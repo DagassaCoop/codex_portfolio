@@ -1,0 +1,9 @@
+onlyBuiltDependencies:
+  - sharp
+  - unrs-resolver
+  - msw
+
+# Ship prebuilt binaries via optional deps; their postinstall is only a fallback.
+ignoredBuiltDependencies:
+  - '@parcel/watcher'
+  - '@swc/core'
