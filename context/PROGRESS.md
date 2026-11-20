@@ -61,6 +61,23 @@ _One entry per meaningful step. Template:_
 
 <!-- entries below, newest first -->
 
+### 2026-11-20 — Session end: docs brought in line with the code
+- **Status:** [done]
+- **What:**
+  - `DESIGN.md`:
+    - "In the app" notes where the implementation differs from the sheets: fonts, aliases, Button loading, Switch, Toggle Group, Select, Checkbox / Radio, Card tag fix, menu focus, Tooltip sides, Toast.
+    - §9 gaps updated with their current status.
+    - New §12, a map from kit class to component to status.
+  - `PROJECT_OVERVIEW.md`:
+    - source of truth;
+    - styling (layers, one entry point, CSS Modules for inline-only layout);
+    - pseudo-states addon;
+    - `shared` slices;
+    - `'use client'` rule;
+    - quality (components covered by stories);
+    - the empty `test/` and `e2e/`.
+- **Next session:** choose between the M1 later pass and M2 (global layout). Restore `test/` and `e2e/` when unit or E2E tests are needed.
+
 ### 2026-11-20 — M1 stage 6: Feedback (Tooltip, Alert, Toast). Base pass complete
 - **Status:** [done]
 - **What:**

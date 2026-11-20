@@ -5,10 +5,10 @@
 >
 > Related docs:
 >
-> - `context/DESIGN.md`: UI Kit (tokens, components, states). The visual source of truth.
+> - `context/DESIGN.md`: the UI Kit (tokens, components, states) and how the app implements it (§12: kit class → component). Together with the code in `src/shared/styles` + `src/shared/ui` (seen in Storybook), it is the source of truth for kit elements.
 > - `context/PROGRESS.md`: development log: status, milestones, decisions, open questions, known issues.
-> - Claude project "Portfolio": `concept-codex.md` (concept), `sitemap.md` (pages and content), `codex.css` (kit stylesheet), `shadcn-components.md`.
-> - UI Kit canvas: https://claude.ai/artifact/9nbNbHQVbXt4z57ZGH443K. Kit sheets are `project/Kit*.dc.html`; `codex.css` is an uploaded asset the sheets link to (id `e7eaac61be294e914584ca1ec245a27b`). Page designs (Home, Hero studies, tablet, mobile) are on the same canvas.
+> - Claude project "Portfolio": `concept-codex.md` (concept), `sitemap.md` (pages and content), `codex.css` (the original kit stylesheet, now brought into `src/shared/styles`), `shadcn-components.md`.
+> - UI Kit canvas: https://claude.ai/artifact/9nbNbHQVbXt4z57ZGH443K. Kit sheets are `project/Kit*.dc.html`; `codex.css` is an uploaded asset the sheets link to (id `e7eaac61be294e914584ca1ec245a27b`). Page designs (Home, Hero studies, tablet, mobile) are on the same canvas. The kit sheets are a historical reference and are not redrawn; the page designs remain the layout reference.
 >
 > Status markers: **[chosen]** decided · **[proposed]** recommended, waiting for confirmation · **[open]** under discussion, see §10.
 
@@ -52,7 +52,7 @@ Global on every page: header and navigation, social rail, contact form (Fol. 04)
 | Language               | TypeScript (strict)                                                                                           | [chosen]   | Pinned to `~6.0`: `typescript-eslint` does not support 7 yet (PROGRESS.md, Decisions).                                                                                      |
 | Framework              | **Next.js 16 (App Router)**, React 19                                                                         | [chosen]   | All pages prerendered (SSG). One server action handles the contact form. Locale routing runs in `proxy.ts` (Next 16's name for middleware).                                 |
 | Primitives             | **Base UI** (`@base-ui/react`)                                                                                | [chosen]   | Headless and accessible. Components Base UI lacks (command palette, carousel) are not critical: we build them later on Base UI primitives, with no extra libraries for now. |
-| Styling                | Plain CSS: `codex.css` tokens + `cx-` classes, CSS Modules for page layout, `clsx`                            | [chosen]   | No Tailwind. Every value comes from DESIGN.md (see §6).                                                                                                                     |
+| Styling                | Plain CSS: the kit stylesheet (tokens + `cx-` classes from `codex.css`) in `src/shared/styles` and one file per component, cascade layers; CSS Modules for page layout; `clsx` | [chosen]   | No Tailwind. Every value comes from DESIGN.md (see §6). |
 | Icons                  | Own components in `shared/ui/icons` with Lucide geometry (ISC), stroke 1.6                                    | [chosen]   | No icon package. Add an icon when a component needs it (steps at the top of `shared/ui/icons/index.ts`). `lucide-react` was removed: from 1.1.0 it has no brand icons (GitHub, LinkedIn). |
 | Fonts                  | `next/font/google` (self-hosted): Space Grotesk, Hanken Grotesk, IBM Plex Mono, EB Garamond Italic            | [chosen]   | No layout shift, no external requests. EB Garamond still needs final approval.                                                                                              |
 | Code highlighting      | Shiki at build time, theme mapped to the kit's `.tk-*` classes                                                | [chosen]   |                                                                                                                                                                             |
@@ -61,8 +61,8 @@ Global on every page: header and navigation, social rail, contact form (Fol. 04)
 | Forms                  | React Hook Form + zod (`@hookform/resolvers`)                                                                 | [chosen]   | The same zod schema validates on the client and on the server.                                                                                                              |
 | Email                  | Resend + React Email                                                                                          | [proposed] | Two emails: a notification to me and an auto-reply to the sender.                                                                                                           |
 | Spam protection        | Honeypot + time trap + zod limits (field lengths, number of links); Cloudflare Turnstile only if spam appears | [chosen]   | No external services. See §7.                                                                                                                                               |
-| Unit / component tests | Vitest + Testing Library + `vitest-axe`                                                                       | [chosen]   | Vitest project `unit` (jsdom).                                                                                                                                              |
-| Component workshop     | **Storybook 10** (`@storybook/nextjs-vite`) + addon-docs, addon-a11y, addon-vitest                            | [chosen]   | Every `shared/ui` component has stories for all kit states. Stories run as tests in Chromium (Vitest project `storybook`); any axe violation fails the story.                |
+| Unit / component tests | Vitest + Testing Library + `vitest-axe`                                                                       | [chosen]   | Vitest project `unit` (jsdom). Its setup files in `test/` are currently missing (PROGRESS.md, Known issues).                                                                                                                                              |
+| Component workshop     | **Storybook 10** (`@storybook/nextjs-vite`) + addon-docs, addon-a11y, addon-vitest, `storybook-addon-pseudo-states`                            | [chosen]   | Every `shared/ui` component has stories for all kit states. Stories run as tests in Chromium (Vitest project `storybook`); any axe violation fails the story. Frozen hover / active / focus states come from the pseudo-states addon.                |
 | API mocking            | MSW                                                                                                           | [chosen]   | Form success and error states in tests.                                                                                                                                     |
 | E2E                    | Playwright + `@axe-core/playwright` + screenshot tests for kit states                                         | [chosen]   |                                                                                                                                                                             |
 | Lint / format          | ESLint (flat config) + Prettier · Stylelint · **Steiger** (FSD linter)                                        | [chosen]   | ESLint pinned to `^9`: plugins inside `eslint-config-next` do not support 10 yet. `context/` is excluded from Prettier.                                                     |
@@ -97,15 +97,15 @@ The Next.js `app/` router lives in the **repo root** and only re-exports FSD pag
 ├─ public/                      # cv.pdf, static images, favicons
 ├─ context/                     # DESIGN.md, PROJECT_OVERVIEW.md, PROGRESS.md
 ├─ .storybook/                  # Storybook config (main.ts, preview.tsx)
-├─ test/                        # Vitest setup, MSW handlers and server
-├─ e2e/                         # Playwright specs
+├─ test/                        # Vitest setup, MSW handlers and server (currently empty, see PROGRESS.md)
+├─ e2e/                         # Playwright specs (currently empty, see PROGRESS.md)
 └─ src/
    ├─ app/        # providers (i18n, toast), global styles, layouts
    ├─ pages/      # home, work, work-detail, about, not-found
    ├─ widgets/    # composed page blocks
    ├─ features/   # user actions
    ├─ entities/   # business entities
-   └─ shared/     # ui kit, config, lib, api, i18n
+   └─ shared/     # ui (kit components), styles (kit stylesheet, fonts), config, lib, api, i18n
 ```
 
 ### 4.2 Slice map
@@ -115,14 +115,15 @@ The Next.js `app/` router lives in the **repo root** and only re-exports FSD pag
 | `widgets`  | `header`, `mobile-menu`, `social-rail`, `hero`, `featured-work`, `services` (What I do), `experience` (spec table + trace), `work-grid`, `case-study`, `contact-section`, `footer-stamp`, `command-palette`, `drawing-layer` (grid, "+", marginalia — decorative) |
 | `features` | `send-message` (contact form + server action), `copy-email`, `switch-locale`, `filter-work`, `toggle-work-view`                                                                                                                                                   |
 | `entities` | `project` (Tav.), `experience` (job / education entry), `tech` (stack item + tooltip text)                                                                                                                                                                        |
-| `shared`   | `ui` (Base UI wrappers styled with `cx-`), `styles` (`codex.css`, fonts), `config` (site config: availability status, links, email), `lib`, `api` (email client), `i18n`                                                                                          |
+| `shared`   | `ui` (kit components on Base UI, one folder each, plus `icons`), `styles` (kit stylesheet, fonts), `config` (site config: availability status, links, email), `lib` (`storybook` helpers for stories), `api` (email client), `i18n`                                                                                          |
 
 ### 4.3 Rules
 
 - Imports go only downward: `app → pages → widgets → features → entities → shared`. Slices on the same layer never import each other.
 - Each slice exposes a public API through `index.ts`. No deep imports. This is enforced by Steiger and ESLint.
 - Server-only code (Resend, secrets) lives in `*.server.ts` files and is marked with `import 'server-only'`.
-- Components are Server Components by default. `'use client'` only where there is interaction (form, palette, toggles, carousel).
+- Components are Server Components by default. `'use client'` only where there is interaction or browser-only state (form, palette, carousel; in `shared/ui`: `NavLink` reads the URL, `Toast` holds the toast list). Base UI parts are client components themselves, so thin wrappers need no directive.
+- `shared/ui` components never import CSS. `src/shared/styles/index.css` is the only entry point for kit CSS. Layout that the kit draws only inline goes into a CSS Module next to the component.
 
 ---
 
@@ -162,12 +163,12 @@ export const projects = [
 
 ## 6. Styling: codex.css on Base UI
 
-- `codex.css` is imported once, globally, in `src/app`. `shared/ui` components render Base UI parts with `cx-` classes. Pages never restyle components (DESIGN.md §0).
+- The kit stylesheet is imported once, globally: `@/shared/styles` in `src/app/layouts` (and in `.storybook/preview.tsx`). `src/shared/styles/index.css` `@import`s tokens, base styles and every component's CSS in the kit's cascade order, in layers `reset < base < components < motion`. Page CSS Modules are unlayered and sit above; they are for layout only. `shared/ui` components render Base UI parts with `cx-` classes. Pages never restyle components (DESIGN.md §0).
 - **State mapping:** Base UI exposes state through ARIA attributes and `data-*` attributes. Many kit selectors already match the ARIA ones (`aria-pressed`, `aria-checked`, `aria-selected`, `aria-expanded`, `aria-current`). Where the kit relies on native pseudo-classes or `.is-*` classes, add aliases for the Base UI attributes (e.g. `[data-checked]`, `[data-disabled]`, `[data-highlighted]`, `[data-popup-open]`) to the **same declarations**, without restyling. Example: Base UI Checkbox renders `role="checkbox"`, not a native `<input>`, so `.cx-check:checked` won't match (DESIGN.md §9.10). Check the rendered DOM before you wire anything up.
 - Single theme: tokens live in `:root` only.
 - Overlays use the kit's motion: 160 ms, 8px offset + fade. Use Base UI `data-starting-style` / `data-ending-style` for enter and exit. Respect `prefers-reduced-motion`.
-- **Readable code.** Components and styles are written to be read by people: one component per folder in `shared/ui`, a clear props API instead of raw class strings, and `codex.css` brought in as formatted, commented stylesheets (one per component) instead of the minified kit file. Values and selectors stay exactly as in the kit.
-- **Foundation is built in two passes.** The base pass comes first; the rest of the kit follows later. Both lists are in PROGRESS.md (Decisions, 2026-11-19).
+- **Readable code.** Components and styles are written to be read by people: one component per folder in `shared/ui`, a clear props API instead of raw class strings, and `codex.css` brought in as formatted, commented stylesheets (one per component) instead of the minified kit file. Values and selectors stay as in the kit, apart from the Base UI aliases and the documented bug fixes (PROGRESS.md, Decisions; DESIGN.md §2.1).
+- **Foundation is built in two passes.** The base pass is complete (2026-11-20); the rest of the kit follows in the later pass. Both lists are in PROGRESS.md (Decisions, 2026-11-19), and the status of every kit class is in DESIGN.md §12.
 
 ---
 
@@ -194,8 +195,8 @@ export const projects = [
 
 ## 9. Quality
 
-- **Unit / component (Vitest):** zod schemas, formatters, every `shared/ui` component (states and a11y), the contact form with MSW.
-- **Stories (Storybook + Vitest):** every `shared/ui` component has stories for each kit state, run as browser tests with axe. Use them to compare components side by side with the kit sheets on the canvas.
+- **Unit (Vitest, jsdom):** zod schemas, formatters, the contact form with MSW. (`shared/ui` components are covered by their stories below.)
+- **Stories (Storybook + Vitest):** every `shared/ui` component has stories for each kit state and behaviour tests (`play`), run in Chromium with axe. The stories are the reference for kit elements.
 - **E2E (Playwright):** navigation in both locales, language switch, ⌘K palette, contact form happy path and error paths, 404. Run axe on every page. Screenshot tests at 1440 / 768 / 375.
 - **Lint:** ESLint + Prettier for TS/TSX, Stylelint for CSS, Steiger for FSD boundaries.
 - **Accessibility:** skip link; focus-visible = the kit's dashed sanguine line; touch targets 44px; decorative layer is `aria-hidden`.
