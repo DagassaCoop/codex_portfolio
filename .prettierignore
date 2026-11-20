@@ -10,3 +10,4 @@ next-env.d.ts
 # Project docs: keep authors formatting
 context
 PROJECT_OVERVIEW.md
+storybook-static
