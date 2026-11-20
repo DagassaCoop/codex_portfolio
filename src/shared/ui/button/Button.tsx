@@ -1,6 +1,8 @@
 import { Button as BaseButton } from '@base-ui/react/button';
 import clsx from 'clsx';
 
+import { Spinner } from '@/shared/ui/spinner';
+
 export type ButtonVariant = 'primary' | 'ink' | 'secondary' | 'mono' | 'ghost' | 'danger' | 'link';
 
 /** `md` = 44px (touch). `sm` = 36px, only in dense desktop panels. */
@@ -32,6 +34,11 @@ type IconOnlyProps = { iconOnly: true; 'aria-label': string } | { iconOnly?: fal
 export type ButtonProps = Omit<BaseButton.Props, 'className'> &
   Omit<ButtonLookProps, 'iconOnly'> &
   IconOnlyProps & {
+    /**
+     * Shows the compass spinner before the label and ignores clicks, but keeps the variant's
+     * colours (no hatching) and stays focusable. Change the label too: "Sending…".
+     */
+    loading?: boolean;
     className?: string;
   };
 
@@ -42,20 +49,36 @@ export type ButtonProps = Omit<BaseButton.Props, 'className'> &
  * @example
  * <Button variant="primary">Send message</Button>
  * <Button variant="ghost" iconOnly aria-label="Close"><XIcon /></Button>
+ * <Button variant="primary" type="submit" loading={isSubmitting}>Sending…</Button>
  */
 export function Button({
   variant,
   size,
   iconOnly,
+  loading = false,
+  disabled,
   className,
+  children,
   type = 'button',
   ...props
 }: ButtonProps) {
   return (
     <BaseButton
       type={type}
-      className={clsx(buttonClassName({ variant, size, iconOnly }), className)}
+      // While loading, Base UI blocks clicks but keeps the button focusable and not :disabled,
+      // so the variant's colours stay (the kit shows a loading button in full colour).
+      disabled={disabled || loading}
+      focusableWhenDisabled={loading}
+      aria-busy={loading || undefined}
+      className={clsx(
+        buttonClassName({ variant, size, iconOnly }),
+        loading && 'is-loading',
+        className,
+      )}
       {...props}
-    />
+    >
+      {loading && <Spinner decorative />}
+      {children}
+    </BaseButton>
   );
 }

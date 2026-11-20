@@ -9,6 +9,8 @@
 export { Icon, type IconProps } from './Icon';
 
 export { ArrowUpRightIcon } from './ArrowUpRightIcon';
+export { CheckIcon } from './CheckIcon';
+export { ChevronDownIcon } from './ChevronDownIcon';
 export { CopyIcon } from './CopyIcon';
 export { DownloadIcon } from './DownloadIcon';
 export { FileTextIcon } from './FileTextIcon';

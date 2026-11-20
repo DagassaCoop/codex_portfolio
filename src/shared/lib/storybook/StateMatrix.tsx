@@ -3,15 +3,17 @@ import type { ReactNode } from 'react';
 import styles from './StateMatrix.module.css';
 
 /**
- * The kit's frozen interaction states. "hover", "active" and "focus" are forced by
+ * The kit's frozen interaction states. "hover", "active", "typing" and "focus" are forced by
  * storybook-addon-pseudo-states (see `pseudoStateParameters`); the others are real component props.
+ * "typing" is the text controls' active state: the caret is in the field (:focus).
  */
-export type KitState = 'default' | 'hover' | 'active' | 'focus' | 'disabled' | 'on';
+export type KitState = 'default' | 'hover' | 'active' | 'typing' | 'focus' | 'disabled' | 'on';
 
 const stateLabels: Record<KitState, string> = {
   default: 'Default',
   hover: 'Hover',
   active: 'Active',
+  typing: 'Active · typing',
   focus: 'Focus-visible',
   disabled: 'Disabled',
   on: 'On',
@@ -50,7 +52,7 @@ export function StateMatrix({ states, rows, label = 'Variant' }: StateMatrixProp
       ))}
 
       {rows.map((row) => (
-        <div key={row.name} className={styles.row}>
+        <div key={`${row.name}-${row.note ?? ''}`} className={styles.row}>
           <div className={styles.name}>
             {row.name}
             {row.note && <span>{row.note}</span>}
@@ -75,5 +77,7 @@ export const pseudoStateParameters = {
     hover: '[data-kit-state="hover"] *',
     active: '[data-kit-state="active"] *',
     focusVisible: '[data-kit-state="focus"] *',
+    // Text controls show focus as "typing" (:focus) plus the construction line (:focus-visible)
+    focus: ['[data-kit-state="typing"] *', '[data-kit-state="focus"] *'],
   },
 };

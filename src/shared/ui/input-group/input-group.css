@@ -1,0 +1,123 @@
+/*
+ * Input Group — .cx-igroup with .cx-addon and .cx-ibtn (DESIGN.md §4, kit sheet 02 §01)
+ *
+ * One framed control: an input with a prefix / suffix addon and/or a "field button" (SEND, Copy).
+ * The group draws the border and states; the inner input is borderless.
+ *
+ * Kit states without a real hook get one:
+ *   .is-focus (dashed outline)  → :has(input:focus-visible)
+ *   .is-disabled (⚠ class-only) → [data-disabled], set by the component
+ *   disabled .cx-ibtn colours    → inline on the kit sheet, written here with tokens
+ */
+
+@layer components {
+  .cx-igroup {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    height: 44px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r);
+    background: var(--white);
+    transition: border-color var(--t);
+  }
+
+  .cx-igroup:hover {
+    border-color: var(--ink);
+  }
+
+  /* Active: typing inside */
+  .cx-igroup:focus-within {
+    border-color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--ink);
+  }
+
+  /* Keyboard focus in the input: the construction line goes around the whole group */
+  .cx-igroup:has(input:focus-visible) {
+    border-color: var(--ink);
+    outline: 2px dashed var(--sanguine);
+    outline-offset: 3px;
+  }
+
+  .cx-igroup input {
+    flex: 1;
+    min-width: 0;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 15px;
+    outline: none;
+  }
+
+  .cx-igroup input::placeholder {
+    color: var(--muted);
+  }
+
+  .cx-igroup[data-disabled] {
+    border-color: var(--line);
+    background-color: var(--sunk);
+    background-image: var(--hatch);
+  }
+
+  .cx-igroup[data-disabled] input {
+    color: var(--muted);
+    cursor: not-allowed;
+  }
+
+  /* ---------- Addon: prefix (default) or suffix (--end) ---------- */
+
+  .cx-addon {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    border-right: 1px solid var(--line-strong);
+    background: var(--sunk);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+
+  .cx-addon--end {
+    border-right: 0;
+    border-left: 1px solid var(--line-strong);
+  }
+
+  .cx-addon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* ---------- Field button ---------- */
+
+  .cx-igroup .cx-ibtn {
+    padding: 0 16px;
+    border: 0;
+    border-left: 1px solid var(--ink);
+    border-radius: 0 3px 3px 0;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background-color var(--t-btn) var(--ease-btn);
+  }
+
+  .cx-igroup .cx-ibtn:hover {
+    background: var(--sanguine);
+  }
+
+  .cx-igroup .cx-ibtn:active {
+    background: var(--sanguine-press);
+  }
+
+  .cx-igroup .cx-ibtn:disabled {
+    background: var(--line);
+    color: var(--muted);
+    cursor: not-allowed;
+  }
+}

@@ -183,6 +183,18 @@
     color: var(--sanguine-press);
   }
 
+  /* ---------- Loading (⚠ class-only state, with aria-busy="true") ---------- */
+
+  .cx-btn.is-loading {
+    cursor: progress;
+  }
+
+  /* The spinner sits before the label at icon size (inline on the kit sheet) */
+  .cx-btn .cx-spinner {
+    width: 16px;
+    height: 16px;
+  }
+
   /* ---------- Disabled = hatched ---------- */
 
   .cx-btn:disabled {

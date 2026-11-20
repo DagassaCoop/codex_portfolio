@@ -1,0 +1,36 @@
+/*
+ * Menu surface — .cx-menu (DESIGN.md §5)
+ *
+ * The floating panel shared by Select's listbox (Forms) and Dropdown / Context menus (Navigation).
+ * Menu items (.cx-menu-item) are added with the Menu component.
+ */
+
+@layer components {
+  .cx-menu {
+    display: flex;
+    flex-direction: column;
+    min-width: 240px;
+    padding: 6px;
+    border: 1px solid var(--ink);
+    border-radius: var(--r);
+    background: var(--surface);
+    box-shadow: var(--float);
+  }
+
+  /* Group label */
+  .cx-menu-label {
+    padding: 8px 10px 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Separator: runs edge to edge, through the panel padding */
+  .cx-menu-sep {
+    height: 0;
+    margin: 6px -6px;
+    border-top: 1px solid var(--line);
+  }
+}

@@ -1,0 +1,26 @@
+/* Story-only colours from kit sheet 02 §06 */
+
+.sanguine {
+  display: inline-flex;
+  color: var(--sanguine);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.labelSmall {
+  font-size: 11px;
+  color: var(--ink-2);
+}
+
+/* Ink panel: paper spinner, secondary text on ink (DESIGN.md §1.6) */
+.inkPanel {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.onInkText {
+  color: #d9cdb6;
+}

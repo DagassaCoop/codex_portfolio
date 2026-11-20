@@ -22,8 +22,8 @@
 _A snapshot. Overwrite it, don't append to it._
 
 - **Phase:** M1 Foundation, base pass (scope in Decisions, 2026-11-19).
-- **Now:** M1 stage 2 (Actions) is done and waiting for review.
-- **Next:** M1 stage 3, Forms: Field, Input, Textarea, Select, Checkbox, Radio Group, Input Group, Spinner (and Button `loading`).
+- **Now:** M1 stage 3 (Forms) is done and waiting for review.
+- **Next:** M1 stage 4, Data display: Badge, Chip, Separator / Marker, Card, Item, Aspect Ratio, Skeleton.
 - **Blocked by:** nothing. The Sheet width is deferred until the mobile menu (M2).
 
 ---
@@ -33,7 +33,7 @@ _A snapshot. Overwrite it, don't append to it._
 | # | Milestone | Status | Notes |
 |---|---|---|---|
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
-| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms · 4 Data display · 5 Navigation · 6 Feedback |
+| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display · 5 Navigation · 6 Feedback |
 | M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | | |
 | M3 | Home (`/[locale]`) | | |
 | M4 | Work (`/[locale]/work`) | | |
@@ -60,6 +60,33 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-19 — M1 stage 3: Forms (Field, Input, Textarea, Select, Native Select, Checkbox, Radio Group, Input Group, Spinner)
+- **Status:** [done]
+- **What:**
+  - Nine components in `src/shared/ui/`, plus Button `loading`.
+  - **Field** wraps Base UI Field: `<Field label required description error counter>`. The label, description and error are linked to the control. `error` makes the field invalid.
+  - **Input** uses Base UI Input. **Textarea** and **NativeSelect** render through `Field.Control`, so a Field labels and validates them too.
+  - **Select** is Base UI Select: `label`, an `options` list (flat or grouped), a portal listbox on the kit's menu surface, and keyboard support.
+  - **Checkbox** and **Radio / RadioGroup** use Base UI: a whole-row `<label>`, `indeterminate`, `invalid`; the group gets a legend and a horizontal layout.
+  - **InputGroup** has `InputGroupAddon`, `InputGroupInput` and `InputGroupButton` parts.
+  - **Spinner** is announced as a status (`label`) or hidden (`decorative`).
+  - **Button `loading`** shows the spinner, sets `aria-busy`, ignores clicks and stays focusable in full colour.
+  - New icons: `CheckIcon`, `ChevronDownIcon`.
+  - The menu surface CSS (`.cx-menu`, label, separator) is added early for Select's listbox.
+  - Stories:
+    - a states matrix for each control, with a new "Active · typing" (:focus) column in `StateMatrix`;
+    - an open grouped Select;
+    - Field anatomy and errors;
+    - the contact form composition (kit sheet 02 §07 with sitemap G3 fields).
+- **Where:**
+  - `src/shared/ui/{field,input,textarea,select,native-select,checkbox,radio-group,input-group,spinner,menu}/`
+  - `src/shared/ui/button/`, `src/shared/ui/icons/`, `src/shared/lib/storybook/`
+  - `src/shared/styles/index.css`
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` and `build-storybook` pass.
+  - `test:stories`: 73/73 on a cold cache. Behaviour tests cover label and help-text linking, aria-invalid with the error in the accessible description, typing, label click and Space on checkbox, `aria-checked="mixed"`, arrow keys in the radio group, keyboard-open and pick in Select (portal listbox), loading ignoring clicks, and the live counter.
+  - Screenshots of the Input, Input Group, Checkbox and Radio matrices, the open Select and the contact form compared with kit sheet 02.
 
 ### 2026-11-19 — Own icon set replaces lucide-react
 - **Status:** [done]
@@ -187,6 +214,31 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 <!-- entries below, newest first -->
 
+### 2026-11-19 — Forms: mapping the kit onto Base UI
+- **Context:** M1 stage 3. The kit styles native inputs. Base UI renders checkbox, radio and the select trigger differently, and several kit states are frozen or inline only.
+- **Decision:**
+  - **Base UI aliases**, same declarations, no restyling:
+    - `.cx-check` / `.cx-radio`: `:checked` → `[data-checked]`, `:disabled` → `[data-disabled]`, `.is-mixed` → `[data-indeterminate]`, `.is-invalid` → `[aria-invalid='true']` / `[data-invalid]`.
+    - `.cx-select`: `.is-invalid` → `[aria-invalid='true']` / `[data-invalid]`.
+    - `.cx-option`: hover → `[data-highlighted]`, `aria-selected` → `[data-selected]`.
+    - `.cx-crow` / `.cx-igroup`: `.is-disabled` → `[data-disabled]` (set by the component).
+    - `.cx-igroup`: `.is-focus` → `:has(input:focus-visible)`.
+  - **Inline-only kit styles moved into CSS with tokens:**
+    - disabled option (`--line-strong`);
+    - disabled field button (`--line` / `--muted`);
+    - Select placeholder (`--muted`);
+    - spinner size inside a button (16px);
+    - indeterminate + hover (`#3a2e22`).
+  - **Bug fixes against codex.css:**
+    - Disabled checkbox / radio no longer react to hover or press (as for Toggle and Switch).
+    - The invalid background uses `background-color`, so an invalid NativeSelect keeps its chevron.
+  - **Overlay motion** (DESIGN.md §2: 160ms, 8px + fade) is added for the Select popup, with a reduced-motion override. It is not in codex.css.
+  - **Select owns its label** (Base UI requires `Select.Label`). Inside a Field, leave out the Field's `label`. **RadioGroup** owns its legend: role `radiogroup`, named by the legend.
+  - **Layout the kit draws only inline** (radio options in a row, the fieldset reset) goes into a CSS Module next to the component, not into a new global `cx-` class.
+  - **Button `loading`** = Base UI `disabled` + `focusableWhenDisabled`. The button is not `:disabled`, so it keeps the variant's colours as on the kit sheet. The spinner is `decorative`; the busy state is `aria-busy`.
+  - The **contact form story** uses NativeSelect for the request type, as the kit composition does.
+- **Affects:** `src/shared/ui/{checkbox,select,input,input-group,button,radio-group}`.
+
 ### 2026-11-19 — No icon package: own icon components
 - **Context:** Lucide deprecated brand icons (lucide-icons/lucide#670), and lucide-react 1.1.0 removed them. The social rail needs GitHub and LinkedIn.
 - **Decision:** Option 1 of the open question.
@@ -291,4 +343,6 @@ _Shortcuts, `TODO(design)` markers, workarounds and warnings to revisit. Templat
 - [ ] **Pseudo-state stories carry no style assertions:** the addon rewrites stylesheets after the story renders, after `play` has run. Real interactions (keyboard Tab) are what get asserted · since 2026-11-19
 - [x] ~~**First `test:stories` run after adding a dependency can fail**~~ while Vite re-optimizes deps. Fixed in stage 2: the `storybook` Vitest project pre-bundles `@base-ui/react/*`, `lucide-react`, `clsx` and `next-intl` (`optimizeDeps.include`). A brand-new runtime dependency used in stories may need adding there · since 2026-11-19
 - [ ] **ESLint 9 is now flagged as deprecated by npm.** Moving to 10 is blocked by the plugins in `eslint-config-next` (Decisions, toolchain versions) · since 2026-11-19
+- [ ] **`build-storybook` prints `MODULE_LEVEL_DIRECTIVE` warnings** for Base UI's `"use client"` directives. They are harmless: Vite drops the directive in a client bundle · since 2026-11-19
+- [ ] **No dashed focus on the field button (`.cx-ibtn`):** it is part of the DESIGN.md §9.6 gap, kept on purpose. The browser's default focus ring shows instead · since 2026-11-19
 - [ ] **Docs reformatted by Prettier once:** at init `pnpm format` reformatted `DESIGN.md` and `PROJECT_OVERVIEW.md` (padded tables, `*italic*` → `_italic_`; no content changes). `context/` is now in `.prettierignore` · since 2026-11-19

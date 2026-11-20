@@ -132,6 +132,20 @@ export const AsLink: Story = {
   },
 };
 
+/** Loading: compass spinner before the label, full colour, clicks ignored (kit sheet 01 §01) */
+export const Loading: Story = {
+  render: () => (
+    <div className="cx-inline">
+      <Button variant="ink" loading>
+        Sending…
+      </Button>
+      <Button variant="primary" loading>
+        Sending…
+      </Button>
+    </div>
+  ),
+};
+
 /* ---------- Behaviour ---------- */
 
 export const ClickCallsHandler: Story = {
@@ -152,5 +166,19 @@ export const DisabledIgnoresClick: Story = {
     await expect(button).toBeDisabled();
     await userEvent.click(button);
     await expect(args.onClick).not.toHaveBeenCalled();
+  },
+};
+
+export const LoadingIgnoresClick: Story = {
+  name: 'Test · loading ignores click, stays focusable',
+  args: { loading: true, children: 'Sending…' },
+  play: async ({ args, canvas, userEvent }) => {
+    const button = canvas.getByRole('button', { name: 'Sending…' });
+    await expect(button).toHaveAttribute('aria-busy', 'true');
+    await expect(button).not.toBeDisabled(); // not :disabled, so no hatching
+    await userEvent.click(button);
+    await expect(args.onClick).not.toHaveBeenCalled();
+    await userEvent.tab();
+    await expect(button).toHaveFocus();
   },
 };

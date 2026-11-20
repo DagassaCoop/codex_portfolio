@@ -1,0 +1,77 @@
+/*
+ * Text controls — .cx-input, .cx-textarea, .cx-select (DESIGN.md §4, kit sheet 02 §01)
+ *
+ * One family in the kit: these rules are shared by Input, Textarea, NativeSelect and the
+ * Select trigger. Their own differences live in textarea.css and select.css.
+ *
+ * Base UI marks an invalid control with aria-invalid (and [data-invalid] on inputs); the kit's
+ * class-only .is-invalid on .cx-select (DESIGN.md §2.1) maps to both here.
+ */
+
+@layer components {
+  .cx-input,
+  .cx-textarea,
+  .cx-select {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r);
+    background: var(--white);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 15px;
+    transition:
+      border-color var(--t),
+      background-color var(--t);
+  }
+
+  .cx-input::placeholder,
+  .cx-textarea::placeholder {
+    color: var(--muted);
+  }
+
+  .cx-input:hover,
+  .cx-textarea:hover,
+  .cx-select:hover {
+    border-color: var(--ink);
+  }
+
+  /* Active: typing, or the select is open. The inset shadow makes the border read as 2px. */
+  .cx-input:focus,
+  .cx-textarea:focus,
+  .cx-select[aria-expanded='true'] {
+    border-color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--ink);
+    outline: none;
+  }
+
+  /* …and the construction line on keyboard focus (the :focus rule above removes outlines) */
+  .cx-input:focus-visible,
+  .cx-textarea:focus-visible {
+    outline: 2px dashed var(--sanguine);
+    outline-offset: 3px;
+  }
+
+  .cx-input[aria-invalid='true'],
+  .cx-textarea[aria-invalid='true'],
+  .cx-input[data-invalid],
+  .cx-textarea[data-invalid],
+  .cx-select[aria-invalid='true'],
+  .cx-select[data-invalid] {
+    border-color: var(--error);
+
+    /* codex.css uses the "background" shorthand here; background-color keeps NativeSelect's chevron */
+    background-color: #fff8f4;
+  }
+
+  .cx-input:disabled,
+  .cx-textarea:disabled,
+  .cx-select:disabled {
+    border-color: var(--line);
+    background-color: var(--sunk);
+    background-image: var(--hatch);
+    color: var(--muted);
+    cursor: not-allowed;
+  }
+}

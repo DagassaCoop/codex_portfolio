@@ -1,0 +1,151 @@
+/*
+ * Checkbox and Radio — .cx-check / .cx-radio inside label.cx-crow (DESIGN.md §4, kit sheet 02 §05)
+ *
+ * 20×20 control in a 44px clickable row. Checked: ink fill with a paper check mark (clip-path)
+ * for the checkbox, an ink dot for the radio.
+ *
+ * The kit styles native inputs (:checked, :disabled). Base UI renders <span role="checkbox">
+ * and <span role="radio">, so every native selector gets a Base UI alias with the same
+ * declarations (DESIGN.md §9.10, PROJECT_OVERVIEW.md §6):
+ *   :checked  → [data-checked]
+ *   :disabled → [data-disabled]
+ *   .is-mixed → [data-indeterminate]   (⚠ class-only in the kit)
+ *   .is-invalid → [aria-invalid='true'], [data-invalid]   (⚠ class-only in the kit)
+ * Radio shares this file: the two controls are one block in codex.css.
+ */
+
+@layer components {
+  /* ---------- Row (the <label>) ---------- */
+
+  .cx-crow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    font-size: 15px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* ⚠ class-only .is-disabled in the kit → [data-disabled] set by the component */
+  .cx-crow[data-disabled] {
+    color: var(--muted);
+    cursor: not-allowed;
+  }
+
+  /* ---------- Control ---------- */
+
+  .cx-check,
+  .cx-radio {
+    display: inline-grid;
+    flex: none;
+    place-content: center;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    border: 1.5px solid var(--ink);
+    border-radius: var(--r-sm);
+    background: var(--white);
+    cursor: pointer;
+    appearance: none;
+    transition:
+      background-color var(--t),
+      transform 80ms;
+  }
+
+  .cx-radio {
+    border-radius: 50%;
+  }
+
+  /* Check mark: drawn with clip-path, hidden until checked */
+  .cx-check::before {
+    content: '';
+    width: 11px;
+    height: 11px;
+    background: var(--paper);
+    clip-path: polygon(14% 52%, 0 66%, 38% 100%, 100% 22%, 86% 8%, 38% 72%);
+    transform: scale(0);
+    transition: transform 100ms var(--ease);
+  }
+
+  /* Radio dot, hidden until selected */
+  .cx-radio::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--ink);
+    transform: scale(0);
+    transition: transform 100ms var(--ease);
+  }
+
+  /*
+   * Hover and active. `:not([data-disabled])` is an addition to the kit, as for Toggle and Switch:
+   * a disabled control never reacts (PROGRESS.md, Decisions).
+   */
+  .cx-check:not(:disabled, [data-disabled]):hover,
+  .cx-radio:not(:disabled, [data-disabled]):hover {
+    background: var(--sunk);
+  }
+
+  /* Active: the control shrinks a little */
+  .cx-check:not(:disabled, [data-disabled]):active,
+  .cx-radio:not(:disabled, [data-disabled]):active {
+    transform: scale(0.88);
+  }
+
+  /* ---------- Checked ---------- */
+
+  .cx-check:checked,
+  .cx-check[data-checked] {
+    background: var(--ink);
+  }
+
+  .cx-check:checked::before,
+  .cx-check[data-checked]::before,
+  .cx-radio:checked::before,
+  .cx-radio[data-checked]::before {
+    transform: scale(1);
+  }
+
+  /* Checked + hover. Indeterminate gets it too (inline on the kit sheet). */
+  .cx-check:checked:not(:disabled, [data-disabled]):hover,
+  .cx-check[data-checked]:not(:disabled, [data-disabled]):hover,
+  .cx-check[data-indeterminate]:not(:disabled, [data-disabled]):hover {
+    background: #3a2e22;
+  }
+
+  /* ---------- Indeterminate: a 2px bar ---------- */
+
+  .cx-check[data-indeterminate] {
+    background: var(--ink);
+  }
+
+  .cx-check[data-indeterminate]::before {
+    width: 10px;
+    height: 2px;
+    clip-path: none;
+    transform: scale(1);
+  }
+
+  /* ---------- Disabled ---------- */
+
+  .cx-check:disabled,
+  .cx-check[data-disabled],
+  .cx-radio:disabled,
+  .cx-radio[data-disabled] {
+    border-color: var(--line-strong);
+    background-color: var(--sunk);
+    background-image: var(--hatch);
+    cursor: not-allowed;
+  }
+
+  /* ---------- Invalid ---------- */
+
+  .cx-check[aria-invalid='true'],
+  .cx-check[data-invalid],
+  .cx-radio[aria-invalid='true'],
+  .cx-radio[data-invalid] {
+    border-color: var(--error);
+  }
+}
