@@ -1,0 +1,26 @@
+/*
+ * Toggle Group — .cx-tgroup (DESIGN.md §3, kit sheet 01 §03)
+ *
+ * A framed track holding .cx-toggle items. Items lose their own border and shrink to 34px.
+ */
+
+@layer components {
+  .cx-tgroup {
+    display: inline-flex;
+    gap: 3px;
+    padding: 3px;
+    border: 1px solid var(--ink);
+    border-radius: var(--r);
+    background: var(--surface);
+  }
+
+  .cx-tgroup > .cx-toggle {
+    height: 34px;
+    border-color: transparent;
+    border-radius: var(--r-sm);
+  }
+
+  .cx-tgroup > .cx-toggle:hover {
+    border-color: transparent;
+  }
+}

@@ -1,0 +1,40 @@
+/*
+ * Focus-visible — the "construction line" (DESIGN.md §2)
+ *
+ * One rule for every interactive kit element: a 2px dashed sanguine outline, 3px away.
+ * Keyboard only (:focus-visible). Inside menus, focus is the highlight fill instead (see Menu).
+ *
+ * :where() keeps the specificity at a single pseudo-class, so a component
+ * can still turn the outline off for a part that shows focus another way.
+ *
+ * Known gap (DESIGN.md §9.6): .cx-ibtn, .cx-tick, .cx-option, .cx-navpanel a,
+ * .cx-sheet-nav a and non-link .cx-card are not in this list. Not fixed on purpose.
+ */
+
+@layer base {
+  :where(
+    .cx-btn,
+    .cx-toggle,
+    .cx-switch,
+    .cx-nav-link,
+    .cx-tab,
+    .cx-page,
+    .cx-menu-item,
+    .cx-input,
+    .cx-textarea,
+    .cx-select,
+    .cx-check,
+    .cx-radio,
+    .cx-slider-thumb,
+    .cx-card--link,
+    .cx-item,
+    .cx-acc-trigger,
+    .cx-tlink,
+    .cx-chip,
+    .cx-crumb a,
+    .cx-handle
+  ):focus-visible {
+    outline: 2px dashed var(--sanguine);
+    outline-offset: 3px;
+  }
+}

@@ -1,0 +1,27 @@
+/*
+ * RadioGroup layout. The kit draws these only inline (contact form, kit sheet 02 §07),
+ * so they live here instead of in a global cx- class. Look and states: checkbox.css (.cx-radio).
+ */
+
+/* Reset the browser's fieldset frame, in case the group renders as a <fieldset>.
+   The legend is a <div> (Base UI), so the field's 7px flex gap applies under it;
+   the kit sets margin-bottom: 7px on a real <legend>. */
+.fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Horizontal options, as in the contact form: 20px apart, wrapping */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}

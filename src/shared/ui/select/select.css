@@ -1,0 +1,91 @@
+/*
+ * Select — .cx-select trigger + .cx-menu listbox with .cx-option items (DESIGN.md §4)
+ *
+ * The trigger shares the text-control rules in input.css. The listbox is the menu surface
+ * (menu.css). Base UI state attributes are mapped onto the kit's selectors:
+ *   [data-highlighted] (keyboard / pointer highlight) = hover
+ *   [data-selected]    = aria-selected="true"
+ *   [data-disabled]    = disabled option (inline on the kit sheet)
+ */
+
+@layer components {
+  /* ---------- Trigger ---------- */
+
+  .cx-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    text-align: left;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .cx-select svg {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    transition: transform var(--t);
+  }
+
+  /* Open: the chevron turns 180° */
+  .cx-select[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+  }
+
+  /* Placeholder text (muted, inline on the kit sheet) */
+  .cx-select [data-placeholder] {
+    color: var(--muted);
+  }
+
+  /* ---------- Listbox ---------- */
+
+  /* As wide as the trigger at least (Base UI provides --anchor-width). Motion: menu.css. */
+  .cx-select-popup {
+    min-width: var(--anchor-width);
+  }
+
+  /* ---------- Option ---------- */
+
+  .cx-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 36px;
+    padding: 0 10px;
+    border-radius: var(--r-sm);
+    font-size: 14px;
+    color: var(--ink);
+    cursor: pointer;
+    outline: none;
+  }
+
+  .cx-option:hover,
+  .cx-option[data-highlighted] {
+    background: var(--sunk);
+  }
+
+  .cx-option:active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .cx-option[aria-selected='true'],
+  .cx-option[data-selected] {
+    font-weight: 600;
+  }
+
+  /* Check mark of the selected option */
+  .cx-option svg {
+    width: 14px;
+    height: 14px;
+    color: var(--sanguine);
+  }
+
+  /* Disabled option: line-strong text, no highlight (inline on the kit sheet) */
+  .cx-option[data-disabled] {
+    background: none;
+    color: var(--line-strong);
+    cursor: not-allowed;
+  }
+}

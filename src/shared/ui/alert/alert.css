@@ -1,0 +1,71 @@
+/*
+ * Alert — .cx-alert, the form status (DESIGN.md §7, kit sheet 05 §05)
+ *
+ * A letter icon in a 28px circle (i · ✓ · ! · ×), a display title and a 14px description.
+ * Tones: default (ink border, surface) · success · warning · error (pigment border, wash, pigment icon).
+ */
+
+@layer components {
+  .cx-alert {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 4px 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--ink);
+    border-radius: var(--r);
+    background: var(--surface);
+  }
+
+  .cx-alert-ico {
+    display: flex;
+    grid-row: span 2;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid currentcolor;
+    border-radius: 50%;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .cx-alert-title {
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .cx-alert-desc {
+    color: var(--ink-2);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .cx-alert--success {
+    border-color: var(--verdigris);
+    background: var(--verdigris-wash);
+  }
+
+  .cx-alert--success .cx-alert-ico {
+    color: var(--verdigris);
+  }
+
+  .cx-alert--warning {
+    border-color: var(--ochre);
+    background: var(--ochre-wash);
+  }
+
+  .cx-alert--warning .cx-alert-ico {
+    color: var(--ochre);
+  }
+
+  .cx-alert--error {
+    border-color: var(--error);
+    background: var(--error-wash);
+  }
+
+  .cx-alert--error .cx-alert-ico {
+    color: var(--error);
+  }
+}

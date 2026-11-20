@@ -1,0 +1,8 @@
+/*
+ * Cascade layer order — lowest priority first. See index.css.
+ *
+ * Kept in its own file and imported first: bundlers inline @import'ed files ahead of
+ * the importing file's own rules, and the first mention of a layer fixes its position.
+ */
+
+@layer reset, base, components, motion;

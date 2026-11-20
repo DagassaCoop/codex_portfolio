@@ -1,0 +1,21 @@
+/*
+ * The toast stack: bottom right, 32px from the edges (20px below 768px) — the page margins
+ * (DESIGN.md §1.8). The kit draws the position only as a rule (sheet 05 §06), so it lives here.
+ */
+
+.viewport {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+@media (width < 768px) {
+  .viewport {
+    right: 20px;
+    bottom: 20px;
+  }
+}

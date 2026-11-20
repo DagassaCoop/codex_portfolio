@@ -1,0 +1,81 @@
+/*
+ * Tabs — .cx-tabs / .cx-tab / .cx-tabpanel (DESIGN.md §5, kit sheet 03 §02)
+ *
+ * Mono 12px uppercase tabs on a 1px ink baseline.
+ * Selected (aria-selected="true"): surface fill, ink text, a 3px sanguine bar, sanguine count.
+ * Base UI Tab renders a native <button role="tab"> with aria-selected, so the kit selectors match.
+ */
+
+@layer components {
+  .cx-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .cx-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 18px;
+    border: 0;
+    background: transparent;
+    color: var(--ink-2);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color var(--t),
+      color var(--t);
+  }
+
+  /* Count */
+  .cx-tab sup {
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .cx-tab:hover {
+    background: var(--sunk);
+    color: var(--ink);
+  }
+
+  .cx-tab:active {
+    background: var(--sunk-2);
+  }
+
+  /* Selected */
+  .cx-tab[aria-selected='true'] {
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  .cx-tab[aria-selected='true']::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 3px;
+    background: var(--sanguine);
+  }
+
+  .cx-tab[aria-selected='true'] sup {
+    color: var(--sanguine);
+  }
+
+  .cx-tab:disabled {
+    background: none;
+    color: var(--line-strong);
+    cursor: not-allowed;
+  }
+
+  .cx-tabpanel {
+    padding: 20px 0 0;
+  }
+}

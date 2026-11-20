@@ -1,0 +1,48 @@
+/*
+ * Breadcrumb — ol.cx-crumb (DESIGN.md §5, kit sheet 03 §03)
+ *
+ * Mono 12px uppercase trail: "Codex / Fol. 02 / Tav. III". Links go sanguine and underlined on hover;
+ * the current page is ink 600. Separators are decorative.
+ */
+
+@layer components {
+  .cx-crumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    list-style: none;
+  }
+
+  .cx-crumb a {
+    padding: 4px 2px;
+    border-radius: 2px;
+    color: var(--ink-2);
+    text-decoration: none;
+    transition: color var(--t);
+  }
+
+  .cx-crumb a:hover {
+    color: var(--sanguine);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .cx-crumb a:active {
+    color: var(--sanguine-press);
+  }
+
+  .cx-crumb [aria-current='page'] {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .cx-crumb .cx-crumb-sep {
+    color: var(--line-strong);
+  }
+}

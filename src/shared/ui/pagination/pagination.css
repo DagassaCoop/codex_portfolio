@@ -1,0 +1,75 @@
+/*
+ * Pagination — nav.cx-pager / .cx-page (DESIGN.md §5, kit sheet 03 §04)
+ *
+ * Between tavole: Roman numerals in 44px squares, plus wide "← Tav. II" / "Tav. IV →" links.
+ * Current page (aria-current="page"): ink fill. Hover / press like a button (fill only, press shift).
+ *
+ * ⚠ The kit's class-only .is-disabled ("in progress") maps to [aria-disabled='true'], set by the
+ * component. Hover / press get `:not([aria-disabled='true'])`: a disabled page never reacts.
+ */
+
+@layer components {
+  .cx-pager {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cx-page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background: transparent;
+    color: var(--ink-2);
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color var(--t-btn) var(--ease-btn),
+      border-color var(--t-btn) var(--ease-btn),
+      color var(--t-btn) var(--ease-btn),
+      transform var(--t-btn) var(--ease-btn);
+  }
+
+  .cx-page:not([aria-disabled='true']):hover {
+    border-color: var(--ink);
+    background: var(--sunk);
+    color: var(--ink);
+  }
+
+  .cx-page:not([aria-disabled='true']):active {
+    transform: translate(1px, 1px);
+    background: var(--sunk-2);
+    transition-duration: var(--t-press);
+  }
+
+  .cx-page[aria-current='page'] {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .cx-page[aria-disabled='true'] {
+    border-color: var(--line);
+    background-image: var(--hatch);
+    color: var(--line-strong);
+    cursor: not-allowed;
+  }
+
+  /* Prev / next: "← Tav. II" */
+  .cx-page--wide {
+    padding: 0 16px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+}

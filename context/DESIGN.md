@@ -2,29 +2,33 @@
 
 > **Purpose.** This file transfers the existing, already-designed Codex UI Kit into the app. It is a _description of what exists_, not a place to invent.
 >
-> **Sources of truth (in priority order):**
+> **After the UI Kit is migrated (M1), the project is the source of truth for every kit element:** the code in `src/shared/styles` and `src/shared/ui`, shown in Storybook, together with this file. The canvas is not redrawn to follow decisions made in the code; it stays as the historical reference. Decided 2026-11-20.
+>
+> **Sources of truth while the kit is being migrated (in priority order):**
 >
 > 1. `codex.css` — the stylesheet every UI Kit sheet is rendered with (identical to project doc `claude/codex.css`). All values below are copied from it. **If this file and `codex.css` ever disagree, `codex.css` wins.**
 > 2. UI Kit canvas, page "UI Kit", 6 sheets: `00 Foundations`, `01 Actions`, `02 Forms`, `03 Navigation`, `04 Data display`, `05 Overlays & feedback` — https://claude.ai/artifact/9nbNbHQVbXt4z57ZGH443K
 > 3. Content (copy, page structure, real data) comes from `sitemap.md`, **not** from the kit. Text on the kit sheets is sample copy.
+>
+> Sections §1–§11 describe the kit as drawn. Lines marked **In the app** say how the project implements it; §12 maps every kit class to its component and status.
 
 ---
 
 ## 0. Rules for anyone (human or AI) writing UI in this repo
 
-1. **Use only what is listed here.** Every component, variant, size and state exists in `codex.css` with a `cx-` class. Do not add new variants, sizes, colors, radii, shadows, durations or easings.
+1. **Use only what is listed here.** Every component, variant, size and state exists in the kit stylesheet with a `cx-` class (in the app: `src/shared/styles` and `src/shared/ui/*/*.css`, brought in from `codex.css`; see §12). Use the `shared/ui` components rather than raw classes. Do not add new variants, sizes, colors, radii, shadows, durations or easings.
 2. **No new values.** If a design need is not covered, stop and mark it `TODO(design)`. Do not approximate with a "close enough" value.
 3. **Tokens only.** Use the CSS custom properties from §1. The only literal colors allowed are the ones listed in §1.6 (they are literals in `codex.css` itself).
 4. **No blur, no soft shadows, no gradients for depth.** Depth = hard offset ink shadow (`--lift`, `--float`) or hatching.
 5. **No `opacity` for disabled.** Disabled = hatching + `--line` border + `--muted` text (exceptions in §9 are documented, not to be copied).
 6. **One accent per screen.** Sanguine (`--sanguine`) = accent. One Primary button per screen.
-7. **Icons:** Lucide, `stroke-width: 1.6`, 24 grid, no fills, no emoji.
+7. **Icons:** Lucide, `stroke-width: 1.6`, 24 grid, no fills, no emoji. In the app: the `Icon` components in `src/shared/ui/icons` (Lucide geometry, no icon package).
 8. **Touch:** interactive height 44px. `sm` (36px) only in dense desktop panels.
 9. **Two-layer rule** (from concept): content layer (~80%) stays clean and readable, with no hatching under text. The drawing layer (~20%: grid, constructions, marginalia, stamp) is decorative: `pointer-events: none`, `aria-hidden="true"`.
 
 ---
 
-## 1. Tokens (`:root` in `codex.css`)
+## 1. Tokens (`:root` in `codex.css`; in the app `src/shared/styles/tokens.css`)
 
 ### 1.1 Color — surfaces
 
@@ -102,7 +106,7 @@ Other radii in the kit: `0` (sheet frame, stamp), pill (`13px` switch, `18px` ch
 
 ### 1.7 Typography
 
-Fonts (Google Fonts, as loaded by the kit):
+Fonts (Google Fonts on the kit sheets; **in the app** self-hosted by `next/font` in `src/shared/styles/fonts.ts`, subsets latin + latin-ext, EB Garamond not preloaded):
 `Space Grotesk` 400/500/600/700 · `Hanken Grotesk` 400/500/600 · `IBM Plex Mono` 400/500/600 · `EB Garamond` italic 400/500.
 
 ```css
@@ -111,6 +115,8 @@ Fonts (Google Fonts, as loaded by the kit):
 --mono: 'IBM Plex Mono', ui-monospace, monospace;
 --marg: 'EB Garamond', serif;
 ```
+
+**In the app** the tokens read the `next/font` variables, with the family name as a fallback: `--display: var(--font-space-grotesk, 'Space Grotesk'), sans-serif` (the same for `--body`, `--mono`, `--marg`). The font classes sit on `<html>`.
 
 | Class              | Font        | Size / line-height / tracking             | Color                                     |
 | ------------------ | ----------- | ----------------------------------------- | ----------------------------------------- |
@@ -150,7 +156,7 @@ The kit maps shadcn **Typography** onto these classes.
 | **Focus-visible**                  | construction line: `outline: 2px dashed var(--sanguine); outline-offset: 3px`                                               | keyboard only (`:focus-visible`). Inside menus, focus = highlight (same look as hover), not dashed                                 |
 | **Disabled**                       | `background: var(--sunk)` + `var(--hatch)`, border `--line`, text `--muted`, no shadow, no transform, `cursor: not-allowed` | **no opacity**                                                                                                                     |
 | **Selected / on / current**        | ink fill + paper text. For tabs & navigation: 2–3px sanguine bar at the bottom                                              |                                                                                                                                    |
-| **Open** (menu, accordion, select) | trigger in ink fill **or** number in sanguine; chevron rotates 180°; "+" → "−"                                              |                                                                                                                                    |
+| **Open** (menu, accordion, select) | trigger in ink fill **or** number in sanguine; chevron rotates 180°; "+" → "−"; **in the app** a kit button that opens a menu keeps its hover look while open (§5 Menu)                                              |                                                                                                                                    |
 | **Floating**                       | `box-shadow: var(--float)`, never blur                                                                                      |                                                                                                                                    |
 
 **Exception — Button Group:** inside a group, hover = fill only (no lift). The active / selected segment (`aria-pressed="true"`, `aria-current`) is **raised out of the group**: `translate(-2px,-2px)` + `--lift`, `z-index: 2`, bg `--sunk` (secondary/mono).
@@ -160,7 +166,7 @@ The kit maps shadcn **Typography** onto these classes.
 - Buttons (Button, Toggle, Chip, Pagination, Switch, `.cx-ibtn`): enter/exit a state in `220ms cubic-bezier(.25,.8,.25,1)`; press is fast, `90ms`; release is smooth again.
 - Everything else: `120ms cubic-bezier(.2,.7,.2,1)`. Menu items: `80ms` background.
 - Lines "drawing themselves" (stroke-dashoffset): 600ms.
-- Overlays appear in 160ms: 8px shift + fade (dialog "sheet laid down": −8px → 0).
+- Overlays appear in 160ms: 8px shift + fade (dialog "sheet laid down": −8px → 0). **In the app:** implemented for the menu surface (Select listbox, dropdown), the tooltip and the toast, each with a reduced-motion override.
 - Tooltip delay 300ms. Toast lifetime 4s.
 - Spinner 1.4s/turn; skeleton hatch moves 1.6s; pulse dot 1.8s.
 - `prefers-reduced-motion: reduce` disables shifts and animations (see §9 for what the CSS actually covers).
@@ -185,6 +191,17 @@ Each `.is-*` class mirrors a real selector so the kit sheets can show frozen sta
 | `.is-loading`  | ⚠ class only (button), used with `aria-busy="true"`                                                                                                                                                        |
 | —              | `[data-highlighted]` on `.cx-menu-item` = hover look (keyboard highlight)                                                                                                                                  |
 
+**In the app:**
+
+- **Frozen `.is-*` classes and sheet scaffolding are not shipped.** Storybook shows frozen states with `storybook-addon-pseudo-states` and the `StateMatrix` helper (`src/shared/lib/storybook`).
+- **⚠ class-only states** map to attributes the components set:
+  - `.is-disabled` → `[data-disabled]` (Card, Item, `.cx-crow`, `.cx-igroup`, `.cx-menu-item`) or `[aria-disabled='true']` (Nav link, Pagination);
+  - `.is-invalid` → `[aria-invalid='true']` / `[data-invalid]`;
+  - `.is-mixed` → `[data-indeterminate]`;
+  - `.is-loading` stays a class, set by `<Button loading>`.
+- **Base UI renders some controls as `<span role=…>`** (Checkbox, Radio, Switch). Their native selectors get aliases with the same declarations: `[data-checked]`, `[data-disabled]`, `[data-highlighted]`, `[data-selected]`.
+- **Hover and press never apply to disabled controls** (`:not(:disabled)` / `:not([data-disabled])`). In codex.css some on + hover rules out-specify disabled; this is fixed.
+
 ---
 
 ## 3. Actions (sheet 01)
@@ -205,7 +222,7 @@ Base: `inline-flex`, gap 8, **height 44**, padding 0 20, border 1px transparent,
 
 Modifiers: `--sm` (h36, pad 0 14, 14px) · `--icon` (44×44, pad 0; with `--sm` = 36) — **icon buttons must have `aria-label`**.
 Disabled: hatch on sunk, border line, text muted. Ghost/Link disabled: no background, transparent border.
-Loading: `.is-loading` + `aria-busy="true"`, `<span class="cx-spinner" style="width:16px;height:16px">` before the label ("Sending…").
+Loading: `.is-loading` + `aria-busy="true"`, `<span class="cx-spinner" style="width:16px;height:16px">` before the label ("Sending…"). **In the app:** `<Button loading>` adds `.is-loading`, `aria-busy` and a decorative spinner (sized 16px in `button.css`). The button ignores clicks but stays focusable and in colour.
 With icon: leading (Download) or trailing (↗ external).
 
 ### Button Group — `.cx-btngroup` (`role="group"` + `aria-label`)
@@ -228,15 +245,15 @@ Kit uses: "Live only" filter, grid/list icon toggle (`aria-label`).
 ### Toggle Group — `.cx-tgroup`
 
 Container: pad 3, gap 3, border 1px ink, `--r`, bg surface. Children `.cx-toggle`: border transparent, **h34**, `--r-sm`.
-A11y in kit: `role="radiogroup"` + `aria-label`; items `role="radio"` + `aria-checked`.
-Kit uses: Language (EN | RU), Theme (Paper | Notte), View (Grid | List), Filter (All | Front | Mobile-disabled).
+A11y in kit: `role="radiogroup"` + `aria-label`; items `role="radio"` + `aria-checked`. **In the app:** Base UI ToggleGroup renders `role="group"` with toggle buttons (`aria-pressed`) and arrow-key focus; the kit CSS styles both.
+Kit uses: Language (EN | RU on the sheet; the app uses EN | FR, see §9.1), Theme (Paper | Notte), View (Grid | List), Filter (All | Front | Mobile-disabled).
 
 ### Switch — `.cx-switch` inside `.cx-switch-row`
 
 Track 46×26, border 1px ink, radius 13, bg surface. Thumb 16×16 ink at 4/4.
 Hover: sunk. Active: thumb widens to 20px. **On** (`aria-checked="true"`): track ink, thumb paper, `translateX(20px)`; on+hover track `#3A2E22`; on+active thumb at 16px.
 Disabled: hatch track, line border, thumb `--line-strong`; row text muted.
-Row: min-h 44, gap 12, 15px. Markup: `<button type="button" role="switch" aria-checked aria-label>`.
+Row: min-h 44, gap 12, 15px. Markup: `<button type="button" role="switch" aria-checked aria-label>`. **In the app:** Base UI renders `<span role="switch">` inside `<label class="cx-switch-row">` (the label names it). `:disabled` has a `[data-disabled]` alias, and the disabled row text is muted (`.cx-switch-row[data-disabled]`).
 Kit uses: Notte (night sheet), reduce motion, "Live demos only".
 
 ### Kbd — `.cx-kbd`
@@ -274,19 +291,19 @@ Shared: width 100%, **h44**, pad 0 12, border 1px `--line-strong`, `--r`, bg `--
 ### Select listbox (open)
 
 `.cx-menu` (`role="listbox"`) with `.cx-menu-label` groups and `.cx-option` (`role="option"`):
-option min-h 36, pad 0 10, `--r-sm`, 14px. Hover sunk · active ink fill/paper text · `aria-selected="true"` = weight 600 + check icon 14px sanguine · disabled in kit = inline `color:#8A7558; cursor:not-allowed` + `aria-disabled="true"`.
+option min-h 36, pad 0 10, `--r-sm`, 14px. Hover sunk · active ink fill/paper text · `aria-selected="true"` = weight 600 + check icon 14px sanguine · disabled in kit = inline `color:#8A7558; cursor:not-allowed` + `aria-disabled="true"`. **In the app:** `.cx-option[data-disabled]` (`--line-strong`), highlight = `[data-highlighted]`, selected = `[data-selected]`; the listbox sits on the menu surface with `min-width: var(--anchor-width)`.
 
 ### Input Group — `.cx-igroup`
 
 h44, border line-strong, `--r`, bg white. Hover ink border; `:focus-within` ink + inset 1px; `.is-focus` dashed outline; disabled hatch.
 
 - `.cx-addon` (prefix): bg sunk, mono 12px ink-2, right border line-strong. `.cx-addon--end` = suffix (left border).
-- `.cx-ibtn` ("field button", e.g. `SEND`): bg ink, paper text, mono 600 12px +0.08em, left border ink, radius `0 3px 3px 0`. Hover bg sanguine; active sanguine-press. Disabled in kit (inline): bg `#D3C5A8`, text `#6B5C48`.
+- `.cx-ibtn` ("field button", e.g. `SEND`): bg ink, paper text, mono 600 12px +0.08em, left border ink, radius `0 3px 3px 0`. Hover bg sanguine; active sanguine-press. Disabled in kit (inline): bg `#D3C5A8`, text `#6B5C48`. **In the app:** `.cx-igroup .cx-ibtn:disabled` uses `--line` / `--muted`. `.is-focus` maps to `:has(input:focus-visible)` and `.is-disabled` to `[data-disabled]`.
   Use: email + copy (sitemap G3), `https://` prefix.
 
 ### Checkbox / Radio — `.cx-check`, `.cx-radio` inside `label.cx-crow`
 
-Native `<input>` with `appearance:none`. 20×20, border 1.5px ink, bg white; checkbox `--r-sm`, radio 50%.
+Native `<input>` with `appearance:none`. **In the app:** Base UI renders `<span role="checkbox">` / `<span role="radio">`; see the aliases in §2.1. Radio groups render `role="radiogroup"` named by the legend. 20×20, border 1.5px ink, bg white; checkbox `--r-sm`, radio 50%.
 Row `.cx-crow`: min-h 44, gap 12, 15px; `.cx-crow.is-disabled` muted.
 Hover sunk · active `scale(.88)` · checked: checkbox ink fill + paper check mark (clip-path) / radio ink dot 10px · checked+hover `#3A2E22` · indeterminate `.is-mixed` (2px bar) + `aria-checked="mixed"` · invalid border error · disabled hatch, border line-strong.
 Radio groups: `<fieldset>` with `<legend class="cx-flabel">`.
@@ -303,7 +320,7 @@ Thumb hover: sanguine fill. Active/drag: `rotate(45deg) scale(1.15)`, sanguine-p
 ### Composition — Contact form (kit sheet 02 §07)
 
 `<form class="cx-panel">`, grid 2 columns, gap `20px 24px`, padding 28. Message spans both columns with counter. Footer row: `grid-column: 1/-1`, border-top 1px line, padding-top 20, space-between: checkbox on the left; `Clear` (Ghost, `type=reset`) + `Send message →` (Primary, `type=submit`) on the right.
-⚠ The kit's fields (Budget radios, "Reply by email") are a layout demo. The **fields and options come from `sitemap.md` G3** (Name, Email, Request type: Job offer / Freelance / Question / Other, Message, optional consent checkbox, honeypot).
+⚠ The kit's fields (Budget radios, "Reply by email") are a layout demo. The **fields and options come from `sitemap.md` G3** (Name, Email, Request type: Job offer / Freelance / Question / Other, Message, optional consent checkbox, honeypot). Storybook: Forms → Composition → Contact form.
 
 ---
 
@@ -317,7 +334,7 @@ Thumb hover: sanguine fill. Active/drag: `rotate(45deg) scale(1.15)`, sanguine-p
 - `.cx-navpanel` (mega-menu): 2-column grid, gap 4, **w520**, pad 8, surface, border ink, `--r`, `--float`. Items: pad 12, `--r-sm`, `.cx-label` 10px sanguine (Tav. N) + `<b>` display 15 + `<span>` 13px ink-2. Hover sunk, active sunk-2.
 
 **Header (kit composition):** height 72, padding 0 24, border-bottom **2px ink**, bg paper. Left: name in Space Grotesk 700 21px −0.03em + `.cx-cap` sheet label. Nav at `margin-left:auto`. Then ⌘K trigger = Secondary `sm` button with search icon + `<kbd class="cx-kbd" style="height:20px">⌘K</kbd>`, `aria-label="Open codex index"`.
-⚠ Nav items in the kit (Work, About, Stack, Notes, Contact) are a demo. Real items: `sitemap.md` G1.
+⚠ Nav items in the kit (Work, About, Stack, Notes, Contact) are a demo. Real items: `sitemap.md` G1. **In the app:** `NavLink` marks itself `aria-current=\"page\"` from the URL.
 
 ### Tabs — `.cx-tabs` / `.cx-tab` / `.cx-tabpanel`
 
@@ -342,7 +359,8 @@ min-w 240, pad 6, surface, border ink, `--r`, `--float`.
 - `.cx-menu-sep`: 1px line, margin `6px -6px`.
 - `.cx-menu-item`: min-h 36, pad 0 10, gap 10, `--r-sm`, body 14px, icon 16 ink-2; `.cx-menu-end` = right-aligned mono 11 muted (shortcut / kbd).
   Hover/highlighted sunk · active ink fill, paper text+icon · checked (`aria-checked="true"`): 6px sanguine dot before · disabled line-strong · `.cx-menu-item--danger` error text, hover error-wash.
-- Kit uses: language/theme dropdown (trigger = Mono `sm` button, chevron rotates when open); context menu on the drawing (easter egg: Explode view `E`, Show construction lines `G`, Mirror writing ✓, Copy SVG `⌘C`, Reset sketch — danger).
+  **Inside menus focus = highlight:** in the app `.cx-menu-item:focus-visible` drops the dashed outline, and the open panel draws no focus ring (§9.6).
+- Kit uses: language/theme dropdown (trigger = Mono `sm` button, chevron rotates when open; **decided 2026-11-20:** while its menu is open the trigger keeps the button's hover look — lift + hard shadow + the variant's hover fill — instead of the sheet's pressed look); context menu on the drawing (easter egg: Explode view `E`, Show construction lines `G`, Mirror writing ✓, Copy SVG `⌘C`, Reset sketch — danger).
 
 ### Command palette (⌘K "codex index") — `.cx-cmd`
 
@@ -361,11 +379,11 @@ Inside a Dialog over scrim. **w600**, surface, border ink, `--r`, `--float`.
 
 Column, surface, border 1px ink, `--r`, overflow hidden.
 
-- `.cx-card-media`: aspect 16/10, bottom border ink, placeholder = sunk + `--xhatch`; inner label `<span>` mono 10px on surface. `.cx-card-tag` (e.g. `TAV. I`): absolute 10/10, mono 10px, ink bg, paper text, radius 2.
+- `.cx-card-media`: aspect 16/10, bottom border ink, placeholder = sunk + `--xhatch`; inner label `<span>` mono 10px on surface. `.cx-card-tag` (e.g. `TAV. I`): absolute 10/10, mono 10px, ink bg, paper text, radius 2. **In the app:** codex.css writes the placeholder label as `.cx-card-media > span`, which also hits the tag and out-specifies its ink fill. Fixed as `> span:not(.cx-card-tag)`.
 - `.cx-card-body`: pad 16, gap 10 — title `.cx-card-title.cx-h4` + Badges.
 - `.cx-card-foot`: pad 12 16, top border line, mono 11px muted — year left, `.cx-card-arrow` `↗` right.
 - **Link card** `.cx-card--link` (`<a>`): hover `translate(-3px,-3px)` + `5px 5px 0 0 var(--ink)`, arrow moves `(3px,-3px)` and turns sanguine, title underlined. Active: `translate(0,0)`, shadow `1px 1px 0 0 ink`, bg sunk. Uses `--t`/`--ease` (120ms), not button timing.
-- Disabled / in progress `.cx-card.is-disabled` + `aria-disabled`: border line, muted text, media at opacity .55, tag bg muted (inline), Badge `warning` "Draft".
+- Disabled / in progress `.cx-card.is-disabled` + `aria-disabled`: border line, muted text, media at opacity .55, tag bg muted (inline), Badge `warning` "Draft". **In the app:** `<Card disabled>` → `[data-disabled]`; its media is decorative (`aria-hidden`, §9.8).
 
 ### Item — list mode — `.cx-items` / `.cx-item`
 
@@ -471,7 +489,7 @@ border ink, `--r`, surface. `.cx-scrollbar` 8px with left 1px line; `.cx-scrollt
 
 ### Tooltip — `.cx-tip` (`role="tooltip"`)
 
-pad 6 9, `--r-sm`, **ink bg, paper text, mono 11px +0.06em**, nowrap, 8px rotated-square arrow. `--right` (arrow on the left) for the social rail; `--top` above stack badges. Shows on hover **and** focus; delay 300ms. May contain `.cx-kbd--dark`.
+pad 6 9, `--r-sm`, **ink bg, paper text, mono 11px +0.06em**, nowrap, 8px rotated-square arrow. `--right` (arrow on the left) for the social rail; `--top` above stack badges. Shows on hover **and** focus; delay 300ms. May contain `.cx-kbd--dark`. **In the app:** only `right` and `top` (the sides the kit draws an arrow for). The tooltip never flips to the other side; the gaps are 10px (right) and 8px (top).
 
 ### Hover Card — `.cx-hcard`
 
@@ -510,6 +528,13 @@ w380, flex gap 14, pad `12 12 12 16`, surface, border ink, `--r`, `--float`. Pos
 `.cx-toast-body`: `.cx-label` 10px (colored: verdigris "Copied", sanguine "Draft saved", default "Sending") + 14px ink-2 text. Optional leading icon 20px or spinner; trailing Secondary `sm` action ("Undo") and Ghost `sm` icon dismiss.
 `.cx-toast--dark`: ink bg, paper text, **shadow `4px 4px 0 0 var(--sanguine)`**, secondary text `#D9CDB6`, label `#F0A58F`.
 
+**In the app:**
+- `ToastProvider` + `useToast().show({ type, title, description, action })`.
+- Types: `success` (verdigris check), `loading` (spinner, no timeout), `accent` (sanguine label).
+- `max-width: calc(100vw - 40px)` is added so the 380px toast fits phones.
+- The stack is 32px from the edges (20px below 768px).
+- `--dark` is not exposed by the component (its only example is the dropped Notte theme, and a dismiss button on ink is not designed).
+
 ---
 
 ## 8. Decorative layer — Separator, Marker, Dimension (sheet 00 §05)
@@ -524,24 +549,69 @@ w380, flex gap 14, pad `12 12 12 16`, surface, border ink, `--r`, `--float`. Pos
 
 ## 9. Known gaps and inconsistencies in the kit (do NOT "fix" silently — decide, then update kit + this file)
 
-1. **Language toggle:** kit and `concept-codex.md` show **EN | RU**; `sitemap.md` says **EN | FR**. Open.
-2. **Social rail:** kit shows GitHub, LinkedIn, **Telegram**, Email; `sitemap.md` G2 lists GitHub, LinkedIn, Email, **CV (PDF)**. Content follows sitemap unless decided otherwise.
-3. **Dark theme "Notte":** only 4 colors are defined (`#1C1712 / #F1EADB / #C9A97A / #E0704F`, concept doc). `codex.css` has **no Notte theme** and no mapping of these to tokens. `.cx-toast--dark` and `.cx-kbd--dark` are "on ink" components, not the Notte theme. Don't derive a dark palette — `TODO(design)`.
+1. **Language toggle:** kit and `concept-codex.md` show **EN | RU**; `sitemap.md` says **EN | FR**. **Decided 2026-11-19: EN | FR.** RU on the kit sheets is sample copy; the canvas is not redrawn (the project is the source of truth).
+2. **Social rail:** kit shows GitHub, LinkedIn, **Telegram**, Email; `sitemap.md` G2 lists GitHub, LinkedIn, Email, **CV (PDF)**. **Decided 2026-11-19: no Telegram**; links follow `sitemap.md` G2. The canvas is not redrawn (the project is the source of truth).
+3. **Dark theme "Notte":** only 4 colors are defined (`#1C1712 / #F1EADB / #C9A97A / #E0704F`, concept doc). `codex.css` has **no Notte theme** and no mapping of these to tokens. `.cx-toast--dark` and `.cx-kbd--dark` are "on ink" components, not the Notte theme. Don't derive a dark palette — `TODO(design)`. **In the app:** one theme only (PROJECT_OVERVIEW.md §2); `.cx-toast--dark` is kept in CSS but not exposed.
 4. **EB Garamond** (5th font) is still awaiting approval (concept doc).
-5. **Sheet width:** CSS default `.cx-sheet-panel{width:360px}` vs rule "320 / 82vw".
-6. **Focus rule coverage:** the shared `:focus-visible` selector does **not** include `.cx-ibtn`, `.cx-tick`, `.cx-option`, `.cx-navpanel a`, `.cx-sheet-nav a`, `.cx-card` (non-link). Browsers will show default focus there.
-7. **Reduced motion coverage:** the `prefers-reduced-motion` block only covers `.cx-btn, .cx-toggle, .cx-chip, .cx-page, .cx-switch, .cx-card, .cx-item, .cx-switch::after` (transitions) and `.cx-spinner, .cx-skel, .cx-dot--pulse` (animations). Not covered: menus, tabs, accordion, inputs, slider, ticks, `.cx-ibtn`, overlays.
-8. **Opacity exceptions:** `.cx-card.is-disabled .cx-card-media{opacity:.55}` and an inline `opacity:.4` on a disabled accordion icon contradict "no opacity". Documented only; not a pattern to reuse.
-9. **Inline-only styles in the kit** (not in CSS): social icon turning sanguine on hover; disabled `.cx-ibtn` colors; disabled `.cx-option` color; Mono button bg surface in the "field button"; collapsible link-button mono styling; `outline-offset:-3px` on focused Item/Accordion rows; card tag muted bg on disabled card.
-10. **Native-element dependency:** `.cx-check`/`.cx-radio` are styled through native `:checked` / `:disabled`; `.cx-select-native` is a native `<select>`. If a library primitive renders something else (e.g. a `<button role="checkbox">` with `aria-checked`/`data-state`), these selectors won't match. Check the DOM the installed shadcn component actually renders before wiring; map its state attributes onto the **same declarations** — don't restyle.
+5. **Sheet width:** CSS default `.cx-sheet-panel{width:360px}` vs rule "320 / 82vw". Deferred to the mobile menu (M2).
+6. **Focus rule coverage:** the shared `:focus-visible` selector does **not** include `.cx-ibtn`, `.cx-tick`, `.cx-option`, `.cx-navpanel a`, `.cx-sheet-nav a`, `.cx-card` (non-link). Browsers will show default focus there. **In the app:** kept as is, except `.cx-menu-item`: focus inside menus is the highlight, not the dashed line (sheet 03 note, §2).
+7. **Reduced motion coverage:** the `prefers-reduced-motion` block only covers `.cx-btn, .cx-toggle, .cx-chip, .cx-page, .cx-switch, .cx-card, .cx-item, .cx-switch::after` (transitions) and `.cx-spinner, .cx-skel, .cx-dot--pulse` (animations). Not covered: menus, tabs, accordion, inputs, slider, ticks, `.cx-ibtn`, overlays. **In the app:** still not covered for those transitions; the new overlay motion (menu surface, tooltip, toast) has its own reduced-motion override.
+8. **Opacity exceptions:** `.cx-card.is-disabled .cx-card-media{opacity:.55}` and an inline `opacity:.4` on a disabled accordion icon contradict "no opacity". Documented only; not a pattern to reuse. **Decided 2026-11-20:** the in-progress card keeps its dimmed media as drawn. Its text falls below 4.5:1, an accepted exception to WCAG 2.2 AA; the media is marked decorative (`aria-hidden`) and excluded from axe checks.
+9. **Inline-only styles in the kit** (not in CSS): social icon turning sanguine on hover; disabled `.cx-ibtn` colors; disabled `.cx-option` color; Mono button bg surface in the "field button"; collapsible link-button mono styling; `outline-offset:-3px` on focused Item/Accordion rows; card tag muted bg on disabled card. **In the app, implemented with tokens:** disabled `.cx-ibtn`, disabled `.cx-option`, `outline-offset:-3px` on `.cx-item`, the muted card tag, the Select placeholder colour, the spinner size inside a button, indeterminate + hover. **Left to compositions:** the social-rail icon colour and the field-button Mono background (M2).
+10. **Native-element dependency:** `.cx-check`/`.cx-radio` are styled through native `:checked` / `:disabled`; `.cx-select-native` is a native `<select>`. If a library primitive renders something else (e.g. a `<button role="checkbox">` with `aria-checked`/`data-state`), these selectors won't match. Check the DOM the installed shadcn component actually renders before wiring; map its state attributes onto the **same declarations** — don't restyle. **In the app:** resolved with Base UI attribute aliases (§2.1).
 11. **Kit sample copy** (e.g. "Notes" nav item, "UI Kit library" as Tav. II, "One core, five brands", "4 live · 1 launching", budgets, hello@[your-domain]) is placeholder. Real content = `sitemap.md`; `concept-codex.md` says brand counts / multi-branding do not appear in the concept.
 
 ---
 
 ## 10. Documentation-only classes (never use in the app)
 
-`.cx-sheet`, `.cx-sheet-head`, `.cx-sheet-meta`, `.cx-sec`, `.cx-sec-title`, `.cx-matrix` (+ `.cx-mh`, `.cx-mv`, `.cx-last`), `.cx-strip`, and the frozen `.is-*` state classes except the ⚠ ones in §2.1. Layout helpers `.cx-panel`, `.cx-cols-2/3/4`, `.cx-stack`, `.cx-inline`, `.cx-cap`, `.cx-note` live in the same scaffolding block of `codex.css`; they may be reused for app layout, but they are not components.
+`.cx-sheet`, `.cx-sheet-head`, `.cx-sheet-meta`, `.cx-sec`, `.cx-sec-title`, `.cx-matrix` (+ `.cx-mh`, `.cx-mv`, `.cx-last`), `.cx-strip`, and the frozen `.is-*` state classes except the ⚠ ones in §2.1. Layout helpers `.cx-panel`, `.cx-cols-2/3/4`, `.cx-stack`, `.cx-inline`, `.cx-cap`, `.cx-note` live in the same scaffolding block of `codex.css`; they may be reused for app layout, but they are not components. **In the app:** none of the documentation-only classes are shipped; the layout helpers are in `src/shared/styles/layout.css`.
 
 ## 11. shadcn component → kit class (as named on the kit sheets)
 
 Button → `.cx-btn` · Button Group → `.cx-btngroup` · Toggle → `.cx-toggle` · Toggle Group → `.cx-tgroup` · Switch → `.cx-switch` · Kbd → `.cx-kbd` · Separator → `.cx-sep` · Marker → `.cx-marker` · Badge → `.cx-badge` (+ Chip `.cx-chip`) · Avatar → `.cx-avatar` · Card → `.cx-card` · Item → `.cx-item` · Navigation Menu → `.cx-nav-link` / `.cx-navpanel` · Tabs → `.cx-tab` · Breadcrumb → `.cx-crumb` · Pagination → `.cx-page` · Dropdown / Context Menu → `.cx-menu` · Command → `.cx-cmd` · Dialog / Alert Dialog → `.cx-dialog` · Sheet → `.cx-sheet-panel` · Drawer → `.cx-drawer` · Tooltip → `.cx-tip` · Hover Card → `.cx-hcard` · Alert → `.cx-alert` · Toast (sonner) → `.cx-toast` · Field / Label → `.cx-field` / `.cx-flabel` · Input → `.cx-input` · Input Group → `.cx-igroup` · Textarea → `.cx-textarea` · Select / Native Select → `.cx-select` (+ `.cx-option`) · Checkbox / Radio Group → `.cx-check` / `.cx-radio` · Slider → `.cx-slider` · Spinner → `.cx-spinner` · Progress → `.cx-progress` · Accordion / Collapsible → `.cx-acc` · Table → `.cx-table` · Code Block → `.cx-code` · Carousel → `.cx-carousel` · Chart → `.cx-chart` · Trace → `.cx-trace` · Empty → `.cx-empty` · Skeleton → `.cx-skel` · Resizable → `.cx-resizable` · Scroll Area → `.cx-scroll` · Aspect Ratio → `.cx-ratio` · Typography → §1.7 classes.
+
+---
+
+## 12. In the app: kit class → component (M1)
+
+Import components from their folder: `import { Button } from '@/shared/ui/button'`. CSS is never imported by components. `src/shared/styles/index.css` loads every file in the kit's cascade order, in layers `reset < base < components < motion`. Stories: `pnpm storybook`.
+
+| Kit class | Component (`src/shared/ui/…`) | Base | Status |
+|---|---|---|---|
+| Tokens, reset, typography, layout helpers, focus, reduced motion | `src/shared/styles/*.css`, fonts in `fonts.ts` | — | done |
+| Icons (Lucide geometry) | `icons/` — `Icon` + one file per icon | — | done (add on demand) |
+| `.cx-btn` | `button/` — `Button`, `buttonClassName()` (for links) | Base UI Button | done |
+| `.cx-btngroup` | `button-group/` — `ButtonGroup` | markup | done |
+| `.cx-toggle` | `toggle/` — `Toggle` | Base UI Toggle | done |
+| `.cx-tgroup` | `toggle-group/` — `ToggleGroup` | Base UI ToggleGroup | done |
+| `.cx-switch` | `switch/` — `Switch` | Base UI Switch | done |
+| `.cx-kbd` | `kbd/` — `Kbd` | markup | done |
+| `.cx-field` (+ label, desc, err, counter) | `field/` — `Field` | Base UI Field | done |
+| `.cx-input` | `input/` — `Input` | Base UI Input | done |
+| `.cx-textarea` | `textarea/` — `Textarea` | Base UI Field.Control | done |
+| `.cx-select` + `.cx-option` | `select/` — `Select` | Base UI Select | done |
+| `.cx-select-native` | `native-select/` — `NativeSelect` | Base UI Field.Control | done |
+| `.cx-igroup`, `.cx-addon`, `.cx-ibtn` | `input-group/` — `InputGroup`, `InputGroupAddon`, `InputGroupInput`, `InputGroupButton` | markup + Base UI | done |
+| `.cx-check`, `.cx-crow` | `checkbox/` — `Checkbox` | Base UI Checkbox | done |
+| `.cx-radio` | `radio-group/` — `RadioGroup`, `Radio` | Base UI RadioGroup + Fieldset | done |
+| `.cx-spinner` | `spinner/` — `Spinner` | markup | done |
+| `.cx-sep`, `.cx-marker`, `.cx-dim` | `separator/` — `Separator`, `Marker`, `Dimension` | Base UI Separator + markup | done |
+| `.cx-badge`, `.cx-dot` | `badge/` — `Badge` | markup | done |
+| `.cx-chip` | `chip/` — `Chip` | Base UI Toggle | done |
+| `.cx-card` | `card/` — `Card`, `CardMedia`, `CardBody`, `CardTitle`, `CardFoot`, `CardArrow` | markup + i18n `Link` | done |
+| `.cx-items`, `.cx-item` | `item/` — `ItemList`, `Item` | markup + i18n `Link` | done |
+| `.cx-ratio` | `aspect-ratio/` — `AspectRatio` | markup | done |
+| `.cx-skel` | `skeleton/` — `Skeleton` | markup | done |
+| `.cx-navbar`, `.cx-nav-link` | `nav-link/` — `NavBar`, `NavLink` (client: reads the URL) | i18n `Link` | done |
+| `.cx-tabs`, `.cx-tab`, `.cx-tabpanel` | `tabs/` — `Tabs`, `TabsList`, `Tab`, `TabsPanel` | Base UI Tabs | done |
+| `.cx-crumb` | `breadcrumb/` — `Breadcrumb` | i18n `Link` | done |
+| `.cx-pager`, `.cx-page` | `pagination/` — `Pagination`, `PaginationLink` | i18n `Link` | done |
+| `.cx-menu`, `.cx-menu-item` | `menu/` — `Menu`, `MenuTrigger`, `MenuPopup`, `MenuItem`, `MenuCheckboxItem`, `MenuRadioGroup`, `MenuRadioItem`, `MenuGroup`, `MenuSeparator` | Base UI Menu | done (dropdown) |
+| `.cx-tip` | `tooltip/` — `Tooltip` | Base UI Tooltip | done |
+| `.cx-alert` | `alert/` — `Alert` | markup | done |
+| `.cx-toast` | `toast/` — `ToastProvider`, `useToast` | Base UI Toast | done (provider not yet in `src/app`) |
+| `.cx-navpanel`, Context menu, `.cx-cmd` | — | — | later pass |
+| `.cx-dialog`, `.cx-sheet-panel`, `.cx-drawer`, `.cx-hcard`, `.cx-stage`, `.cx-scrim` | — | — | later pass |
+| `.cx-acc`, `.cx-table`, `.cx-code`, `.cx-trace`, `.cx-empty`, `.cx-avatar`, `.cx-carousel` | — | — | later pass |
+| `.cx-slider`, `.cx-progress`, `.cx-resizable`, `.cx-scroll`, `.cx-chart` (optional) | — | — | later pass |

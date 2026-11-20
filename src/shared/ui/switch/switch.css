@@ -1,0 +1,101 @@
+/*
+ * Switch — .cx-switch inside .cx-switch-row (DESIGN.md §3, kit sheet 01 §04)
+ *
+ * Track 46×26, thumb 16×16 drawn with ::after. On (aria-checked="true"): ink track, paper thumb.
+ *
+ * Base UI Switch.Root renders <span role="switch"> (not a <button>), so the kit's :disabled
+ * selectors get a [data-disabled] alias with the same declarations (PROJECT_OVERVIEW.md §6).
+ */
+
+@layer components {
+  /* The row is the <label>: clicking the text toggles the switch */
+  .cx-switch-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    font-size: 15px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* Disabled row: muted text (DESIGN.md §3; inline on the kit sheet, not in codex.css) */
+  .cx-switch-row[data-disabled] {
+    color: var(--muted);
+    cursor: not-allowed;
+  }
+
+  .cx-switch {
+    position: relative;
+    flex: none;
+    width: 46px;
+    height: 26px;
+    padding: 0;
+    border: 1px solid var(--ink);
+    border-radius: 13px;
+    background: var(--surface);
+    cursor: pointer;
+    transition: background-color var(--t-btn) var(--ease-btn);
+  }
+
+  /* Thumb */
+  .cx-switch::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--ink);
+    transition:
+      transform var(--t-btn) var(--ease-btn),
+      width var(--t-btn) var(--ease-btn);
+  }
+
+  .cx-switch:not(:disabled, [data-disabled]):hover {
+    background: var(--sunk);
+  }
+
+  /* Active: the thumb stretches */
+  .cx-switch:not(:disabled, [data-disabled]):active::after {
+    width: 20px;
+  }
+
+  /* On */
+  .cx-switch[aria-checked='true'] {
+    background: var(--ink);
+  }
+
+  .cx-switch[aria-checked='true']::after {
+    background: var(--paper);
+    transform: translateX(20px);
+  }
+
+  /*
+   * On + active: the stretched thumb moves back to 16px so it stays inside the track.
+   * The kit draws this state only with frozen classes (.is-on.is-active); this is its real hook.
+   */
+  .cx-switch[aria-checked='true']:not(:disabled, [data-disabled]):active::after {
+    transform: translateX(16px);
+  }
+
+  /* On + hover. `:not(…)` is an addition: a disabled switch never reacts to hover. */
+  .cx-switch[aria-checked='true']:not(:disabled, [data-disabled]):hover {
+    background: #3a2e22;
+  }
+
+  /* Disabled = hatched track, line border, line-strong thumb */
+  .cx-switch:disabled,
+  .cx-switch[data-disabled] {
+    border-color: var(--line);
+    background-color: var(--sunk);
+    background-image: var(--hatch);
+    cursor: not-allowed;
+  }
+
+  .cx-switch:disabled::after,
+  .cx-switch[data-disabled]::after {
+    background: var(--line-strong);
+  }
+}

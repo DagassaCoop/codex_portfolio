@@ -1,0 +1,32 @@
+/*
+ * Reduced motion (DESIGN.md §2)
+ *
+ * When the user asks for less motion, state changes snap instead of animating
+ * and looping animations (spinner, skeleton, pulse dot) stop.
+ *
+ * This layer comes last, so it wins over the component rules regardless of specificity.
+ *
+ * Known gap (DESIGN.md §9.7): menus, tabs, accordion, inputs, slider, carousel ticks,
+ * .cx-ibtn and overlays are not covered. Not fixed on purpose.
+ */
+
+@layer motion {
+  @media (prefers-reduced-motion: reduce) {
+    .cx-btn,
+    .cx-toggle,
+    .cx-chip,
+    .cx-page,
+    .cx-switch,
+    .cx-card,
+    .cx-item,
+    .cx-switch::after {
+      transition: none;
+    }
+
+    .cx-spinner,
+    .cx-skel,
+    .cx-dot--pulse {
+      animation: none;
+    }
+  }
+}

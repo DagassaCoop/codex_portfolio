@@ -1,0 +1,71 @@
+/*
+ * Codex UI Kit — design tokens (Rev. B)
+ *
+ * Copied value-for-value from the kit's codex.css (DESIGN.md §1).
+ * Do not add tokens or change values here without updating the kit and DESIGN.md first.
+ * Single theme (Paper): tokens live in :root only.
+ */
+
+:root {
+  /* ---------- Surfaces (§1.1) ---------- */
+  --paper: #f1eadb; /* page background */
+  --surface: #f8f4ea; /* cards, panels, menus, dialogs */
+  --white: #fffdf8; /* input fields, code block */
+  --sunk: #e9dfcb; /* hover fill */
+  --sunk-2: #ded2b9; /* active / pressed fill */
+
+  /* ---------- Ink and lines (§1.2) ---------- */
+  --ink: #231b13; /* text, component outlines */
+  --ink-2: #4a3f33; /* body text */
+  --muted: #6b5c48; /* captions (4.8:1 on paper) */
+  --line-strong: #8a7558; /* input borders (3.6:1) */
+  --line: #d3c5a8; /* dividers inside components */
+  --sepia: #8a6a45; /* decor only: grid, "+", mirror writing */
+
+  /* ---------- Accent: sanguine (§1.3) ---------- */
+  --sanguine: #a3402a;
+  --sanguine-hover: #8b3422;
+  --sanguine-press: #7f2f1e;
+  --sanguine-wash: #ead2c3; /* highlight, selected row, accent badge */
+
+  /* ---------- Semantic: Renaissance pigments (§1.4) ---------- */
+  --verdigris: #2f6049; /* success */
+  --verdigris-wash: #d6e3d6;
+  --ochre: #7e560c; /* warning */
+  --ochre-wash: #f0ddb4;
+  --error: #8e2a1a; /* error: always with an icon and the "ERR —" prefix */
+  --error-wash: #f2d3c9;
+  --scrim: rgba(35, 27, 19, 0.45); /* overlay backdrop: ink at 45% */
+
+  /* ---------- Fonts (§1.7) ----------
+   * The --font-* variables come from next/font (src/shared/styles/fonts.ts).
+   * The family name after the comma is the fallback when next/font is not loaded (e.g. unit tests).
+   */
+  --display: var(--font-space-grotesk, 'Space Grotesk'), sans-serif;
+  --body: var(--font-hanken-grotesk, 'Hanken Grotesk'), sans-serif;
+  --mono: var(--font-ibm-plex-mono, 'IBM Plex Mono'), ui-monospace, monospace;
+  --marg: var(--font-eb-garamond, 'EB Garamond'), serif;
+
+  /* ---------- Radii (§1.5) ---------- */
+  --r: 4px; /* default */
+  --r-sm: 3px; /* badge, kbd, menu item, option, toggle-group item */
+
+  /* ---------- Depth: hard ink shadows, never blur (§1.5) ---------- */
+  --lift: 3px 3px 0 0 var(--ink); /* hover */
+  --float: 4px 4px 0 0 var(--ink); /* menus, dialogs, hover card, toast */
+
+  /* ---------- Hatching (disabled state, placeholders) (§1.5) ---------- */
+  --hatch: repeating-linear-gradient(135deg, rgba(74, 63, 51, 0.42) 0 1px, transparent 1px 6px);
+  --xhatch:
+    repeating-linear-gradient(135deg, rgba(74, 63, 51, 0.42) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(45deg, rgba(74, 63, 51, 0.28) 0 1px, transparent 1px 7px);
+
+  /* ---------- Motion (§2) ---------- */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1); /* everything except buttons */
+  --t: 120ms;
+
+  /* Buttons: a soft settle into a state, a quicker press */
+  --t-btn: 220ms;
+  --t-press: 90ms;
+  --ease-btn: cubic-bezier(0.25, 0.8, 0.25, 1);
+}

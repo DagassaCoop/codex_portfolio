@@ -1,0 +1,144 @@
+/*
+ * Typography (DESIGN.md §1.7)
+ *
+ * The kit maps shadcn "Typography" onto these classes.
+ * Use them on the matching element: .cx-display on h1, .cx-h2 on h2, .cx-body on p, and so on.
+ */
+
+@layer base {
+  /* ---------- Headings: Space Grotesk ---------- */
+
+  .cx-display {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+  }
+
+  .cx-h2 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+
+  .cx-h3 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  .cx-h4 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  /* ---------- Body text: Hanken Grotesk ---------- */
+
+  .cx-lead {
+    margin: 0;
+    font-family: var(--body);
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  .cx-body {
+    margin: 0;
+    font-family: var(--body);
+    font-size: 17.5px;
+    line-height: 1.56;
+    color: var(--ink-2);
+  }
+
+  .cx-small {
+    margin: 0;
+    font-family: var(--body);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  .cx-note {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+
+  /* ---------- Labels: IBM Plex Mono, uppercase ---------- */
+
+  /* Section and folio labels; often coloured with --sanguine */
+  .cx-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  /* Captions */
+  .cx-cap {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Inline code */
+  .cx-icode {
+    padding: 1px 5px;
+    border-radius: var(--r-sm);
+    background: var(--sunk);
+    font-family: var(--mono);
+    font-size: 0.88em;
+  }
+
+  /* ---------- Marginalia: EB Garamond italic ---------- */
+
+  /* Max 2 per screen (DESIGN.md §1.7) */
+  .cx-marg {
+    font-family: var(--marg);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-2);
+  }
+
+  /* Mirror writing — decor only, always aria-hidden */
+  .cx-mirror {
+    display: inline-block;
+    transform: scaleX(-1);
+    color: var(--sepia);
+  }
+
+  /* ---------- Text link ---------- */
+
+  .cx-tlink {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--line-strong);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: color var(--t);
+  }
+
+  .cx-tlink:hover {
+    color: var(--sanguine);
+    text-decoration-color: var(--sanguine);
+  }
+
+  .cx-tlink:active {
+    color: var(--sanguine-press);
+  }
+}

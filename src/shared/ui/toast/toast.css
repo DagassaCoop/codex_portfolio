@@ -1,0 +1,108 @@
+/*
+ * Toast — .cx-toast (DESIGN.md §7, kit sheet 05 §06)
+ *
+ * A floating sheet, bottom right, 4s: optional leading icon or spinner, a mono label + 14px text,
+ * an optional Secondary sm action and a Ghost sm dismiss. --dark sits on ink with a sanguine shadow.
+ */
+
+@layer components {
+  .cx-toast {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 380px;
+
+    /* Addition: never wider than a phone screen minus the 20px page margins (DESIGN.md §1.8) */
+    max-width: calc(100vw - 40px);
+    padding: 12px 12px 12px 16px;
+    border: 1px solid var(--ink);
+    border-radius: var(--r);
+    background: var(--surface);
+    box-shadow: var(--float);
+  }
+
+  /* Leading icon (success check): 20px */
+  .cx-toast > svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+  }
+
+  .cx-toast-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .cx-toast-body .cx-label {
+    font-size: 10px;
+  }
+
+  .cx-toast-body span:last-child {
+    color: var(--ink-2);
+    font-size: 14px;
+  }
+
+  /* Label colours by type (inline on the kit sheet) */
+  .cx-toast[data-type='success'] .cx-label,
+  .cx-toast[data-type='success'] > svg {
+    color: var(--verdigris);
+  }
+
+  .cx-toast[data-type='accent'] .cx-label {
+    color: var(--sanguine);
+  }
+
+  .cx-toast[data-type='loading'] .cx-spinner {
+    color: var(--ink-2);
+  }
+
+  /*
+   * ---------- On ink ----------
+   * Kept from the kit but not exposed by the Toast component yet: the sheet's only example belongs
+   * to the dropped Notte theme, and its buttons on ink are styled inline. Add it with a real use case.
+   */
+
+  .cx-toast--dark {
+    background: var(--ink);
+    box-shadow: 4px 4px 0 0 var(--sanguine);
+    color: var(--paper);
+  }
+
+  .cx-toast--dark .cx-toast-body span:last-child {
+    color: #d9cdb6;
+  }
+
+  /* Label on ink (inline on the kit sheet) */
+  .cx-toast--dark .cx-label {
+    color: #f0a58f;
+  }
+}
+
+/*
+ * Motion (DESIGN.md §2): 160ms, 8px shift up + fade. Not in codex.css.
+ * The stack's position (bottom right) is in Toast.module.css: the kit has no viewport element.
+ */
+@layer components {
+  .cx-toast {
+    transition:
+      opacity 160ms var(--ease),
+      transform 160ms var(--ease);
+  }
+
+  .cx-toast[data-starting-style],
+  .cx-toast[data-ending-style] {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@layer motion {
+  @media (prefers-reduced-motion: reduce) {
+    .cx-toast {
+      transition: none;
+    }
+  }
+}

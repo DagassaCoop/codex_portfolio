@@ -1,0 +1,14 @@
+/*
+ * Textarea — .cx-textarea (DESIGN.md §4). Shares the text-control rules in input.css.
+ */
+
+@layer components {
+  .cx-textarea {
+    display: block;
+    height: auto;
+    min-height: 120px;
+    padding: 10px 12px;
+    line-height: 1.5;
+    resize: vertical;
+  }
+}

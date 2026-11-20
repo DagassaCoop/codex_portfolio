@@ -1,0 +1,90 @@
+/*
+ * Separator, Marker, Dimension — the drawing layer's lines (DESIGN.md §8, kit sheet 00 §05)
+ *
+ * Separator: 1px line (default) · ink · strong (2px ink) · vertical.
+ * Marker: a labelled divider, "Fol. 03 · About", with the section name in sanguine.
+ * Dimension: a dimension line with end ticks and a real value, "1280 PX". Decorative only.
+ */
+
+@layer components {
+  /* ---------- Separator ---------- */
+
+  .cx-sep {
+    width: 100%;
+    margin: 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .cx-sep--ink {
+    border-top-color: var(--ink);
+  }
+
+  .cx-sep--strong {
+    border-top: 2px solid var(--ink);
+  }
+
+  .cx-sep--v {
+    align-self: stretch;
+    width: 0;
+    height: 100%;
+    border-top: 0;
+    border-left: 1px solid var(--line);
+  }
+
+  /* ---------- Marker ---------- */
+
+  .cx-marker {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    color: var(--ink-2);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* Ink lines on both sides of the label */
+  .cx-marker::before,
+  .cx-marker::after {
+    content: '';
+    flex: 1;
+    border-top: 1px solid var(--ink);
+  }
+
+  .cx-marker b {
+    font-weight: 500;
+    color: var(--sanguine);
+  }
+
+  /* ---------- Dimension ---------- */
+
+  .cx-dim {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+
+  /* The two halves of the line, each with an end tick */
+  .cx-dim::before,
+  .cx-dim::after {
+    content: '';
+    flex: 1;
+    height: 10px;
+    border-top: 1px solid var(--muted);
+    border-left: 1px solid var(--muted);
+    transform: translateY(5px);
+  }
+
+  .cx-dim::after {
+    border-right: 1px solid var(--muted);
+    border-left: 0;
+  }
+}
