@@ -1,0 +1,66 @@
+/*
+ * Reset — a minimal, neutral baseline.
+ *
+ * Only removes browser defaults; it introduces no design values.
+ * Page colours and the body font come from tokens, as on the kit sheets (DESIGN.md §1).
+ */
+
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+  }
+
+  /* Text blocks: spacing comes from layout, not from browser margins */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  figure,
+  blockquote,
+  dl,
+  dd {
+    margin: 0;
+  }
+
+  /* Lists that are styled as lists of things (nav, cards) opt out with role="list" */
+  ul[role='list'],
+  ol[role='list'] {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Media never overflows its container */
+  img,
+  picture,
+  video,
+  canvas {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Form controls use the page font instead of the system UI font */
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+}

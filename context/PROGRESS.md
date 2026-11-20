@@ -22,8 +22,8 @@
 _A snapshot. Overwrite it, don't append to it._
 
 - **Phase:** M1 Foundation, base pass (scope in Decisions, 2026-11-19).
-- **Now:** nothing in progress. M0 is done, Storybook is set up.
-- **Next:** bring `codex.css` into the repo as readable, per-component styles, then build the base `shared/ui` components with stories.
+- **Now:** M1 stage 1 (styles) is done and waiting for review.
+- **Next:** M1 stage 2, Actions: Button, Button Group, Toggle, Toggle Group, Switch, Kbd.
 - **Blocked by:** nothing. The Sheet width is deferred until the mobile menu (M2).
 
 ---
@@ -33,7 +33,7 @@ _A snapshot. Overwrite it, don't append to it._
 | # | Milestone | Status | Notes |
 |---|---|---|---|
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
-| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [todo] | Two passes: base first, the rest later (Decisions, 2026-11-19) |
+| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions · 3 Forms · 4 Data display · 5 Navigation · 6 Feedback |
 | M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | | |
 | M3 | Home (`/[locale]`) | | |
 | M4 | Work (`/[locale]/work`) | | |
@@ -60,6 +60,30 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-19 — M1 stage 1: styles (tokens, reset, typography, focus, reduced motion)
+- **Status:** [done]
+- **What:**
+  - Kit stylesheet brought in from `codex.css` (Rev. B) as formatted, commented files. Values are unchanged; Prettier lower-cases hex and writes `0.45` for `.45`.
+  - Cascade layers `reset < base < components < motion`. The order is declared in `layers.css`, imported first.
+  - Fonts via `next/font/google`, with `latin` + `latin-ext` subsets. The tokens read the font variables, falling back to the family names. The variables sit on `<html>`.
+  - Layout helpers (`.cx-panel`, `.cx-stack`, `.cx-inline`, `.cx-cols-2/3/4`) are included (DESIGN.md §10 allows them for app layout).
+  - Doc-only `.is-*` classes are not in the app CSS. Stories show frozen states with `storybook-addon-pseudo-states` instead.
+  - Stories: Foundations / Colors, Typography (scale + text-link states + keyboard focus test), Space & effects, State language.
+- **Where:**
+  - `src/shared/styles/`: `layers`, `tokens`, `reset`, `typography`, `layout`, `focus` and `motion` `.css`, plus `index.css`, `fonts.ts`, `index.ts` and `stories/`
+  - `src/app/layouts/LocaleLayout.tsx`
+  - `.storybook/main.ts`, `.storybook/preview.tsx`
+  - `stylelint.config.mjs`
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check` and `build` pass.
+  - `test:stories`: 9/9 passed, including axe, all kit fonts loaded, and a real keyboard Tab showing the dashed sanguine outline.
+  - `build-storybook` passes.
+  - Checked in the built app CSS that the layer order statement comes first.
+  - Pseudo-states checked by hand in the running Storybook: hover colour and the focus-visible outline apply.
+- **Follow-ups:**
+  - Add a regression test for the layer order (reduced motion beats components) once Button exists, e.g. a Playwright test with `reducedMotion: 'reduce'`.
+  - Missing test infrastructure (see Known issues).
 
 ### 2026-11-19 — PROJECT_OVERVIEW.md brought up to date
 - **Status:** [done]
@@ -88,7 +112,7 @@ _One entry per meaningful step. Template:_
 - **What:** Storybook 10 (`@storybook/nextjs-vite`) with addon-docs, addon-a11y and addon-vitest, plus `eslint-plugin-storybook`. Every story runs as a test in Chromium, and any axe violation fails it (`a11y.test: 'error'`). Vitest is split into two projects: `unit` (jsdom) and `storybook` (browser). Preview wraps stories in `NextIntlClientProvider` (EN messages).
 - **Where:** `.storybook/main.ts`, `.storybook/preview.tsx`, `vitest.config.ts`. Scripts: `storybook`, `build-storybook`, `test:stories`
 - **Verified:** with a throwaway story (removed): `build-storybook` built, the dev server served `index.json`, the `play` test passed, and a button without a name failed on axe `button-name`. `typecheck`, `lint` and `format:check` pass.
-- **Follow-ups:** import the kit styles in `.storybook/preview.tsx` (`TODO(foundation)`).
+- **Follow-ups:** ~~import the kit styles in `.storybook/preview.tsx`~~ done in M1 stage 1.
 
 ### 2026-11-19 — Project init (M0)
 - **Status:** [done]
@@ -117,6 +141,18 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-19 — How the kit stylesheet lives in the app
+- **Context:** M1 stage 1. `codex.css` is one minified file that mixes the kit with sheet scaffolding and frozen-state classes.
+- **Decision:**
+  - The kit is split into readable files under `src/shared/styles/`, and later one file per component in `src/shared/ui/<component>/`.
+  - `src/shared/styles/index.css` is the only entry point, and it fixes the order (PROJECT_OVERVIEW.md §6: imported once, globally). Components do not import their own CSS.
+  - Cascade layers `reset < base < components < motion`. Page CSS Modules are unlayered, so they win; use them for layout only.
+  - Doc-only `.is-*` classes and sheet scaffolding (DESIGN.md §10) are not shipped. ⚠ class-only states (DESIGN.md §2.1) will be kept where a component needs them.
+  - Frozen states in Storybook come from `storybook-addon-pseudo-states`.
+  - Stylelint keeps the kit's colour notation: `rgba(…, .45)`, not `rgb(… / 45%)`. CSS Modules use camelCase class names.
+  - The DESIGN.md §9.6 (focus coverage) and §9.7 (reduced-motion coverage) gaps are copied as they are, with comments in `focus.css` and `motion.css`.
+- **Affects:** `src/shared/styles/`, `stylelint.config.mjs`, `.storybook/`.
 
 ### 2026-11-19 — Foundation in two passes, base pass first
 - **Context:** The kit has ~45 components. The MVP pages do not need all of them right away.
@@ -179,4 +215,9 @@ _Shortcuts, `TODO(design)` markers, workarounds and warnings to revisit. Templat
 - [ ] **No localized 404 yet:** `app/not-found.tsx` is a bare English fallback (`TODO` in the file). The real page is M9 · since 2026-11-19
 - [ ] **No kit styles in Storybook yet:** `TODO(foundation)` in `.storybook/preview.tsx` · since 2026-11-19
 - [ ] **E2E has only run on `desktop`:** the `tablet` and `mobile` Playwright projects exist but have not been run · since 2026-11-19
+- [ ] **`test/` and `e2e/` are empty.** `test/setup.ts`, `test/vitest.d.ts` and `test/mocks/{handlers,server}.ts` from M0 are gone, and so is `e2e/smoke.spec.ts`. The folders were emptied around 21:38, before the first commit (`f73532a`), so these files were never in git. `vitest.config.ts` (project `unit`) still points to `./test/setup.ts`, so the first unit test will fail until the files are restored or the config changes. Restore them, or was this intentional? · since 2026-11-19
+- [ ] **pseudo-states needs manual registration:** `storybook-addon-pseudo-states` is not loaded into the preview from `main.ts` `addons`, so `.storybook/preview.tsx` registers its decorator and initial globals itself. The toolbar toggle still comes from `main.ts`. Re-check after Storybook upgrades (the decorator could end up registered twice) · since 2026-11-19
+- [ ] **Pseudo-state stories carry no style assertions:** the addon rewrites stylesheets after the story renders, after `play` has run. Real interactions (keyboard Tab) are what get asserted · since 2026-11-19
+- [ ] **First `test:stories` run after adding a dependency can fail** with "Vitest failed to find the current suite" while Vite re-optimizes deps. A second run passes · since 2026-11-19
+- [ ] **ESLint 9 is now flagged as deprecated by npm.** Moving to 10 is blocked by the plugins in `eslint-config-next` (Decisions, toolchain versions) · since 2026-11-19
 - [ ] **Docs reformatted by Prettier once:** at init `pnpm format` reformatted `DESIGN.md` and `PROJECT_OVERVIEW.md` (padded tables, `*italic*` → `_italic_`; no content changes). `context/` is now in `.prettierignore` · since 2026-11-19

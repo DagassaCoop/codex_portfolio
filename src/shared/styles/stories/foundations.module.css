@@ -1,0 +1,138 @@
+/*
+ * Layout for the Foundations stories only (documentation, not part of the kit).
+ * Every value is a kit token or a size copied from the Foundations sheet (UI Kit · 00).
+ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 1312px;
+}
+
+.sectionTitle {
+  margin: 0 0 16px;
+}
+
+/* ---------- Colour swatches ---------- */
+
+.swatchRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.swatch {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r);
+}
+
+/* Light swatches need an outline to be visible on paper */
+.swatchOutlined {
+  border: 1px solid var(--ink);
+}
+
+/* Semantic pigments: the wash colour as an inner ring */
+.swatchWithWash {
+  box-shadow: inset 0 0 0 6px var(--wash);
+}
+
+/* ---------- Typography specimen ---------- */
+
+.specimen {
+  padding: 0;
+}
+
+.specimenRow {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 20px;
+  align-items: baseline;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.specimenRow:last-child {
+  border-bottom: 0;
+}
+
+.specimenSpec {
+  line-height: 1.6;
+}
+
+.measure {
+  max-width: 680px;
+}
+
+/* ---------- Space, radius, borders, elevation ---------- */
+
+.spaceBar {
+  height: 12px;
+  background: var(--sanguine);
+}
+
+.radiusBox {
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--ink);
+}
+
+.radiusPill {
+  width: 48px;
+  height: 28px;
+  border: 1px solid var(--ink);
+  border-radius: 14px;
+}
+
+.rule {
+  width: 100%;
+}
+
+.elevationBox {
+  width: 56px;
+  height: 40px;
+  border: 1px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--surface);
+}
+
+/* ---------- State language ---------- */
+
+.states {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.stateDemo {
+  display: block;
+  width: 100%;
+  height: 56px;
+  border: 1px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--surface);
+}
+
+.stateHover {
+  background: var(--sunk);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--lift);
+}
+
+.stateActive {
+  background: var(--sunk-2);
+  transform: translate(1px, 1px);
+}
+
+.stateFocus {
+  outline: 2px dashed var(--sanguine);
+  outline-offset: 3px;
+}
+
+.stateDisabled {
+  border-color: var(--line);
+  background-color: var(--sunk);
+  background-image: var(--hatch);
+}

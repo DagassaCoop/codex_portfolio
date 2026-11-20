@@ -6,6 +6,7 @@ import type { ReactNode } from 'react';
 
 import { siteConfig } from '@/shared/config';
 import { routing } from '@/shared/i18n';
+import { fontVariables } from '@/shared/styles';
 
 type LocaleLayoutProps = {
   children: ReactNode;
@@ -36,7 +37,7 @@ export async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   setRequestLocale(locale);
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={fontVariables}>
       <body>
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>

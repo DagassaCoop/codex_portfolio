@@ -1,0 +1,26 @@
+/*
+ * Codex UI Kit — global stylesheet (the app's codex.css)
+ *
+ * Imported once, from src/app (and from .storybook/preview.tsx).
+ * This file is the manifest: it fixes the cascade order of everything the kit ships.
+ *
+ * Cascade layers, lowest priority first (the order is declared in layers.css):
+ *   reset      — browser defaults removed
+ *   base       — typography, layout helpers, shared focus rule
+ *   components — shared/ui component styles (one file per component)
+ *   motion     — prefers-reduced-motion overrides, must beat components
+ *
+ * Unlayered CSS (page CSS Modules) sits above every layer. Use it for page layout
+ * only; pages never restyle components (DESIGN.md §0).
+ */
+
+@import url('./layers.css');
+@import url('./tokens.css');
+@import url('./reset.css');
+@import url('./typography.css');
+@import url('./layout.css');
+@import url('./focus.css');
+
+/* Components (@layer components) — added stage by stage */
+
+@import url('./motion.css');
