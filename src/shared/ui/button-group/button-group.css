@@ -1,0 +1,73 @@
+/*
+ * Button Group — .cx-btngroup (DESIGN.md §3, kit sheet 01 §02)
+ *
+ * Buttons share borders; only the outer corners are rounded.
+ * Inside a group hover is a fill only (no lift). The active / selected segment
+ * (aria-pressed="true", aria-current) is raised out of the group instead.
+ */
+
+@layer components {
+  .cx-btngroup {
+    display: inline-flex;
+    align-items: stretch;
+  }
+
+  .cx-btngroup > .cx-btn {
+    border-radius: 0;
+  }
+
+  .cx-btngroup > .cx-btn + .cx-btn {
+    margin-left: -1px;
+  }
+
+  .cx-btngroup > .cx-btn:first-child {
+    border-radius: var(--r) 0 0 var(--r);
+  }
+
+  .cx-btngroup > .cx-btn:last-child {
+    border-radius: 0 var(--r) var(--r) 0;
+  }
+
+  /* Hover: fill only, drawn above the neighbours' shared border */
+  .cx-btngroup > .cx-btn:not(:disabled):hover {
+    position: relative;
+    z-index: 1;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Active / selected segment: raised out of the group, hard shadow below */
+  .cx-btngroup > .cx-btn:not(:disabled):active,
+  .cx-btngroup > .cx-btn[aria-pressed='true'],
+  .cx-btngroup > .cx-btn[aria-current] {
+    position: relative;
+    z-index: 2;
+    transform: translate(-2px, -2px);
+    box-shadow: var(--lift);
+  }
+
+  .cx-btngroup > .cx-btn--secondary[aria-pressed='true'],
+  .cx-btngroup > .cx-btn--mono[aria-pressed='true'],
+  .cx-btngroup > .cx-btn--secondary[aria-current] {
+    background: var(--sunk);
+  }
+
+  /* ---------- Vertical (social rail) ---------- */
+
+  .cx-btngroup--v {
+    flex-direction: column;
+  }
+
+  .cx-btngroup--v > .cx-btn + .cx-btn {
+    margin-top: -1px;
+    margin-left: 0;
+  }
+
+  .cx-btngroup--v > .cx-btn:first-child {
+    border-radius: var(--r) var(--r) 0 0;
+  }
+
+  .cx-btngroup--v > .cx-btn:last-child {
+    border-radius: 0 0 var(--r) var(--r);
+  }
+}

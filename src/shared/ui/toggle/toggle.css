@@ -1,0 +1,76 @@
+/*
+ * Toggle — .cx-toggle (DESIGN.md §3, kit sheet 01 §03)
+ *
+ * Off: transparent with a line-strong border. On (aria-pressed / aria-checked): ink fill, paper text.
+ * Base UI Toggle renders a native <button> with aria-pressed, so the kit selectors match as they are.
+ */
+
+@layer components {
+  .cx-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 40px;
+    min-width: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r);
+    background: transparent;
+    color: var(--ink-2);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color var(--t-btn) var(--ease-btn),
+      color var(--t-btn) var(--ease-btn),
+      border-color var(--t-btn) var(--ease-btn),
+      transform var(--t-btn) var(--ease-btn);
+  }
+
+  .cx-toggle svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .cx-toggle:not(:disabled):hover {
+    border-color: var(--ink);
+    background: var(--sunk);
+    color: var(--ink);
+  }
+
+  .cx-toggle:not(:disabled):active {
+    transform: translate(1px, 1px);
+    background: var(--sunk-2);
+    transition-duration: var(--t-press);
+  }
+
+  /* On */
+  .cx-toggle[aria-pressed='true'],
+  .cx-toggle[aria-checked='true'] {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /*
+   * On + hover. `:not(:disabled)` is an addition to the kit: without it a disabled
+   * toggle that is on would still darken on hover (PROGRESS.md, Decisions).
+   */
+  .cx-toggle[aria-pressed='true']:not(:disabled):hover,
+  .cx-toggle[aria-checked='true']:not(:disabled):hover {
+    background: #3a2e22;
+    color: var(--paper);
+  }
+
+  .cx-toggle:disabled {
+    border-color: var(--line);
+    background-color: var(--sunk);
+    background-image: var(--hatch);
+    color: var(--muted);
+    cursor: not-allowed;
+  }
+}

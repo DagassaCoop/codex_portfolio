@@ -11,6 +11,8 @@ const config = {
     'color-function-notation': null,
     'color-function-alias-notation': null,
     'alpha-value-notation': null,
+    // The kit relies on rule order (hover before disabled, group overrides after items), as codex.css does
+    'no-descending-specificity': null,
     // CSS Modules: :global / composes
     'selector-pseudo-class-no-unknown': [true, { ignorePseudoClasses: ['global', 'local'] }],
     'property-no-unknown': [true, { ignoreProperties: ['composes'] }],

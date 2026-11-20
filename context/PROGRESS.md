@@ -22,8 +22,8 @@
 _A snapshot. Overwrite it, don't append to it._
 
 - **Phase:** M1 Foundation, base pass (scope in Decisions, 2026-11-19).
-- **Now:** M1 stage 1 (styles) is done and waiting for review.
-- **Next:** M1 stage 2, Actions: Button, Button Group, Toggle, Toggle Group, Switch, Kbd.
+- **Now:** M1 stage 2 (Actions) is done and waiting for review.
+- **Next:** M1 stage 3, Forms: Field, Input, Textarea, Select, Checkbox, Radio Group, Input Group, Spinner (and Button `loading`).
 - **Blocked by:** nothing. The Sheet width is deferred until the mobile menu (M2).
 
 ---
@@ -33,7 +33,7 @@ _A snapshot. Overwrite it, don't append to it._
 | # | Milestone | Status | Notes |
 |---|---|---|---|
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
-| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions · 3 Forms · 4 Data display · 5 Navigation · 6 Feedback |
+| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms · 4 Data display · 5 Navigation · 6 Feedback |
 | M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | | |
 | M3 | Home (`/[locale]`) | | |
 | M4 | Work (`/[locale]/work`) | | |
@@ -60,6 +60,33 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-19 — M1 stage 2: Actions (Button, Button Group, Toggle, Toggle Group, Switch, Kbd)
+- **Status:** [done]
+- **What:**
+  - Six components in `src/shared/ui/`, each with its CSS, stories and `index.ts`.
+  - Button, Toggle, Toggle Group and Switch are built on Base UI. Button Group and Kbd are plain markup: Base UI has no such primitives.
+  - API:
+    - `<Button variant size iconOnly>`, plus `buttonClassName()` for links that look like buttons.
+    - `<ButtonGroup aria-label orientation>`.
+    - `<Toggle iconOnly>` and `<ToggleGroup aria-label value>`.
+    - `<Switch>label</Switch>`: the whole row is a `<label>`.
+    - `<Kbd tone>`.
+  - `iconOnly` requires `aria-label` at the type level.
+  - Stories helper `src/shared/lib/storybook` (`StateMatrix` + `pseudoStateParameters`): variant × state tables like the kit sheets, with hover / active / focus forced per cell.
+  - Component CSS is registered in `src/shared/styles/index.css` in the kit's cascade order.
+- **Where:**
+  - `src/shared/ui/{button,button-group,toggle,toggle-group,switch,kbd}/`
+  - `src/shared/lib/storybook/`
+  - `src/shared/styles/index.css`
+  - `vitest.config.ts` (`optimizeDeps`), `eslint.config.mjs`, `stylelint.config.mjs`
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` and `build-storybook` pass.
+  - `test:stories`: 34/34, including on a cold cache. Behaviour tests cover click / disabled, aria-pressed toggling with Space, single choice with arrow keys in the group, and the switch toggling by label click and Space.
+  - Screenshots of every state matrix compared with kit sheet 01. Rendered DOM checked: Switch is `<span role="switch">` named by its `<label>`; ToggleGroup items carry `aria-pressed`.
+- **Follow-ups:**
+  - Button `loading` (spinner + `aria-busy`) is deferred to stage 3, where the Spinner lives.
+  - Icon stroke 1.6 is passed per icon (`strokeWidth={1.6}`). Consider a shared icon wrapper.
 
 ### 2026-11-19 — M1 stage 1: styles (tokens, reset, typography, focus, reduced motion)
 - **Status:** [done]
@@ -142,6 +169,21 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 <!-- entries below, newest first -->
 
+### 2026-11-19 — Actions: mapping the kit onto Base UI
+- **Context:** M1 stage 2. Base UI renders some parts differently from the kit's markup, and a few kit states exist only as frozen classes or inline styles.
+- **Decision:**
+  - **Links that look like buttons** use `buttonClassName()` on the link, not `<Button render={<a/>}>`: Base UI would add `role="button"` to a non-button element.
+  - **Switch:** Base UI renders `<span role="switch">`, so `:disabled` gets a `[data-disabled]` alias. Additions, each drawn from DESIGN.md §3:
+    - `.cx-switch-row[data-disabled]` makes the row text muted. This is inline-only on the kit sheet.
+    - `[aria-checked='true']:active::after { translateX(16px) }` is the real hook for the sheet's frozen "on + active" state.
+  - **Disabled on + hover:** a disabled toggle or switch that is on no longer darkens on hover (`:not(:disabled)` added). In codex.css it does, because the on + hover rule out-specifies the disabled rule. This is a bug fix.
+  - **Toggle Group** uses Base UI's toggle buttons (`role="group"`, `aria-pressed`) instead of the sheet's `radiogroup` / `radio`. The kit CSS styles both. Arrow keys move focus.
+  - **Switch sample copy** is "Live demos only", not "Notte" (no night theme).
+  - **Not in components**, because they belong to compositions (the social-rail widget, M2):
+    - the social-rail icon turning sanguine on hover (inline on the sheet);
+    - the Mono button's surface background in the "field button".
+- **Affects:** `src/shared/ui/{switch,toggle}/*.css`, `src/shared/ui/button/Button.tsx`.
+
 ### 2026-11-19 — How the kit stylesheet lives in the app
 - **Context:** M1 stage 1. `codex.css` is one minified file that mixes the kit with sheet scaffolding and frozen-state classes.
 - **Decision:**
@@ -195,6 +237,15 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 _Things waiting for an answer. Template: `- [ ] <question> — context / options · owner · since YYYY-MM-DD`_
 
+- [ ] **GitHub and LinkedIn icons.**
+  - Lucide deprecated brand icons (lucide-icons/lucide#670; the 1.0.0 typings say "will be removed in v1.0"). They are gone from lucide-react 1.1.0 (2026-03-24) onward; the project uses 1.76.
+  - The social rail needs them (kit sheets 01 and 05). The kit's GitHub SVG is the old Lucide path.
+  - shadcn.io/icons/lucide still offers `lucide-github` as copy-paste SVG/React, or one file via the shadcn CLI (needs an account).
+  - Options:
+    - local stroke icons in `shared/ui/icons` from the old Lucide paths (ISC) — recommended: same style as the kit;
+    - Simple Icons (filled logos, which break the "no fills" icon rule);
+    - pinning an old lucide-react.
+  - Needed for M2 · owner: author · since 2026-11-19
 - [ ] **Sheet (mobile menu) width.** `codex.css` sets `.cx-sheet-panel { width: 360px }`. The kit's mobile-menu mockup draws it at 320px, and the overlay rules say "320 / 82vw" (320px, but never wider than 82% of the screen). On a 360px phone a 360px sheet covers the whole screen, so the scrim and the page behind it disappear. Options: `min(320px, 82vw)` (matches the mockup and the rule, recommended) or 360px (matches the CSS). **Deferred** until the mobile menu (M2); also listed in `PROJECT_OVERVIEW.md` §10.4 · owner: author · since 2026-11-19
 - [ ] **Update the kit canvas** to EN | FR and no Telegram, or leave the sheets as they are and treat them as sample copy · owner: author · since 2026-11-19
 - [ ] **`sitemap.md` is not in the repo.** It holds the real content and is needed for pages (M2–M6). Copy it into `context/`? · owner: author · since 2026-11-19
@@ -218,6 +269,6 @@ _Shortcuts, `TODO(design)` markers, workarounds and warnings to revisit. Templat
 - [ ] **`test/` and `e2e/` are empty.** `test/setup.ts`, `test/vitest.d.ts` and `test/mocks/{handlers,server}.ts` from M0 are gone, and so is `e2e/smoke.spec.ts`. The folders were emptied around 21:38, before the first commit (`f73532a`), so these files were never in git. `vitest.config.ts` (project `unit`) still points to `./test/setup.ts`, so the first unit test will fail until the files are restored or the config changes. Restore them, or was this intentional? · since 2026-11-19
 - [ ] **pseudo-states needs manual registration:** `storybook-addon-pseudo-states` is not loaded into the preview from `main.ts` `addons`, so `.storybook/preview.tsx` registers its decorator and initial globals itself. The toolbar toggle still comes from `main.ts`. Re-check after Storybook upgrades (the decorator could end up registered twice) · since 2026-11-19
 - [ ] **Pseudo-state stories carry no style assertions:** the addon rewrites stylesheets after the story renders, after `play` has run. Real interactions (keyboard Tab) are what get asserted · since 2026-11-19
-- [ ] **First `test:stories` run after adding a dependency can fail** with "Vitest failed to find the current suite" while Vite re-optimizes deps. A second run passes · since 2026-11-19
+- [x] ~~**First `test:stories` run after adding a dependency can fail**~~ while Vite re-optimizes deps. Fixed in stage 2: the `storybook` Vitest project pre-bundles `@base-ui/react/*`, `lucide-react`, `clsx` and `next-intl` (`optimizeDeps.include`). A brand-new runtime dependency used in stories may need adding there · since 2026-11-19
 - [ ] **ESLint 9 is now flagged as deprecated by npm.** Moving to 10 is blocked by the plugins in `eslint-config-next` (Decisions, toolchain versions) · since 2026-11-19
 - [ ] **Docs reformatted by Prettier once:** at init `pnpm format` reformatted `DESIGN.md` and `PROJECT_OVERVIEW.md` (padded tables, `*italic*` → `_italic_`; no content changes). `context/` is now in `.prettierignore` · since 2026-11-19

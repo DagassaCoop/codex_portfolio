@@ -21,6 +21,18 @@
 @import url('./layout.css');
 @import url('./focus.css');
 
-/* Components (@layer components) — added stage by stage */
+/*
+ * Components (@layer components), in the kit's cascade order:
+ * a group's file comes after its items' file, so the group's overrides win.
+ */
 
+/* Actions */
+@import url('../ui/button/button.css');
+@import url('../ui/button-group/button-group.css');
+@import url('../ui/toggle/toggle.css');
+@import url('../ui/toggle-group/toggle-group.css');
+@import url('../ui/switch/switch.css');
+@import url('../ui/kbd/kbd.css');
+
+/* Reduced motion — must stay last */
 @import url('./motion.css');

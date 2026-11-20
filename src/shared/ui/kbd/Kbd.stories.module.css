@@ -1,0 +1,11 @@
+/* Story-only: the ink panel from the kit sheet (01 §05) */
+
+.inkPanel {
+  border-color: var(--ink);
+  background: var(--ink);
+}
+
+/* Secondary text on ink (DESIGN.md §1.6) */
+.onInk {
+  color: #d9cdb6;
+}

@@ -9,6 +9,8 @@ export default defineConfig([
   ...nextTs,
   {
     rules: {
+      // Lets a component drop a prop before spreading the rest onto the DOM: const { iconOnly, ...props }
+      '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true }],
       '@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
       'import/order': [
         'error',
