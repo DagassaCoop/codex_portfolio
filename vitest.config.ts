@@ -38,7 +38,7 @@ export default defineConfig({
         // Pre-bundle the UI deps up front. Otherwise Vite discovers them mid-run, re-optimizes and
         // reloads the browser, which fails the first test run after a new import.
         optimizeDeps: {
-          include: ['@base-ui/react/*', 'lucide-react', 'clsx', 'next-intl'],
+          include: ['@base-ui/react/*', 'clsx', 'next-intl'],
         },
         test: {
           name: 'storybook',

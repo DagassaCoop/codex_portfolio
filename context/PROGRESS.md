@@ -61,6 +61,24 @@ _One entry per meaningful step. Template:_
 
 <!-- entries below, newest first -->
 
+### 2026-11-19 — Own icon set replaces lucide-react
+- **Status:** [done]
+- **What:**
+  - Removed `lucide-react`.
+  - Added `src/shared/ui/icons`:
+    - `Icon`, the base: 24 grid, no fill, stroke 1.6 (2 allowed for chevrons and checks), `aria-hidden` unless labelled, then `role="img"`.
+    - One file per icon (`<Name>Icon.tsx`), holding only the icons the stories use: ArrowUpRight, Copy, Download, FileText, Github, LayoutGrid, Linkedin, List, Mail, X.
+  - Geometry comes from Lucide. GitHub and LinkedIn come from lucide-react 1.0.0, the last release with brand icons.
+  - The license (Lucide ISC + Feather MIT) is in `src/shared/ui/icons/LICENSE`.
+  - Story "Foundations/Icons": a gallery that asserts stroke, fill and `aria-hidden`.
+  - The social-rail story now shows GitHub, LinkedIn, Email and CV.
+- **Where:**
+  - `src/shared/ui/icons/`
+  - the stories in `src/shared/ui/{button,button-group,toggle,toggle-group}`
+  - `vitest.config.ts`
+  - `PROJECT_OVERVIEW.md` §3, `DESIGN.md` §0.7
+- **Verified:** `test:stories` 36/36 on a cold cache. Screenshots of the gallery and the social rail checked.
+
 ### 2026-11-19 — M1 stage 2: Actions (Button, Button Group, Toggle, Toggle Group, Switch, Kbd)
 - **Status:** [done]
 - **What:**
@@ -86,7 +104,7 @@ _One entry per meaningful step. Template:_
   - Screenshots of every state matrix compared with kit sheet 01. Rendered DOM checked: Switch is `<span role="switch">` named by its `<label>`; ToggleGroup items carry `aria-pressed`.
 - **Follow-ups:**
   - Button `loading` (spinner + `aria-busy`) is deferred to stage 3, where the Spinner lives.
-  - Icon stroke 1.6 is passed per icon (`strokeWidth={1.6}`). Consider a shared icon wrapper.
+  - ~~Icon stroke 1.6 is passed per icon~~ solved by the own icon set (stroke 1.6 is the default).
 
 ### 2026-11-19 — M1 stage 1: styles (tokens, reset, typography, focus, reduced motion)
 - **Status:** [done]
@@ -169,6 +187,17 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 <!-- entries below, newest first -->
 
+### 2026-11-19 — No icon package: own icon components
+- **Context:** Lucide deprecated brand icons (lucide-icons/lucide#670), and lucide-react 1.1.0 removed them. The social rail needs GitHub and LinkedIn.
+- **Decision:** Option 1 of the open question.
+  - Remove `lucide-react`.
+  - Keep icons as own components in `shared/ui/icons`, with Lucide geometry (ISC) in the kit's stroke style.
+  - Add icons only when something needs them (steps at the top of `shared/ui/icons/index.ts`).
+  - Rejected:
+    - Simple Icons: filled logos, which break the "no fills" rule;
+    - pinning lucide-react 1.0.0.
+- **Affects:** `PROJECT_OVERVIEW.md` §3 (Icons), `DESIGN.md` §0.7.
+
 ### 2026-11-19 — Actions: mapping the kit onto Base UI
 - **Context:** M1 stage 2. Base UI renders some parts differently from the kit's markup, and a few kit states exist only as frozen classes or inline styles.
 - **Decision:**
@@ -237,15 +266,6 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 _Things waiting for an answer. Template: `- [ ] <question> — context / options · owner · since YYYY-MM-DD`_
 
-- [ ] **GitHub and LinkedIn icons.**
-  - Lucide deprecated brand icons (lucide-icons/lucide#670; the 1.0.0 typings say "will be removed in v1.0"). They are gone from lucide-react 1.1.0 (2026-03-24) onward; the project uses 1.76.
-  - The social rail needs them (kit sheets 01 and 05). The kit's GitHub SVG is the old Lucide path.
-  - shadcn.io/icons/lucide still offers `lucide-github` as copy-paste SVG/React, or one file via the shadcn CLI (needs an account).
-  - Options:
-    - local stroke icons in `shared/ui/icons` from the old Lucide paths (ISC) — recommended: same style as the kit;
-    - Simple Icons (filled logos, which break the "no fills" icon rule);
-    - pinning an old lucide-react.
-  - Needed for M2 · owner: author · since 2026-11-19
 - [ ] **Sheet (mobile menu) width.** `codex.css` sets `.cx-sheet-panel { width: 360px }`. The kit's mobile-menu mockup draws it at 320px, and the overlay rules say "320 / 82vw" (320px, but never wider than 82% of the screen). On a 360px phone a 360px sheet covers the whole screen, so the scrim and the page behind it disappear. Options: `min(320px, 82vw)` (matches the mockup and the rule, recommended) or 360px (matches the CSS). **Deferred** until the mobile menu (M2); also listed in `PROJECT_OVERVIEW.md` §10.4 · owner: author · since 2026-11-19
 - [ ] **Update the kit canvas** to EN | FR and no Telegram, or leave the sheets as they are and treat them as sample copy · owner: author · since 2026-11-19
 - [ ] **`sitemap.md` is not in the repo.** It holds the real content and is needed for pages (M2–M6). Copy it into `context/`? · owner: author · since 2026-11-19

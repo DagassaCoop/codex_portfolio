@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { FileText, Mail } from 'lucide-react';
 import { expect } from 'storybook/test';
 
 import { Button, buttonClassName } from '@/shared/ui/button';
+import { FileTextIcon, GithubIcon, LinkedinIcon, MailIcon } from '@/shared/ui/icons';
 
 import { ButtonGroup } from './ButtonGroup';
 
@@ -67,26 +67,37 @@ export const FieldButton: Story = {
   ),
 };
 
-/**
- * Social rail: vertical, Secondary icon buttons.
- * GitHub and LinkedIn icons are not in lucide-react 1.x, so this story shows Email and CV only.
- */
+/** Social rail: vertical, Secondary icon buttons. Links follow sitemap.md G2 (no Telegram, DESIGN.md §9.2). */
 export const Vertical: Story = {
   render: (args) => (
     <ButtonGroup {...args} aria-label="Social links" orientation="vertical">
       <a
         href="#"
+        aria-label="GitHub"
+        className={buttonClassName({ variant: 'secondary', iconOnly: true })}
+      >
+        <GithubIcon />
+      </a>
+      <a
+        href="#"
+        aria-label="LinkedIn"
+        className={buttonClassName({ variant: 'secondary', iconOnly: true })}
+      >
+        <LinkedinIcon />
+      </a>
+      <a
+        href="#"
         aria-label="Email"
         className={buttonClassName({ variant: 'secondary', iconOnly: true })}
       >
-        <Mail strokeWidth={1.6} aria-hidden />
+        <MailIcon />
       </a>
       <a
         href="#"
         aria-label="CV (PDF)"
         className={buttonClassName({ variant: 'secondary', iconOnly: true })}
       >
-        <FileText strokeWidth={1.6} aria-hidden />
+        <FileTextIcon />
       </a>
     </ButtonGroup>
   ),

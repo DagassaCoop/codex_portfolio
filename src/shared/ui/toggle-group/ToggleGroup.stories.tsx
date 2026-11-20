@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { LayoutGrid, List } from 'lucide-react';
 import { expect } from 'storybook/test';
 
+import { LayoutGridIcon, ListIcon } from '@/shared/ui/icons';
 import { Toggle } from '@/shared/ui/toggle';
 
 import { ToggleGroup } from './ToggleGroup';
@@ -50,10 +50,10 @@ export const IconView: Story = {
   render: (args) => (
     <ToggleGroup {...args}>
       <Toggle value="grid" iconOnly aria-label="Grid view">
-        <LayoutGrid strokeWidth={1.6} aria-hidden />
+        <LayoutGridIcon />
       </Toggle>
       <Toggle value="list" iconOnly aria-label="List view">
-        <List strokeWidth={1.6} aria-hidden />
+        <ListIcon />
       </Toggle>
     </ToggleGroup>
   ),

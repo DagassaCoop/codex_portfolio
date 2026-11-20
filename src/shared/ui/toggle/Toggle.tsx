@@ -15,7 +15,7 @@ export type ToggleProps = Omit<BaseToggle.Props, 'className'> &
  *
  * @example
  * <Toggle pressed={liveOnly} onPressedChange={setLiveOnly}>Live only</Toggle>
- * <Toggle iconOnly aria-label="Grid view"><LayoutGrid strokeWidth={1.6} /></Toggle>
+ * <Toggle iconOnly aria-label="Grid view"><LayoutGridIcon /></Toggle>
  */
 export function Toggle({ iconOnly, className, ...props }: ToggleProps) {
   return <BaseToggle className={clsx('cx-toggle', className)} {...props} />;

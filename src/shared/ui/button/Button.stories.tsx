@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { ArrowUpRight, Copy, Download, X } from 'lucide-react';
 import { expect, fn } from 'storybook/test';
 
 import { pseudoStateParameters, StateMatrix, type StateMatrixRow } from '@/shared/lib/storybook';
+import { ArrowUpRightIcon, CopyIcon, DownloadIcon, XIcon } from '@/shared/ui/icons';
 
 import { Button, buttonClassName, type ButtonVariant } from './Button';
 
@@ -38,10 +38,10 @@ const variantRows: StateMatrixRow[] = [
           aria-label="Copy email"
           disabled={state === 'disabled'}
         >
-          <Copy strokeWidth={1.6} aria-hidden />
+          <CopyIcon />
         </Button>
         <Button variant="ghost" iconOnly aria-label="Close" disabled={state === 'disabled'}>
-          <X strokeWidth={1.6} aria-hidden />
+          <XIcon />
         </Button>
       </>
     ),
@@ -90,7 +90,7 @@ export const Sizes: Story = {
         Small 36
       </Button>
       <Button variant="secondary" size="sm" iconOnly aria-label="Close">
-        <X strokeWidth={1.6} aria-hidden />
+        <XIcon />
       </Button>
     </div>
   ),
@@ -101,12 +101,12 @@ export const WithIcon: Story = {
   render: () => (
     <div className="cx-inline">
       <Button variant="mono">
-        <Download strokeWidth={1.6} aria-hidden />
+        <DownloadIcon />
         Download CV
       </Button>
       <a href="#" className={buttonClassName({ variant: 'secondary' })}>
         GitHub
-        <ArrowUpRight strokeWidth={1.6} aria-hidden />
+        <ArrowUpRightIcon />
       </a>
     </div>
   ),

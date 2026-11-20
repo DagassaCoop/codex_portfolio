@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { LayoutGrid } from 'lucide-react';
 import { expect } from 'storybook/test';
 
 import { pseudoStateParameters, StateMatrix } from '@/shared/lib/storybook';
+import { LayoutGridIcon } from '@/shared/ui/icons';
 
 import { Toggle } from './Toggle';
 
@@ -47,7 +47,7 @@ export const States: Story = {
               pressed={state === 'on'}
               disabled={state === 'disabled'}
             >
-              <LayoutGrid strokeWidth={1.6} aria-hidden />
+              <LayoutGridIcon />
             </Toggle>
           ),
         },

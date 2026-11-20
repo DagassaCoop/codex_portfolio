@@ -18,7 +18,7 @@
 4. **No blur, no soft shadows, no gradients for depth.** Depth = hard offset ink shadow (`--lift`, `--float`) or hatching.
 5. **No `opacity` for disabled.** Disabled = hatching + `--line` border + `--muted` text (exceptions in §9 are documented, not to be copied).
 6. **One accent per screen.** Sanguine (`--sanguine`) = accent. One Primary button per screen.
-7. **Icons:** Lucide, `stroke-width: 1.6`, 24 grid, no fills, no emoji.
+7. **Icons:** Lucide, `stroke-width: 1.6`, 24 grid, no fills, no emoji. In the app: the `Icon` components in `src/shared/ui/icons` (Lucide geometry, no icon package).
 8. **Touch:** interactive height 44px. `sm` (36px) only in dense desktop panels.
 9. **Two-layer rule** (from concept): content layer (~80%) stays clean and readable, with no hatching under text. The drawing layer (~20%: grid, constructions, marginalia, stamp) is decorative: `pointer-events: none`, `aria-hidden="true"`.
 

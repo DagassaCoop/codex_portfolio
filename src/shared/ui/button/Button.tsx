@@ -41,7 +41,7 @@ export type ButtonProps = Omit<BaseButton.Props, 'className'> &
  *
  * @example
  * <Button variant="primary">Send message</Button>
- * <Button variant="ghost" iconOnly aria-label="Close"><X strokeWidth={1.6} /></Button>
+ * <Button variant="ghost" iconOnly aria-label="Close"><XIcon /></Button>
  */
 export function Button({
   variant,
