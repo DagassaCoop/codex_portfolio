@@ -1,0 +1,66 @@
+/*
+ * Chip — button.cx-chip with aria-pressed: an interactive filter (DESIGN.md §6, kit sheet 04 §03)
+ *
+ * A pill-shaped toggle with an optional <sup> count. On = ink fill.
+ * Base UI Toggle renders a native <button aria-pressed>, so the kit selectors match as they are.
+ */
+
+@layer components {
+  .cx-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 18px;
+    background: transparent;
+    color: var(--ink-2);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color var(--t-btn) var(--ease-btn),
+      color var(--t-btn) var(--ease-btn),
+      border-color var(--t-btn) var(--ease-btn);
+  }
+
+  /* Count */
+  .cx-chip sup {
+    font-size: 9px;
+    color: var(--sanguine);
+  }
+
+  .cx-chip:hover {
+    border-color: var(--ink);
+    background: var(--sunk);
+    color: var(--ink);
+  }
+
+  .cx-chip:active {
+    background: var(--sunk-2);
+    transition-duration: var(--t-press);
+  }
+
+  /* On */
+  .cx-chip[aria-pressed='true'] {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .cx-chip[aria-pressed='true'] sup {
+    color: #f0a58f;
+  }
+
+  .cx-chip:disabled {
+    border-color: var(--line);
+    background-color: var(--sunk);
+    background-image: var(--hatch);
+    color: var(--muted);
+    cursor: not-allowed;
+  }
+}

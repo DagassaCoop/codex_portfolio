@@ -47,5 +47,14 @@
 @import url('../ui/checkbox/checkbox.css');
 @import url('../ui/spinner/spinner.css');
 
+/* Data display */
+@import url('../ui/separator/separator.css');
+@import url('../ui/badge/badge.css');
+@import url('../ui/chip/chip.css');
+@import url('../ui/card/card.css');
+@import url('../ui/item/item.css');
+@import url('../ui/aspect-ratio/aspect-ratio.css');
+@import url('../ui/skeleton/skeleton.css');
+
 /* Reduced motion — must stay last */
 @import url('./motion.css');

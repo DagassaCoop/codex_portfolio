@@ -1,0 +1,22 @@
+/*
+ * Skeleton — .cx-skel (DESIGN.md §6, kit sheet 04 §12)
+ *
+ * Hatching on sunk that slowly slides, like a pencil (1.6s). Reduced motion stops it (motion.css).
+ * Size it per use; the loading container carries aria-busy and a label.
+ */
+
+@layer components {
+  .cx-skel {
+    border-radius: 2px;
+    background-color: var(--sunk);
+    background-image: var(--hatch);
+    background-size: 24px 24px;
+    animation: cx-hatchmove 1.6s linear infinite;
+  }
+
+  @keyframes cx-hatchmove {
+    to {
+      background-position: 24px 0;
+    }
+  }
+}

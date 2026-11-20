@@ -22,8 +22,8 @@
 _A snapshot. Overwrite it, don't append to it._
 
 - **Phase:** M1 Foundation, base pass (scope in Decisions, 2026-11-19).
-- **Now:** M1 stage 3 (Forms) is done and waiting for review.
-- **Next:** M1 stage 4, Data display: Badge, Chip, Separator / Marker, Card, Item, Aspect Ratio, Skeleton.
+- **Now:** M1 stage 4 (Data display) is done and waiting for review.
+- **Next:** M1 stage 5, Navigation: Nav link, Tabs, Breadcrumb, Pagination, Menu.
 - **Blocked by:** nothing. The Sheet width is deferred until the mobile menu (M2).
 
 ---
@@ -33,7 +33,7 @@ _A snapshot. Overwrite it, don't append to it._
 | # | Milestone | Status | Notes |
 |---|---|---|---|
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
-| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display · 5 Navigation · 6 Feedback |
+| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation · 6 Feedback |
 | M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | | |
 | M3 | Home (`/[locale]`) | | |
 | M4 | Work (`/[locale]/work`) | | |
@@ -60,6 +60,26 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-20 — M1 stage 4: Data display (Badge, Chip, Separator / Marker / Dimension, Card, Item, Aspect Ratio, Skeleton)
+- **Status:** [done]
+- **What:**
+  - **Badge**: `<Badge tone dot>`, seven tones, a status dot (static or pulsing).
+  - **Chip**: Base UI Toggle with a `count`.
+  - **Separator** (Base UI Separator: line / ink / strong / vertical), **Marker** (`role="separator"`) and **Dimension** (decorative) share one folder, like the kit's CSS block.
+  - **Card** parts: `Card`, `CardMedia` (tag + decorative placeholder), `CardBody`, `CardTitle` (a real heading, h3 by default), `CardFoot`, `CardArrow`.
+  - **Item** + **ItemList**: `num`, `title`, `meta`, `end`.
+  - With `href`, Card and Item render the locale-aware `Link` from `@/shared/i18n`; `disabled` = "in progress".
+  - **AspectRatio**: `ratio`, `label`, image children with next/image `fill`.
+  - **Skeleton**: `width` / `height`; the loading container gets `role="status"`.
+  - Stories: a states matrix for Card and Chip, the Item list with forced hover / active / focus rows, badge tones, separators, kit ratios, a loading card.
+- **Where:**
+  - `src/shared/ui/{badge,chip,separator,card,item,aspect-ratio,skeleton}/`
+  - `src/shared/styles/index.css`
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` and `build-storybook` pass.
+  - `test:stories`: 91/91 on a cold cache. The tests cover single-choice chips, separators exposed to assistive tech (the dimension hidden), the card as one locale-aware link with a heading, Item rows as links while the draft row is not, and the busy skeleton.
+  - Screenshots of every story compared with kit sheets 04 and 00 §05.
 
 ### 2026-11-19 — M1 stage 3: Forms (Field, Input, Textarea, Select, Native Select, Checkbox, Radio Group, Input Group, Spinner)
 - **Status:** [done]
@@ -213,6 +233,30 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-20 — The in-progress card keeps the kit's dimmed look
+- **Context:** The kit dims an in-progress card's media with `opacity: .55` (DESIGN.md §9.8), which puts the tag and the placeholder text at ~2.2–2.9:1. WCAG 2.2 AA needs 4.5:1.
+- **Decision:** Follow the design. This is an accepted exception to the WCAG 2.2 AA target (PROJECT_OVERVIEW.md §1):
+  - the dimmed media stays as drawn;
+  - it is treated as decoration (`aria-hidden`, documented on `Card`);
+  - axe checks exclude `.cx-card[data-disabled] .cx-card-media`.
+- **Rejected:** dimming only the hatching and keeping the text contrast (a kit change).
+- **Affects:**
+  - `src/shared/ui/card/Card.tsx` and its stories (already in place);
+  - `DESIGN.md` §9.8;
+  - the Playwright axe check on the Work page (M4/M10) needs the same exclusion.
+
+### 2026-11-20 — Data display: decisions
+- **Context:** M1 stage 4.
+- **Decision:**
+  - **Bug fix against codex.css:** `.cx-card-media > span` (the placeholder label) out-specified `.cx-card-tag`, so the "TAV. I" tag lost its ink fill. It is now `> span:not(.cx-card-tag)`. Checked on screenshot; this matches DESIGN.md §6 and the sheet's inline dark tag on the disabled card.
+  - **Card and Item link through `@/shared/i18n`** (locale-aware `Link`) when given `href`: they always point to internal case studies. Buttons stay link-agnostic (`buttonClassName`).
+  - **⚠ class-only `.is-disabled`** on Card and Item maps to `[data-disabled]`, as for `.cx-crow` / `.cx-igroup`.
+  - Item hover / active get `:not([data-disabled])`, so an in-progress row never reacts. Item focus uses `outline-offset: -3px`, which is inline on the sheet: the list clips overflow.
+  - **Inline-only kit styles moved into CSS:** the muted tag on an in-progress card.
+  - **The card placeholder label is decorative** (`aria-hidden`); it stands in for an image.
+  - **Marker** keeps the kit's `role="separator"`. Its text is therefore not read out, so sections still need a real heading.
+- **Affects:** `src/shared/ui/{card,item}`.
 
 ### 2026-11-19 — Forms: mapping the kit onto Base UI
 - **Context:** M1 stage 3. The kit styles native inputs. Base UI renders checkbox, radio and the select trigger differently, and several kit states are frozen or inline only.

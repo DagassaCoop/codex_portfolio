@@ -1,0 +1,143 @@
+/*
+ * Card — the tavola (project) card, .cx-card (DESIGN.md §6, kit sheet 04 §01)
+ *
+ * media (16:10, hatched placeholder) → body (title + badges) → foot (year · ↗).
+ * As a link (.cx-card--link) the sheet lifts 3px on hover and the arrow leaves ↗ in sanguine.
+ * Uses the general 120ms timing, not the buttons'.
+ *
+ * ⚠ The kit's class-only .is-disabled ("in progress") maps to [data-disabled], set by the component.
+ */
+
+@layer components {
+  .cx-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--ink);
+    border-radius: var(--r);
+    background: var(--surface);
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      transform var(--t) var(--ease),
+      box-shadow var(--t) var(--ease),
+      background-color var(--t);
+  }
+
+  /* ---------- Media ---------- */
+
+  .cx-card-media {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 10;
+    border-bottom: 1px solid var(--ink);
+    background: var(--sunk);
+    background-image: var(--xhatch);
+  }
+
+  /*
+   * Placeholder label, "[ SCREEN ]". codex.css writes this as `.cx-card-media > span`, which also
+   * hits the tag and out-specifies it (the tag would lose its ink fill). `:not(.cx-card-tag)` fixes
+   * that (PROGRESS.md, Decisions).
+   */
+  .cx-card-media > span:not(.cx-card-tag) {
+    padding: 3px 6px;
+    background: var(--surface);
+    color: var(--ink-2);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+  }
+
+  /* The tavola number, top left: "TAV. I" */
+  .cx-card-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 3px 6px;
+    border-radius: 2px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+  }
+
+  /* ---------- Body and foot ---------- */
+
+  .cx-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .cx-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  .cx-card-arrow {
+    transition:
+      transform var(--t) var(--ease),
+      color var(--t);
+  }
+
+  /* ---------- Link card ---------- */
+
+  .cx-card--link {
+    cursor: pointer;
+  }
+
+  .cx-card--link:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 5px 5px 0 0 var(--ink);
+  }
+
+  .cx-card--link:hover .cx-card-arrow {
+    color: var(--sanguine);
+    transform: translate(3px, -3px);
+  }
+
+  .cx-card--link:hover .cx-card-title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  .cx-card--link:active {
+    background: var(--sunk);
+    box-shadow: 1px 1px 0 0 var(--ink);
+    transform: translate(0, 0);
+  }
+
+  /* ---------- In progress (disabled) ---------- */
+
+  .cx-card[data-disabled] {
+    border-color: var(--line);
+    color: var(--muted);
+    box-shadow: none;
+    transform: none;
+    cursor: default;
+  }
+
+  /* Opacity is a documented exception to the kit's rule (DESIGN.md §9.8), not a pattern to reuse */
+  .cx-card[data-disabled] .cx-card-media {
+    border-bottom-color: var(--line);
+    opacity: 0.55;
+  }
+
+  /* Muted tag (inline on the kit sheet) */
+  .cx-card[data-disabled] .cx-card-tag {
+    background: var(--muted);
+  }
+}

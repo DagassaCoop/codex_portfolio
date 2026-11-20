@@ -1,0 +1,124 @@
+/*
+ * Item — a project row in list mode, .cx-items / .cx-item (DESIGN.md §6, kit sheet 04 §02)
+ *
+ * Grid: number (Roman) · title + badges · year and ↗.
+ * Hover: sunk fill, underlined title, the arrow leaves ↗ in sanguine. Active: the number fills with ink.
+ *
+ * ⚠ The kit's class-only .is-disabled maps to [data-disabled], set by the component.
+ */
+
+@layer components {
+  .cx-items {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--ink);
+    border-radius: var(--r);
+    background: var(--surface);
+  }
+
+  .cx-item {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    text-decoration: none;
+    transition: background-color var(--t);
+  }
+
+  .cx-item:last-child {
+    border-bottom: 0;
+  }
+
+  /* The list clips overflow, so the construction line is drawn inside (inline on the kit sheet) */
+  .cx-item:focus-visible {
+    outline-offset: -3px;
+  }
+
+  .cx-item-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--ink);
+    border-radius: var(--r);
+    background: var(--surface);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  .cx-item-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 17px;
+  }
+
+  .cx-item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .cx-item-end {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: right;
+  }
+
+  .cx-item-end small {
+    display: block;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .cx-item-arrow {
+    display: inline-block;
+    transition:
+      transform var(--t) var(--ease),
+      color var(--t);
+  }
+
+  /* ---------- Hover / active. `:not([data-disabled])`: an in-progress row never reacts. ---------- */
+
+  .cx-item:not([data-disabled]):hover {
+    background: var(--sunk);
+  }
+
+  .cx-item:not([data-disabled]):hover .cx-item-title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  .cx-item:not([data-disabled]):hover .cx-item-arrow {
+    color: var(--sanguine);
+    transform: translate(3px, -3px);
+  }
+
+  .cx-item:not([data-disabled]):active {
+    background: var(--sunk-2);
+  }
+
+  .cx-item:not([data-disabled]):active .cx-item-num {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* ---------- In progress (disabled) ---------- */
+
+  .cx-item[data-disabled] {
+    color: var(--muted);
+  }
+
+  .cx-item[data-disabled] .cx-item-num {
+    border-color: var(--line);
+    background-image: var(--hatch);
+  }
+}
