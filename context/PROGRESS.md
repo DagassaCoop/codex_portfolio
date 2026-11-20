@@ -22,8 +22,8 @@
 _A snapshot. Overwrite it, don't append to it._
 
 - **Phase:** M1 Foundation, base pass (scope in Decisions, 2026-11-19).
-- **Now:** M1 stage 4 (Data display) is done and waiting for review.
-- **Next:** M1 stage 5, Navigation: Nav link, Tabs, Breadcrumb, Pagination, Menu.
+- **Now:** M1 stage 5 (Navigation) is done and waiting for review.
+- **Next:** M1 stage 6, Feedback: Tooltip, Alert, Toast — the last stage of the base pass.
 - **Blocked by:** nothing. The Sheet width is deferred until the mobile menu (M2).
 
 ---
@@ -33,7 +33,7 @@ _A snapshot. Overwrite it, don't append to it._
 | # | Milestone | Status | Notes |
 |---|---|---|---|
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
-| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation · 6 Feedback |
+| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback |
 | M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | | |
 | M3 | Home (`/[locale]`) | | |
 | M4 | Work (`/[locale]/work`) | | |
@@ -60,6 +60,36 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-20 — M1 stage 5: Navigation (Nav link, Tabs, Breadcrumb, Pagination, Menu)
+- **Status:** [done]
+- **What:**
+  - **NavBar + NavLink** (client component): a locale-aware link that marks itself `aria-current="page"` from the URL (the same path or a page inside it; `/` only on `/`). It also takes `current` (override), `count` and `disabled`.
+  - **Tabs**: `Tabs`, `TabsList` (aria-label), `Tab` (count), `TabsPanel`, on Base UI Tabs.
+  - **Breadcrumb**: `items`, the last one is the current page; locale-aware links.
+  - **Pagination + PaginationLink**: `current`, `wide` (prev / next), `disabled`.
+  - **Menu** on Base UI Menu:
+    - `MenuTrigger` looks like a kit button (Mono `sm` by default) with a chevron that turns;
+    - `MenuPopup` is the kit surface;
+    - `MenuItem` (icon, end, danger), `MenuCheckboxItem`, `MenuRadioGroup` / `MenuRadioItem`, `MenuGroup`, `MenuSeparator`.
+  - Stories:
+    - the states of each component, as on kit sheet 03;
+    - the language menu (EN / FR);
+    - the sheet's drawing menu with every item kind.
+- **Where:**
+  - `src/shared/ui/{nav-link,tabs,breadcrumb,pagination,menu}/`
+  - `src/shared/ui/select/select.css`
+  - `src/shared/styles/index.css`
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` and `build-storybook` pass.
+  - `test:stories`: 108/108 on a cold cache. The tests cover:
+    - the current page from the URL, with locale prefixes in hrefs;
+    - arrows and Enter switching tabs and panels;
+    - the breadcrumb's last item as the current page;
+    - the current and unavailable pagination pages;
+    - the menu: keyboard open, radio choice, Esc returning focus to the trigger, and the checkbox item.
+  - Screenshots of every story compared with kit sheet 03. Keyboard highlight in a menu shows no dashed line.
+- **Follow-ups:** the Navigation Menu panel (`.cx-navpanel`) and the Context menu are in the later pass.
 
 ### 2026-11-20 — M1 stage 4: Data display (Badge, Chip, Separator / Marker / Dimension, Card, Item, Aspect Ratio, Skeleton)
 - **Status:** [done]
@@ -234,6 +264,38 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 <!-- entries below, newest first -->
 
+### 2026-11-20 — After the migration, the project is the source of truth for the kit
+- **Context:** Several decisions in M1 differ from the canvas: EN | FR, no Telegram, bug fixes against codex.css, the open-menu trigger. The open question was whether to redraw the canvas.
+- **Decision:**
+  - The canvas is not redrawn.
+  - Once the UI Kit is migrated, the source of truth for every kit element is the project: `src/shared/styles` + `src/shared/ui` (seen in Storybook), with `DESIGN.md` describing them.
+  - The canvas and `codex.css` remain the reference only while a component is being migrated.
+  - Page designs on the canvas (Home, Hero) are still the reference for layout when pages are built.
+- **Affects:** the `DESIGN.md` header (sources of truth) and §9.1–9.2. Closes the "update the kit canvas" open question.
+
+### 2026-11-20 — An open menu's trigger keeps the hover look
+- **Context:** Review of stage 5. Kit sheet 03 §05 draws the open dropdown's trigger pressed (`.is-active`).
+- **Decision:** While its menu is open, a button trigger looks hovered: lift (−2/−2 + hard shadow) and its variant's hover fill.
+  - Implemented in `button.css` by adding `.cx-btn[aria-expanded='true']` to every hover rule.
+  - It applies to any kit button that opens something, whatever its variant; the chevron still turns 180°.
+- **Affects:** `src/shared/ui/button/button.css`, `DESIGN.md` §5 (Menu), the Menu stories (asserted).
+
+### 2026-11-20 — Navigation: decisions
+- **Context:** M1 stage 5.
+- **Decision:**
+  - **Focus inside menus is the highlight, not the dashed line.** codex.css lists `.cx-menu-item` in the shared focus rule, but sheet 03 §07's note and DESIGN.md §2 say the menu shows focus as the highlight. Base UI moves real focus onto items, so `.cx-menu-item:focus-visible` drops the outline and the popup panel itself draws no focus ring.
+  - **Popup motion moved from Select to the shared menu surface** (`.cx-menu`, menu.css): one rule for the Select listbox and the dropdown menu.
+  - **⚠ class-only `.is-disabled`** maps to:
+    - `[aria-disabled='true']` on `.cx-nav-link` and `.cx-page` (rendered as text);
+    - `[data-disabled]` on `.cx-menu-item` (Base UI).
+  - Hover / press are guarded with `:not(…)` so disabled items never react.
+  - **The menu trigger's chevron rotation** is inline on the sheet, so it lives in `Menu.module.css`.
+  - **NavLink, Breadcrumb and Pagination link through `@/shared/i18n`**, like Card and Item.
+  - **NavLink is a client component** (it reads the URL). It is the first `'use client'` in `shared/ui`.
+  - **Accessible names must contain the visible text** (WCAG 2.5.3). For example, the language trigger is "Language: EN", not just "Language"; axe enforces this in the stories.
+  - **Not in this pass:** the Navigation Menu panel (`.cx-navpanel`) and the Context menu (the drawing's easter egg).
+- **Affects:** `src/shared/ui/{menu,select,nav-link,pagination}`.
+
 ### 2026-11-20 — The in-progress card keeps the kit's dimmed look
 - **Context:** The kit dims an in-progress card's media with `opacity: .55` (DESIGN.md §9.8), which puts the tag and the placeholder text at ~2.2–2.9:1. WCAG 2.2 AA needs 4.5:1.
 - **Decision:** Follow the design. This is an accepted exception to the WCAG 2.2 AA target (PROJECT_OVERVIEW.md §1):
@@ -336,7 +398,7 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 ### 2026-11-19 — No Telegram in the social links
 - **Context:** The kit sheets show Telegram; `sitemap.md` G2 does not.
 - **Decision:** Remove Telegram. Social links: GitHub, LinkedIn, Email, CV (PDF).
-- **Affects:** `DESIGN.md` §9.2. The kit canvas still shows Telegram (Open questions).
+- **Affects:** `DESIGN.md` §9.2. The canvas still shows Telegram and is not redrawn (Decisions, 2026-11-20).
 
 ### 2026-11-19 — Second language is FR, not RU
 - **Context:** The kit and `concept-codex.md` show EN | RU; `PROJECT_OVERVIEW.md` and `sitemap.md` say EN | FR.
@@ -363,7 +425,6 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 _Things waiting for an answer. Template: `- [ ] <question> — context / options · owner · since YYYY-MM-DD`_
 
 - [ ] **Sheet (mobile menu) width.** `codex.css` sets `.cx-sheet-panel { width: 360px }`. The kit's mobile-menu mockup draws it at 320px, and the overlay rules say "320 / 82vw" (320px, but never wider than 82% of the screen). On a 360px phone a 360px sheet covers the whole screen, so the scrim and the page behind it disappear. Options: `min(320px, 82vw)` (matches the mockup and the rule, recommended) or 360px (matches the CSS). **Deferred** until the mobile menu (M2); also listed in `PROJECT_OVERVIEW.md` §10.4 · owner: author · since 2026-11-19
-- [ ] **Update the kit canvas** to EN | FR and no Telegram, or leave the sheets as they are and treat them as sample copy · owner: author · since 2026-11-19
 - [ ] **`sitemap.md` is not in the repo.** It holds the real content and is needed for pages (M2–M6). Copy it into `context/`? · owner: author · since 2026-11-19
 - [ ] **EB Garamond Italic** (fifth font, marginalia) · `PROJECT_OVERVIEW.md` §10.2 · owner: author
 - [ ] **Email provider:** Resend (proposed) · `PROJECT_OVERVIEW.md` §10.1 · owner: author

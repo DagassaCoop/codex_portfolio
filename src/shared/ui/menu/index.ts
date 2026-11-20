@@ -1,5 +1,18 @@
-/*
- * The Menu component arrives in M1 stage 5 (Navigation).
- * Until then this folder holds only the menu surface styles (menu.css), used by Select's listbox.
- */
-export {};
+export {
+  Menu,
+  MenuCheckboxItem,
+  MenuGroup,
+  MenuItem,
+  MenuPopup,
+  MenuRadioGroup,
+  MenuRadioItem,
+  MenuSeparator,
+  MenuTrigger,
+  type MenuCheckboxItemProps,
+  type MenuGroupProps,
+  type MenuItemProps,
+  type MenuPopupProps,
+  type MenuRadioGroupProps,
+  type MenuRadioItemProps,
+  type MenuTriggerProps,
+} from './Menu';

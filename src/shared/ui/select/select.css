@@ -40,7 +40,7 @@
 
   /* ---------- Listbox ---------- */
 
-  /* As wide as the trigger at least (Base UI provides --anchor-width) */
+  /* As wide as the trigger at least (Base UI provides --anchor-width). Motion: menu.css. */
   .cx-select-popup {
     min-width: var(--anchor-width);
   }
@@ -87,31 +87,5 @@
     background: none;
     color: var(--line-strong);
     cursor: not-allowed;
-  }
-}
-
-/*
- * Overlay motion (DESIGN.md §2, PROJECT_OVERVIEW.md §6): 160ms, 8px shift + fade.
- * Not in codex.css; values from the kit's overlay rules.
- */
-@layer components {
-  .cx-select-popup {
-    transition:
-      opacity 160ms var(--ease),
-      transform 160ms var(--ease);
-  }
-
-  .cx-select-popup[data-starting-style],
-  .cx-select-popup[data-ending-style] {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-}
-
-@layer motion {
-  @media (prefers-reduced-motion: reduce) {
-    .cx-select-popup {
-      transition: none;
-    }
   }
 }

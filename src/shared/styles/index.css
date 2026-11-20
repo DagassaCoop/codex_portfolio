@@ -34,7 +34,7 @@
 @import url('../ui/switch/switch.css');
 @import url('../ui/kbd/kbd.css');
 
-/* Menu surface (Select listbox now, Dropdown / Context menus in Navigation) */
+/* Menu surface and items (Select's listbox, Dropdown menu) */
 @import url('../ui/menu/menu.css');
 
 /* Forms */
@@ -55,6 +55,12 @@
 @import url('../ui/item/item.css');
 @import url('../ui/aspect-ratio/aspect-ratio.css');
 @import url('../ui/skeleton/skeleton.css');
+
+/* Navigation (the menu surface and items are in menu.css, above) */
+@import url('../ui/nav-link/nav-link.css');
+@import url('../ui/tabs/tabs.css');
+@import url('../ui/breadcrumb/breadcrumb.css');
+@import url('../ui/pagination/pagination.css');
 
 /* Reduced motion — must stay last */
 @import url('./motion.css');

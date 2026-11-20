@@ -1,0 +1,12 @@
+/*
+ * The menu trigger's chevron turns 180° while the menu is open.
+ * Inline on the kit sheet (03 §05), so it lives here, not in a global cx- class.
+ */
+
+.chevron {
+  transition: transform var(--t);
+}
+
+[data-popup-open] > .chevron {
+  transform: rotate(180deg);
+}

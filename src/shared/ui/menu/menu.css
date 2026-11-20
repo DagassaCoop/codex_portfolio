@@ -1,8 +1,7 @@
 /*
  * Menu surface — .cx-menu (DESIGN.md §5)
  *
- * The floating panel shared by Select's listbox (Forms) and Dropdown / Context menus (Navigation).
- * Menu items (.cx-menu-item) are added with the Menu component.
+ * The floating panel shared by Select's listbox (Forms) and the Dropdown menu (Navigation).
  */
 
 @layer components {
@@ -15,6 +14,15 @@
     border-radius: var(--r);
     background: var(--surface);
     box-shadow: var(--float);
+  }
+
+  /*
+   * Base UI focuses the popup itself when it opens; inside menus focus is shown by the item
+   * highlight (DESIGN.md §2), so the panel draws no focus ring.
+   */
+  .cx-menu:focus,
+  .cx-menu:focus-visible {
+    outline: none;
   }
 
   /* Group label */
@@ -32,5 +40,121 @@
     height: 0;
     margin: 6px -6px;
     border-top: 1px solid var(--line);
+  }
+}
+
+/*
+ * Menu items — .cx-menu-item (DESIGN.md §5, kit sheet 03 §05–07)
+ *
+ * Hover and keyboard highlight look the same ([data-highlighted] from Base UI). Inside menus,
+ * focus IS the highlight: the shared dashed focus line is turned off here (kit sheet 03 §07 note,
+ * DESIGN.md §2), although codex.css lists .cx-menu-item in the shared focus rule.
+ * Pressed: ink fill. Checked (radio / checkbox items): a 6px sanguine dot before the text.
+ *
+ * ⚠ The kit's class-only .is-disabled maps to [data-disabled] (Base UI).
+ */
+@layer components {
+  .cx-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 36px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 14px;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 80ms;
+  }
+
+  .cx-menu-item:focus-visible {
+    outline: none;
+  }
+
+  .cx-menu-item svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    color: var(--ink-2);
+  }
+
+  /* Right-aligned shortcut or note: "⌘C", "EN" */
+  .cx-menu-item .cx-menu-end {
+    display: inline-flex;
+    gap: 4px;
+    margin-left: auto;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .cx-menu-item:hover,
+  .cx-menu-item[data-highlighted] {
+    background: var(--sunk);
+  }
+
+  .cx-menu-item:active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .cx-menu-item:active svg {
+    color: var(--paper);
+  }
+
+  /* Checked: sanguine dot */
+  .cx-menu-item[aria-checked='true']::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    margin-left: -2px;
+    border-radius: 50%;
+    background: var(--sanguine);
+  }
+
+  .cx-menu-item[data-disabled] {
+    background: none;
+    color: var(--line-strong);
+    cursor: not-allowed;
+  }
+
+  .cx-menu-item--danger {
+    color: var(--error);
+  }
+
+  .cx-menu-item--danger:hover,
+  .cx-menu-item--danger[data-highlighted] {
+    background: var(--error-wash);
+  }
+}
+
+/*
+ * Popup motion for every floating .cx-menu (Select listbox, Dropdown): 160ms, 8px shift + fade
+ * (DESIGN.md §2, PROJECT_OVERVIEW.md §6). Not in codex.css; values from the kit's overlay rules.
+ */
+@layer components {
+  .cx-menu {
+    transition:
+      opacity 160ms var(--ease),
+      transform 160ms var(--ease);
+  }
+
+  .cx-menu[data-starting-style],
+  .cx-menu[data-ending-style] {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@layer motion {
+  @media (prefers-reduced-motion: reduce) {
+    .cx-menu {
+      transition: none;
+    }
   }
 }

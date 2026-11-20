@@ -2,7 +2,9 @@
 
 > **Purpose.** This file transfers the existing, already-designed Codex UI Kit into the app. It is a _description of what exists_, not a place to invent.
 >
-> **Sources of truth (in priority order):**
+> **After the UI Kit is migrated (M1), the project is the source of truth for every kit element:** the code in `src/shared/styles` and `src/shared/ui`, shown in Storybook, together with this file. The canvas is not redrawn to follow decisions made in the code; it stays as the historical reference. Decided 2026-11-20.
+>
+> **Sources of truth while the kit is being migrated (in priority order):**
 >
 > 1. `codex.css` — the stylesheet every UI Kit sheet is rendered with (identical to project doc `claude/codex.css`). All values below are copied from it. **If this file and `codex.css` ever disagree, `codex.css` wins.**
 > 2. UI Kit canvas, page "UI Kit", 6 sheets: `00 Foundations`, `01 Actions`, `02 Forms`, `03 Navigation`, `04 Data display`, `05 Overlays & feedback` — https://claude.ai/artifact/9nbNbHQVbXt4z57ZGH443K
@@ -342,7 +344,7 @@ min-w 240, pad 6, surface, border ink, `--r`, `--float`.
 - `.cx-menu-sep`: 1px line, margin `6px -6px`.
 - `.cx-menu-item`: min-h 36, pad 0 10, gap 10, `--r-sm`, body 14px, icon 16 ink-2; `.cx-menu-end` = right-aligned mono 11 muted (shortcut / kbd).
   Hover/highlighted sunk · active ink fill, paper text+icon · checked (`aria-checked="true"`): 6px sanguine dot before · disabled line-strong · `.cx-menu-item--danger` error text, hover error-wash.
-- Kit uses: language/theme dropdown (trigger = Mono `sm` button, chevron rotates when open); context menu on the drawing (easter egg: Explode view `E`, Show construction lines `G`, Mirror writing ✓, Copy SVG `⌘C`, Reset sketch — danger).
+- Kit uses: language/theme dropdown (trigger = Mono `sm` button, chevron rotates when open; **decided 2026-11-20:** while its menu is open the trigger keeps the button's hover look — lift + hard shadow + the variant's hover fill — instead of the sheet's pressed look); context menu on the drawing (easter egg: Explode view `E`, Show construction lines `G`, Mirror writing ✓, Copy SVG `⌘C`, Reset sketch — danger).
 
 ### Command palette (⌘K "codex index") — `.cx-cmd`
 
@@ -524,8 +526,8 @@ w380, flex gap 14, pad `12 12 12 16`, surface, border ink, `--r`, `--float`. Pos
 
 ## 9. Known gaps and inconsistencies in the kit (do NOT "fix" silently — decide, then update kit + this file)
 
-1. **Language toggle:** kit and `concept-codex.md` show **EN | RU**; `sitemap.md` says **EN | FR**. **Decided 2026-11-19: EN | FR.** RU on the kit sheets is sample copy; the kit canvas is not updated yet.
-2. **Social rail:** kit shows GitHub, LinkedIn, **Telegram**, Email; `sitemap.md` G2 lists GitHub, LinkedIn, Email, **CV (PDF)**. **Decided 2026-11-19: no Telegram**; links follow `sitemap.md` G2. The kit canvas is not updated yet.
+1. **Language toggle:** kit and `concept-codex.md` show **EN | RU**; `sitemap.md` says **EN | FR**. **Decided 2026-11-19: EN | FR.** RU on the kit sheets is sample copy; the canvas is not redrawn (the project is the source of truth).
+2. **Social rail:** kit shows GitHub, LinkedIn, **Telegram**, Email; `sitemap.md` G2 lists GitHub, LinkedIn, Email, **CV (PDF)**. **Decided 2026-11-19: no Telegram**; links follow `sitemap.md` G2. The canvas is not redrawn (the project is the source of truth).
 3. **Dark theme "Notte":** only 4 colors are defined (`#1C1712 / #F1EADB / #C9A97A / #E0704F`, concept doc). `codex.css` has **no Notte theme** and no mapping of these to tokens. `.cx-toast--dark` and `.cx-kbd--dark` are "on ink" components, not the Notte theme. Don't derive a dark palette — `TODO(design)`.
 4. **EB Garamond** (5th font) is still awaiting approval (concept doc).
 5. **Sheet width:** CSS default `.cx-sheet-panel{width:360px}` vs rule "320 / 82vw".

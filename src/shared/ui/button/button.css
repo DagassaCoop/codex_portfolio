@@ -111,40 +111,52 @@
     width: 36px;
   }
 
-  /* ---------- Hover = lift ---------- */
+  /*
+   * ---------- Hover = lift ----------
+   * A button whose menu is open (aria-expanded="true", set by Base UI on the trigger) keeps the
+   * hover look while the menu is open (decided 2026-11-20, PROGRESS.md).
+   */
 
-  .cx-btn:not(:disabled):hover {
+  .cx-btn:not(:disabled):hover,
+  .cx-btn[aria-expanded='true'] {
     transform: translate(-2px, -2px);
     box-shadow: var(--lift);
   }
 
-  .cx-btn--primary:not(:disabled):hover {
+  .cx-btn--primary:not(:disabled):hover,
+  .cx-btn--primary[aria-expanded='true'] {
     background: var(--sanguine-hover);
   }
 
-  .cx-btn--ink:not(:disabled):hover {
+  .cx-btn--ink:not(:disabled):hover,
+  .cx-btn--ink[aria-expanded='true'] {
     background: #3a2e22;
     box-shadow: 3px 3px 0 0 var(--sanguine);
   }
 
   .cx-btn--secondary:not(:disabled):hover,
-  .cx-btn--mono:not(:disabled):hover {
+  .cx-btn--secondary[aria-expanded='true'],
+  .cx-btn--mono:not(:disabled):hover,
+  .cx-btn--mono[aria-expanded='true'] {
     background: var(--sunk);
   }
 
-  .cx-btn--danger:not(:disabled):hover {
+  .cx-btn--danger:not(:disabled):hover,
+  .cx-btn--danger[aria-expanded='true'] {
     background: var(--error-wash);
     box-shadow: 3px 3px 0 0 var(--error);
   }
 
   /* Ghost and Link: fill / colour only, no lift */
-  .cx-btn--ghost:not(:disabled):hover {
+  .cx-btn--ghost:not(:disabled):hover,
+  .cx-btn--ghost[aria-expanded='true'] {
     transform: none;
     box-shadow: none;
     background: var(--sunk);
   }
 
-  .cx-btn--link:not(:disabled):hover {
+  .cx-btn--link:not(:disabled):hover,
+  .cx-btn--link[aria-expanded='true'] {
     transform: none;
     box-shadow: none;
     color: var(--sanguine);
