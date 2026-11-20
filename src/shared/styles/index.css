@@ -62,5 +62,10 @@
 @import url('../ui/breadcrumb/breadcrumb.css');
 @import url('../ui/pagination/pagination.css');
 
+/* Feedback */
+@import url('../ui/tooltip/tooltip.css');
+@import url('../ui/alert/alert.css');
+@import url('../ui/toast/toast.css');
+
 /* Reduced motion — must stay last */
 @import url('./motion.css');

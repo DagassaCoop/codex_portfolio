@@ -1,0 +1,74 @@
+/*
+ * Tooltip — .cx-tip (DESIGN.md §7, kit sheet 05 §01)
+ *
+ * An ink plate with mono 11px paper text and an 8px rotated-square arrow.
+ * --right: next to the social rail (arrow on the left). --top: above stack badges (arrow below).
+ * Shows on hover and focus after 300ms (set in the component).
+ */
+
+@layer components {
+  .cx-tip {
+    position: relative;
+    display: inline-flex;
+    padding: 6px 9px;
+    border-radius: var(--r-sm);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  /* The arrow */
+  .cx-tip::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--ink);
+    transform: rotate(45deg);
+  }
+
+  .cx-tip--right::after {
+    top: calc(50% - 4px);
+    left: -4px;
+  }
+
+  .cx-tip--top::after {
+    bottom: -4px;
+    left: calc(50% - 4px);
+  }
+}
+
+/*
+ * Motion (DESIGN.md §2): overlays appear in 160ms with an 8px shift + fade, here moving out from
+ * the trigger. Not in codex.css; values from the kit's overlay rules.
+ */
+@layer components {
+  .cx-tip {
+    transition:
+      opacity 160ms var(--ease),
+      transform 160ms var(--ease);
+  }
+
+  .cx-tip--right[data-starting-style],
+  .cx-tip--right[data-ending-style] {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  .cx-tip--top[data-starting-style],
+  .cx-tip--top[data-ending-style] {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@layer motion {
+  @media (prefers-reduced-motion: reduce) {
+    .cx-tip {
+      transition: none;
+    }
+  }
+}

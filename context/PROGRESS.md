@@ -21,9 +21,9 @@
 
 _A snapshot. Overwrite it, don't append to it._
 
-- **Phase:** M1 Foundation, base pass (scope in Decisions, 2026-11-19).
-- **Now:** M1 stage 5 (Navigation) is done and waiting for review.
-- **Next:** M1 stage 6, Feedback: Tooltip, Alert, Toast — the last stage of the base pass.
+- **Phase:** M1 Foundation. The base pass is complete (stages 1–6); the later pass has not started.
+- **Now:** M1 stage 6 (Feedback) is done and waiting for review. This completes the base pass.
+- **Next:** to be decided: the later pass of M1 (Decisions, 2026-11-19) or M2 (global layout).
 - **Blocked by:** nothing. The Sheet width is deferred until the mobile menu (M2).
 
 ---
@@ -33,7 +33,7 @@ _A snapshot. Overwrite it, don't append to it._
 | # | Milestone | Status | Notes |
 |---|---|---|---|
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
-| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback |
+| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo] |
 | M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | | |
 | M3 | Home (`/[locale]`) | | |
 | M4 | Work (`/[locale]/work`) | | |
@@ -60,6 +60,32 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-20 — M1 stage 6: Feedback (Tooltip, Alert, Toast). Base pass complete
+- **Status:** [done]
+- **What:**
+  - **Tooltip** on Base UI Tooltip: `<Tooltip content side defaultOpen>{trigger}</Tooltip>`.
+    - 300ms delay, opens on hover and on keyboard focus.
+    - Sides `right` (social rail) and `top` (stack badges), the two the kit draws an arrow for. It never flips to the other side.
+  - **Alert**: `<Alert tone title>`, the letter icon is automatic. `error` gets `role="alert"` and the "ERR — " title prefix; the other tones get `role="status"`.
+  - **Toast** on Base UI Toast:
+    - `ToastProvider` (stack bottom right, 4s, `dismissLabel`) and `useToast()` with `show`, `update` and `close`.
+    - Types: `success` (verdigris check), `loading` (spinner, stays until closed), `accent` (sanguine label), default.
+    - An optional action ("Undo") and a dismiss button.
+  - Stories: tooltips (right, with Kbd, top), the alert tones, and the toasts (copy email; every kind at once).
+- **Where:**
+  - `src/shared/ui/{tooltip,alert,toast}/`
+  - `src/shared/styles/index.css`
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` and `build-storybook` pass.
+  - `test:stories`: 118/118 on a cold cache. The tests cover:
+    - the tooltip opening on keyboard focus and closing on Esc;
+    - alert roles and the ERR prefix;
+    - a toast shown by an action, typed, visible after its enter transition, and closed by dismiss.
+  - Screenshots compared with kit sheet 05.
+- **Follow-ups:**
+  - Put `ToastProvider` into the app providers (`src/app`) with a translated `dismissLabel` when the first toast is used (`copy-email`, M2/M7).
+  - The rest of the kit is in the later pass (Decisions, 2026-11-19).
 
 ### 2026-11-20 — M1 stage 5: Navigation (Nav link, Tabs, Breadcrumb, Pagination, Menu)
 - **Status:** [done]
@@ -264,6 +290,22 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 <!-- entries below, newest first -->
 
+### 2026-11-20 — Feedback: decisions
+- **Context:** M1 stage 6.
+- **Decision:**
+  - **Tooltip:**
+    - Only `right` and `top`, with Base UI `collisionAvoidance: { side: 'shift' }`, so it never flips to a side the kit has no arrow for.
+    - Gaps of 10px (right) and 8px (top), from the sheet.
+    - Motion: 160ms fade + 8px shift away from the trigger, with reduced motion.
+  - **Alert:** the "ERR — " prefix of error titles is added by the component, so the rule cannot be forgotten. The roles are `alert` for errors and `status` otherwise.
+  - **Toast:**
+    - The label colours by type are inline on the sheet and written in toast.css with tokens.
+    - Added `max-width: calc(100vw - 40px)`: the kit's 380px toast does not fit a 360px phone.
+    - The stack's position is a page-margin rule, not a kit element, so it lives in `Toast.module.css`: 32px from the edges, 20px below 768px.
+    - Base UI's default limit of 3 visible toasts is kept.
+  - **The dark toast (`.cx-toast--dark`) is not exposed:** its only kit example belongs to the dropped Notte theme, and a dismiss button on ink is not designed (ink icon on ink). Its CSS is kept.
+- **Affects:** `src/shared/ui/{tooltip,alert,toast}`.
+
 ### 2026-11-20 — After the migration, the project is the source of truth for the kit
 - **Context:** Several decisions in M1 differ from the canvas: EN | FR, no Telegram, bug fixes against codex.css, the open-menu trigger. The open question was whether to redraw the canvas.
 - **Decision:**
@@ -450,4 +492,5 @@ _Shortcuts, `TODO(design)` markers, workarounds and warnings to revisit. Templat
 - [ ] **ESLint 9 is now flagged as deprecated by npm.** Moving to 10 is blocked by the plugins in `eslint-config-next` (Decisions, toolchain versions) · since 2026-11-19
 - [ ] **`build-storybook` prints `MODULE_LEVEL_DIRECTIVE` warnings** for Base UI's `"use client"` directives. They are harmless: Vite drops the directive in a client bundle · since 2026-11-19
 - [ ] **No dashed focus on the field button (`.cx-ibtn`):** it is part of the DESIGN.md §9.6 gap, kept on purpose. The browser's default focus ring shows instead · since 2026-11-19
+- [ ] **Toast dismiss is `aria-hidden` but focusable** (Base UI's choice: toasts are announced through the live region). axe's `aria-hidden-focus` may flag it in Playwright page checks; decide then whether to exclude it or override it · since 2026-11-20
 - [ ] **Docs reformatted by Prettier once:** at init `pnpm format` reformatted `DESIGN.md` and `PROJECT_OVERVIEW.md` (padded tables, `*italic*` → `_italic_`; no content changes). `context/` is now in `.prettierignore` · since 2026-11-19
