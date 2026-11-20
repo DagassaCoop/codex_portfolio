@@ -229,7 +229,7 @@ Kit uses: "Live only" filter, grid/list icon toggle (`aria-label`).
 
 Container: pad 3, gap 3, border 1px ink, `--r`, bg surface. Children `.cx-toggle`: border transparent, **h34**, `--r-sm`.
 A11y in kit: `role="radiogroup"` + `aria-label`; items `role="radio"` + `aria-checked`.
-Kit uses: Language (EN | RU), Theme (Paper | Notte), View (Grid | List), Filter (All | Front | Mobile-disabled).
+Kit uses: Language (EN | RU on the sheet; the app uses EN | FR, see §9.1), Theme (Paper | Notte), View (Grid | List), Filter (All | Front | Mobile-disabled).
 
 ### Switch — `.cx-switch` inside `.cx-switch-row`
 
@@ -524,8 +524,8 @@ w380, flex gap 14, pad `12 12 12 16`, surface, border ink, `--r`, `--float`. Pos
 
 ## 9. Known gaps and inconsistencies in the kit (do NOT "fix" silently — decide, then update kit + this file)
 
-1. **Language toggle:** kit and `concept-codex.md` show **EN | RU**; `sitemap.md` says **EN | FR**. Open.
-2. **Social rail:** kit shows GitHub, LinkedIn, **Telegram**, Email; `sitemap.md` G2 lists GitHub, LinkedIn, Email, **CV (PDF)**. Content follows sitemap unless decided otherwise.
+1. **Language toggle:** kit and `concept-codex.md` show **EN | RU**; `sitemap.md` says **EN | FR**. **Decided 2026-11-19: EN | FR.** RU on the kit sheets is sample copy; the kit canvas is not updated yet.
+2. **Social rail:** kit shows GitHub, LinkedIn, **Telegram**, Email; `sitemap.md` G2 lists GitHub, LinkedIn, Email, **CV (PDF)**. **Decided 2026-11-19: no Telegram**; links follow `sitemap.md` G2. The kit canvas is not updated yet.
 3. **Dark theme "Notte":** only 4 colors are defined (`#1C1712 / #F1EADB / #C9A97A / #E0704F`, concept doc). `codex.css` has **no Notte theme** and no mapping of these to tokens. `.cx-toast--dark` and `.cx-kbd--dark` are "on ink" components, not the Notte theme. Don't derive a dark palette — `TODO(design)`.
 4. **EB Garamond** (5th font) is still awaiting approval (concept doc).
 5. **Sheet width:** CSS default `.cx-sheet-panel{width:360px}` vs rule "320 / 82vw".

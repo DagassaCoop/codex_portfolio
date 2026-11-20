@@ -6,8 +6,9 @@
 > Related docs:
 >
 > - `context/DESIGN.md`: UI Kit (tokens, components, states). The visual source of truth.
+> - `context/PROGRESS.md`: development log: status, milestones, decisions, open questions, known issues.
 > - Claude project "Portfolio": `concept-codex.md` (concept), `sitemap.md` (pages and content), `codex.css` (kit stylesheet), `shadcn-components.md`.
-> - UI Kit canvas: https://claude.ai/artifact/9nbNbHQVbXt4z57ZGH443K
+> - UI Kit canvas: https://claude.ai/artifact/9nbNbHQVbXt4z57ZGH443K. Kit sheets are `project/Kit*.dc.html`; `codex.css` is an uploaded asset the sheets link to (id `e7eaac61be294e914584ca1ec245a27b`). Page designs (Home, Hero studies, tablet, mobile) are on the same canvas.
 >
 > Status markers: **[chosen]** decided · **[proposed]** recommended, waiting for confirmation · **[open]** under discussion, see §10.
 
@@ -48,8 +49,8 @@ Global on every page: header and navigation, social rail, contact form (Fol. 04)
 
 | Layer                  | Choice                                                                                                        | Status     | Notes                                                                                                                                                                       |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Language               | TypeScript (strict)                                                                                           | [chosen]   |                                                                                                                                                                             |
-| Framework              | **Next.js (App Router)**, React 19                                                                            | [chosen]   | All pages prerendered (SSG). One server action handles the contact form.                                                                                                    |
+| Language               | TypeScript (strict)                                                                                           | [chosen]   | Pinned to `~6.0`: `typescript-eslint` does not support 7 yet (PROGRESS.md, Decisions).                                                                                      |
+| Framework              | **Next.js 16 (App Router)**, React 19                                                                         | [chosen]   | All pages prerendered (SSG). One server action handles the contact form. Locale routing runs in `proxy.ts` (Next 16's name for middleware).                                 |
 | Primitives             | **Base UI** (`@base-ui/react`)                                                                                | [chosen]   | Headless and accessible. Components Base UI lacks (command palette, carousel) are not critical: we build them later on Base UI primitives, with no extra libraries for now. |
 | Styling                | Plain CSS: `codex.css` tokens + `cx-` classes, CSS Modules for page layout, `clsx`                            | [chosen]   | No Tailwind. Every value comes from DESIGN.md (see §6).                                                                                                                     |
 | Icons                  | `lucide-react`, stroke 1.6                                                                                    | [chosen]   |                                                                                                                                                                             |
@@ -60,10 +61,11 @@ Global on every page: header and navigation, social rail, contact form (Fol. 04)
 | Forms                  | React Hook Form + zod (`@hookform/resolvers`)                                                                 | [chosen]   | The same zod schema validates on the client and on the server.                                                                                                              |
 | Email                  | Resend + React Email                                                                                          | [proposed] | Two emails: a notification to me and an auto-reply to the sender.                                                                                                           |
 | Spam protection        | Honeypot + time trap + zod limits (field lengths, number of links); Cloudflare Turnstile only if spam appears | [chosen]   | No external services. See §7.                                                                                                                                               |
-| Unit / component tests | Vitest + Testing Library + `vitest-axe`                                                                       | [chosen]   |                                                                                                                                                                             |
+| Unit / component tests | Vitest + Testing Library + `vitest-axe`                                                                       | [chosen]   | Vitest project `unit` (jsdom).                                                                                                                                              |
+| Component workshop     | **Storybook 10** (`@storybook/nextjs-vite`) + addon-docs, addon-a11y, addon-vitest                            | [chosen]   | Every `shared/ui` component has stories for all kit states. Stories run as tests in Chromium (Vitest project `storybook`); any axe violation fails the story.                |
 | API mocking            | MSW                                                                                                           | [chosen]   | Form success and error states in tests.                                                                                                                                     |
 | E2E                    | Playwright + `@axe-core/playwright` + screenshot tests for kit states                                         | [chosen]   |                                                                                                                                                                             |
-| Lint / format          | ESLint (flat config) + Prettier · Stylelint · **Steiger** (FSD linter)                                        | [chosen]   |                                                                                                                                                                             |
+| Lint / format          | ESLint (flat config) + Prettier · Stylelint · **Steiger** (FSD linter)                                        | [chosen]   | ESLint pinned to `^9`: plugins inside `eslint-config-next` do not support 10 yet. `context/` is excluded from Prettier.                                                     |
 | Package manager        | pnpm                                                                                                          | [chosen]   | Strict dependencies: only what `package.json` declares can be imported.                                                                                                     |
 
 **Not in the project (decided):** database, TanStack Query, dark theme, MDX.
@@ -81,6 +83,7 @@ The Next.js `app/` router lives in the **repo root** and only re-exports FSD pag
 ```
 /
 ├─ app/                         # Next.js routing only (thin)
+│  ├─ layout.tsx               # pass-through; <html> lives in [locale]/layout
 │  ├─ [locale]/
 │  │  ├─ layout.tsx            → src/app/layouts
 │  │  ├─ page.tsx              → export { HomePage as default } from '@/pages/home'
@@ -89,9 +92,13 @@ The Next.js `app/` router lives in the **repo root** and only re-exports FSD pag
 │  │  └─ about/page.tsx        → @/pages/about
 │  └─ not-found.tsx
 ├─ pages/README.md              # empty on purpose (see above)
+├─ proxy.ts                     # next-intl locale routing
 ├─ messages/                    # all copy: en.json, fr.json (next-intl)
 ├─ public/                      # cv.pdf, static images, favicons
-├─ context/DESIGN.md
+├─ context/                     # DESIGN.md, PROJECT_OVERVIEW.md, PROGRESS.md
+├─ .storybook/                  # Storybook config (main.ts, preview.tsx)
+├─ test/                        # Vitest setup, MSW handlers and server
+├─ e2e/                         # Playwright specs
 └─ src/
    ├─ app/        # providers (i18n, toast), global styles, layouts
    ├─ pages/      # home, work, work-detail, about, not-found
@@ -159,6 +166,8 @@ export const projects = [
 - **State mapping:** Base UI exposes state through ARIA attributes and `data-*` attributes. Many kit selectors already match the ARIA ones (`aria-pressed`, `aria-checked`, `aria-selected`, `aria-expanded`, `aria-current`). Where the kit relies on native pseudo-classes or `.is-*` classes, add aliases for the Base UI attributes (e.g. `[data-checked]`, `[data-disabled]`, `[data-highlighted]`, `[data-popup-open]`) to the **same declarations**, without restyling. Example: Base UI Checkbox renders `role="checkbox"`, not a native `<input>`, so `.cx-check:checked` won't match (DESIGN.md §9.10). Check the rendered DOM before you wire anything up.
 - Single theme: tokens live in `:root` only.
 - Overlays use the kit's motion: 160 ms, 8px offset + fade. Use Base UI `data-starting-style` / `data-ending-style` for enter and exit. Respect `prefers-reduced-motion`.
+- **Readable code.** Components and styles are written to be read by people: one component per folder in `shared/ui`, a clear props API instead of raw class strings, and `codex.css` brought in as formatted, commented stylesheets (one per component) instead of the minified kit file. Values and selectors stay exactly as in the kit.
+- **Foundation is built in two passes.** The base pass comes first; the rest of the kit follows later. Both lists are in PROGRESS.md (Decisions, 2026-11-19).
 
 ---
 
@@ -186,11 +195,12 @@ export const projects = [
 ## 9. Quality
 
 - **Unit / component (Vitest):** zod schemas, formatters, every `shared/ui` component (states and a11y), the contact form with MSW.
+- **Stories (Storybook + Vitest):** every `shared/ui` component has stories for each kit state, run as browser tests with axe. Use them to compare components side by side with the kit sheets on the canvas.
 - **E2E (Playwright):** navigation in both locales, language switch, ⌘K palette, contact form happy path and error paths, 404. Run axe on every page. Screenshot tests at 1440 / 768 / 375.
 - **Lint:** ESLint + Prettier for TS/TSX, Stylelint for CSS, Steiger for FSD boundaries.
 - **Accessibility:** skip link; focus-visible = the kit's dashed sanguine line; touch targets 44px; decorative layer is `aria-hidden`.
 
-Scripts (planned, run with pnpm): `dev` · `build` · `start` · `typecheck` · `lint` · `lint:fsd` · `lint:css` · `test` · `test:e2e`.
+Scripts (run with pnpm): `dev` · `build` · `start` · `typecheck` · `lint` · `lint:fsd` · `lint:css` · `format` · `format:check` · `test` · `test:watch` · `test:stories` · `test:e2e` · `storybook` · `build-storybook`.
 
 ---
 
@@ -199,3 +209,4 @@ Scripts (planned, run with pnpm): `dev` · `build` · `start` · `typecheck` · 
 1. **Email provider:** Resend (proposed).
 2. Fifth font (EB Garamond Italic) for marginalia.
 3. Hero illustration mechanism, and whether to include a portrait.
+4. **Sheet (mobile menu) width:** `min(320px, 82vw)` (kit mockup and overlay rule) or 360px (`codex.css`). Deferred until the mobile menu (DESIGN.md §9.5, PROGRESS.md).
