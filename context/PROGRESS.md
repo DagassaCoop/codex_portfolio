@@ -21,10 +21,10 @@
 
 _A snapshot. Overwrite it, don't append to it._
 
-- **Phase:** M1 Foundation. The base pass is complete (stages 1–6); the later pass has not started.
-- **Now:** M1 stage 6 (Feedback) is done and waiting for review. This completes the base pass.
-- **Next:** to be decided: the later pass of M1 (Decisions, 2026-11-19) or M2 (global layout).
-- **Blocked by:** nothing. The Sheet width is deferred until the mobile menu (M2).
+- **Phase:** M2 Global layout (branch `ui/layout`). M1's later pass waits; only Dialog is pulled forward, for the mobile menu.
+- **Now:** M2 stage 1 (page frame) is done and waiting for review.
+- **Next:** M2 stage 2, the header (with the monogram). Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
+- **Blocked by:** nothing.
 
 ---
 
@@ -34,7 +34,7 @@ _A snapshot. Overwrite it, don't append to it._
 |---|---|---|---|
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
 | M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo] |
-| M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | | |
+| M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [in progress] | Stages: 1 Page frame [done] · 2 Header + monogram [todo] · 3 Social rail [todo] · 4 Footer stamp [todo] · 5 Mobile menu + Dialog in the kit [todo]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
 | M3 | Home (`/[locale]`) | | |
 | M4 | Work (`/[locale]/work`) | | |
 | M5 | Work detail / case study (`/[locale]/work/[slug]`) | | |
@@ -60,6 +60,24 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-21 — M2 stage 1: page frame
+- **Status:** [done]
+- **What:**
+  - `PageFrame` in `src/app/layouts`: the drawing sheet from the Home page design, rendered by `LocaleLayout` around every page.
+    - Paper padding, the A–L ruler (decor), the 1680px frame with an ink border.
+    - Cells with the lines between them: monogram, rail, header, `<main id="main">`, footer. Slots for the widgets of the next stages (`monogram`, `rail`, `header`, `footer`).
+    - Phone layout (≤ 600px): one column, monogram and rail in one 72px strip, header 64px.
+    - Skip link "Skip to content" (EN / FR in `messages`, namespace `layout`).
+  - `HomePage` no longer renders `<main>`; it shows a placeholder title so the layout can be seen on `/` (TODO(M3)).
+  - Docs: `DESIGN.md` §1.9 (page layout and breakpoints) and §9.5 (Sheet width); new `context/SITEMAP.md` (content map); `PROJECT_OVERVIEW.md` links and §2.
+- **Where:**
+  - `src/app/layouts/PageFrame.tsx`, `PageFrame.module.css`, `LocaleLayout.tsx`
+  - `src/pages/home/ui/HomePage.tsx`, `HomePage.module.css`
+  - `messages/{en,fr}.json`
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd`, Prettier on `src` and `messages`, and `build` pass.
+  - Production build screenshots at 1440, 768, 375 and 1920 compared with the Home design; axe (WCAG 2.2 AA) on `/en`: no violations. The first Tab focuses the skip link with the dashed outline.
 
 ### 2026-11-20 — Session end: docs brought in line with the code
 - **Status:** [done]
@@ -307,6 +325,20 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 <!-- entries below, newest first -->
 
+### 2026-11-21 — M2 scope and the layout decisions
+- **Context:** Start of M2. The Home page design on the canvas is the layout reference; it differs from the docs in a few places.
+- **Decision:**
+  - **Scope and order of M2:** 1 page frame → 2 header (the monogram is part of it) → 3 social rail → 4 footer stamp → 5 mobile menu. Each stage is shown on `/` and reviewed before the next one starts.
+  - **Deferred:** the command palette (M8) and the toast provider. Only the ⌘K trigger may appear in the header.
+  - **The contact section (Fol. 04) is not part of the layout** for now; it is left untouched.
+  - **Dialog joins the kit in stage 5** (pulled from M1's later pass), with stories, because the mobile menu needs it.
+  - **Sheet width:** the kit rule, `min(320px, 82vw)`. Rejected: 360px (`codex.css`) and `min(360px, 88vw)` (Home design).
+  - **No theme switch** anywhere (the Home design's Paper | Notte toggle and "Switch theme" action are dropped).
+  - **Navigation:** Home / Work / About. No counters, no Contact item.
+  - **Breakpoints and page margins** from the Home design are recorded in `DESIGN.md` §1.9.
+  - **Content arrives with its component**, split as in `PROJECT_OVERVIEW.md` §5 (copy in `messages`, data in TS). `context/SITEMAP.md` maps what lives where. This closes the "`sitemap.md` is not in the repo" question.
+- **Affects:** `DESIGN.md` §1.8, §1.9, §7 (Sheet), §9.5; `PROJECT_OVERVIEW.md` related docs, §2, §4.1, §5, §10; `context/SITEMAP.md`.
+
 ### 2026-11-20 — Feedback: decisions
 - **Context:** M1 stage 6.
 - **Decision:**
@@ -483,8 +515,6 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 _Things waiting for an answer. Template: `- [ ] <question> — context / options · owner · since YYYY-MM-DD`_
 
-- [ ] **Sheet (mobile menu) width.** `codex.css` sets `.cx-sheet-panel { width: 360px }`. The kit's mobile-menu mockup draws it at 320px, and the overlay rules say "320 / 82vw" (320px, but never wider than 82% of the screen). On a 360px phone a 360px sheet covers the whole screen, so the scrim and the page behind it disappear. Options: `min(320px, 82vw)` (matches the mockup and the rule, recommended) or 360px (matches the CSS). **Deferred** until the mobile menu (M2); also listed in `PROJECT_OVERVIEW.md` §10.4 · owner: author · since 2026-11-19
-- [ ] **`sitemap.md` is not in the repo.** It holds the real content and is needed for pages (M2–M6). Copy it into `context/`? · owner: author · since 2026-11-19
 - [ ] **EB Garamond Italic** (fifth font, marginalia) · `PROJECT_OVERVIEW.md` §10.2 · owner: author
 - [ ] **Email provider:** Resend (proposed) · `PROJECT_OVERVIEW.md` §10.1 · owner: author
 - [ ] **Hero illustration** mechanism, and whether to include a portrait · `PROJECT_OVERVIEW.md` §10.3 · owner: author

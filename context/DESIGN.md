@@ -143,6 +143,36 @@ The kit maps shadcn **Typography** onto these classes.
 - **Borders:** 1px `--line` inside cards · 1px `--line-strong` inputs · 1px `--ink` component outlines · **2px `--ink`** header, stamp, tables (`th`), accordion top, sheet/drawer edges · 1px dashed `--sanguine` construction lines.
 - **Grid:** 12 columns **without gutter** (grid lines = column borders). Max width 1440. Page margins 32 (desktop) / 20 (mobile). Social rail 72. "+" marks on key intersections in `--sepia`, mono font, decorative.
 - **Icons:** Lucide, stroke 1.6, 24 grid. In the kit, chevrons (Select, Nav, Dropdown) and check marks use `stroke-width="2"`.
+- **In the app:** the page frame, breakpoints and section padding follow the Home page design, see §1.9. Its frame is 1680px wide (not 1440) and its outer and section margins differ from the 32 / 20 above.
+
+### 1.9 Page layout and breakpoints (Home page design)
+
+Not part of the kit sheets: these values come from the Home page design on the canvas (`project/Home.dc.html`). The tablet (768) and mobile (360) boards render the same page, so its media queries are the only responsive spec. Added 2026-11-21.
+
+**Breakpoints** (the design uses `max-width`):
+
+| Name    | Width        | What changes                                                                                         |
+| ------- | ------------ | ---------------------------------------------------------------------------------------------------- |
+| desktop | > 1024px     | —                                                                                                    |
+| tablet  | ≤ 1024px     | header: the sheet label and the nav are replaced by the menu button; content grids become one column; section padding 24 |
+| phone   | ≤ 600px      | the frame becomes one column; the ruler is hidden; paper padding 12; header 64; section padding 16; language toggle and ⌘K leave the header |
+
+The design also has a rule at 1180px for an element that is not drawn (`.h-tlabel`); it is not used. The Toast stack (M1) moves at 768px (Toast.module.css); it was set before this section and is left as is.
+
+**The sheet frame** (every page):
+
+- Paper around the sheet: padding `28 20 20 20` (phone: 12).
+- Ruler above the frame: letters A–L over the 12 content columns, mono 10px, +0.12em, `--muted`, 8px from the top of the paper. Decor (`aria-hidden`). Hidden on phones.
+- Frame: max-width **1680**, centered, 1px `--ink` border, bg `--paper`.
+- Grid: columns `72px | 1fr` (social rail 72). Rows: header **72**, main, footer.
+  - Desktop / tablet: monogram (top left, 72×72) · header (top) · rail (left, under the monogram) · main · footer.
+  - Phone: monogram + rail share a 72px strip (the rail turns horizontal), then the header (**64**), main, footer.
+- Lines between the cells: monogram bottom **2px ink** + right 1px ink · header bottom **2px ink** · rail right 1px ink (phone: bottom 1px ink, the monogram gets a 1px bottom and keeps its right line) · footer top **2px ink**.
+- Skip link "Skip to content" (first focusable element): ink bg, paper text, mono 12px +0.1em UPPER, padding 12 16, `--r`; hidden above the page, appears 16px from the top on focus with the dashed sanguine outline.
+
+**Section padding** inside `main` (`.h-pad` in the design): **32** desktop · **24** tablet · **16** phone. Section rhythm: head `40 / 24`, body bottom 56.
+
+**In the app:** `src/app/layouts/PageFrame.tsx` + `PageFrame.module.css` draws the frame, the cells and the lines; widgets fill the cells. Media queries cannot read custom properties, so the breakpoints are literals in the CSS Modules (`width <= 1024px`, `width <= 600px`). The ruler is anchored to the frame rather than to the paper (as on the canvas), so it stays over the columns once the frame stops at 1680px.
 
 ---
 
@@ -507,7 +537,7 @@ Default w480 (kit shows 620 for tavola preview, 400 for alert), max-w 100%, surf
 ### Sheet — `.cx-sheet-panel` (mobile menu)
 
 ⚠ **Name clash:** `.cx-sheet` in `codex.css` is _documentation scaffolding_ (the 1440px kit page). The Sheet **component** is `.cx-sheet-panel`.
-Right side, full height, surface, **left border 2px ink** (`--left` variant mirrors). CSS default width 360; kit composition uses 320 (rule: 320 / 82vw).
+Right side, full height, surface, **left border 2px ink** (`--left` variant mirrors). CSS default width 360; kit composition uses 320 (rule: 320 / 82vw). **In the app:** `min(320px, 82vw)` (§9.5).
 
 - `.cx-sheet-panel-head`: h64, pad `0 10 0 20`, bottom 2px ink; `.cx-label` 11 + Ghost icon close.
 - `.cx-sheet-nav a`: pad 14 12, bottom 1px line; `<b>` display 24 −0.02em + `<span>` mono 11 muted (folio number); hover sunk; `aria-current="page"` → title in sanguine.
@@ -553,7 +583,7 @@ w380, flex gap 14, pad `12 12 12 16`, surface, border ink, `--r`, `--float`. Pos
 2. **Social rail:** kit shows GitHub, LinkedIn, **Telegram**, Email; `sitemap.md` G2 lists GitHub, LinkedIn, Email, **CV (PDF)**. **Decided 2026-11-19: no Telegram**; links follow `sitemap.md` G2. The canvas is not redrawn (the project is the source of truth).
 3. **Dark theme "Notte":** only 4 colors are defined (`#1C1712 / #F1EADB / #C9A97A / #E0704F`, concept doc). `codex.css` has **no Notte theme** and no mapping of these to tokens. `.cx-toast--dark` and `.cx-kbd--dark` are "on ink" components, not the Notte theme. Don't derive a dark palette — `TODO(design)`. **In the app:** one theme only (PROJECT_OVERVIEW.md §2); `.cx-toast--dark` is kept in CSS but not exposed.
 4. **EB Garamond** (5th font) is still awaiting approval (concept doc).
-5. **Sheet width:** CSS default `.cx-sheet-panel{width:360px}` vs rule "320 / 82vw". Deferred to the mobile menu (M2).
+5. **Sheet width:** CSS default `.cx-sheet-panel{width:360px}` vs rule "320 / 82vw" (the Home design draws `min(360px, 88vw)`). **Decided 2026-11-21: the kit rule, `min(320px, 82vw)`.**
 6. **Focus rule coverage:** the shared `:focus-visible` selector does **not** include `.cx-ibtn`, `.cx-tick`, `.cx-option`, `.cx-navpanel a`, `.cx-sheet-nav a`, `.cx-card` (non-link). Browsers will show default focus there. **In the app:** kept as is, except `.cx-menu-item`: focus inside menus is the highlight, not the dashed line (sheet 03 note, §2).
 7. **Reduced motion coverage:** the `prefers-reduced-motion` block only covers `.cx-btn, .cx-toggle, .cx-chip, .cx-page, .cx-switch, .cx-card, .cx-item, .cx-switch::after` (transitions) and `.cx-spinner, .cx-skel, .cx-dot--pulse` (animations). Not covered: menus, tabs, accordion, inputs, slider, ticks, `.cx-ibtn`, overlays. **In the app:** still not covered for those transitions; the new overlay motion (menu surface, tooltip, toast) has its own reduced-motion override.
 8. **Opacity exceptions:** `.cx-card.is-disabled .cx-card-media{opacity:.55}` and an inline `opacity:.4` on a disabled accordion icon contradict "no opacity". Documented only; not a pattern to reuse. **Decided 2026-11-20:** the in-progress card keeps its dimmed media as drawn. Its text falls below 4.5:1, an accepted exception to WCAG 2.2 AA; the media is marked decorative (`aria-hidden`) and excluded from axe checks.

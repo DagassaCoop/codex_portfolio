@@ -8,6 +8,8 @@ import { siteConfig } from '@/shared/config';
 import { routing } from '@/shared/i18n';
 import { fontVariables } from '@/shared/styles';
 
+import { PageFrame } from './PageFrame';
+
 type LocaleLayoutProps = {
   children: ReactNode;
   params: Promise<{ locale: string }>;
@@ -39,7 +41,9 @@ export async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   return (
     <html lang={locale} className={fontVariables}>
       <body>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <PageFrame>{children}</PageFrame>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

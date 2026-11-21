@@ -5,5 +5,8 @@
   },
   "home": {
     "title": "Codex"
+  },
+  "layout": {
+    "skipToContent": "Aller au contenu"
   }
 }

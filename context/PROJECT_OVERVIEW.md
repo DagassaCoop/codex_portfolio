@@ -7,6 +7,7 @@
 >
 > - `context/DESIGN.md`: the UI Kit (tokens, components, states) and how the app implements it (§12: kit class → component). Together with the code in `src/shared/styles` + `src/shared/ui` (seen in Storybook), it is the source of truth for kit elements.
 > - `context/PROGRESS.md`: development log: status, milestones, decisions, open questions, known issues.
+> - `context/SITEMAP.md`: content map: what each page and global element shows, and where each piece of content lives (copy in `messages/`, data in TS). Filled as components are built.
 > - Claude project "Portfolio": `concept-codex.md` (concept), `sitemap.md` (pages and content), `codex.css` (the original kit stylesheet, now brought into `src/shared/styles`), `shadcn-components.md`.
 > - UI Kit canvas: https://claude.ai/artifact/9nbNbHQVbXt4z57ZGH443K. Kit sheets are `project/Kit*.dc.html`; `codex.css` is an uploaded asset the sheets link to (id `e7eaac61be294e914584ca1ec245a27b`). Page designs (Home, Hero studies, tablet, mobile) are on the same canvas. The kit sheets are a historical reference and are not redrawn; the page designs remain the layout reference.
 >
@@ -38,7 +39,7 @@ Pages (details in `sitemap.md`):
 | `/[locale]/about`       | About                    | Skills / Experience / Education                                                         |
 | `*`                     | 404                      | Empty state                                                                             |
 
-Global on every page: header and navigation, social rail, contact form (Fol. 04), footer stamp, EN | FR language switch, ⌘K command palette.
+Global on every page: header and navigation, social rail, contact form (Fol. 04), footer stamp, EN | FR language switch, ⌘K command palette. They sit in the page frame from the Home page design (DESIGN.md §1.9). The contact section is not part of the layout yet (PROGRESS.md, Decisions 2026-11-21).
 
 - **One theme only (Paper).** There is no dark "Notte" theme and no theme switch. [chosen]
 - Languages: **EN** (default) and **FR**. Every piece of copy exists in both. [chosen]
@@ -95,7 +96,7 @@ The Next.js `app/` router lives in the **repo root** and only re-exports FSD pag
 ├─ proxy.ts                     # next-intl locale routing
 ├─ messages/                    # all copy: en.json, fr.json (next-intl)
 ├─ public/                      # cv.pdf, static images, favicons
-├─ context/                     # DESIGN.md, PROJECT_OVERVIEW.md, PROGRESS.md
+├─ context/                     # DESIGN.md, PROJECT_OVERVIEW.md, PROGRESS.md, SITEMAP.md
 ├─ .storybook/                  # Storybook config (main.ts, preview.tsx)
 ├─ test/                        # Vitest setup, MSW handlers and server (currently empty, see PROGRESS.md)
 ├─ e2e/                         # Playwright specs (currently empty, see PROGRESS.md)
@@ -129,7 +130,7 @@ The Next.js `app/` router lives in the **repo root** and only re-exports FSD pag
 
 ## 5. Content
 
-All content lives in git. There is no CMS, no database and no MDX: every page, case studies included, follows a fixed template built from kit components. Content is split into **data** (language-independent) and **copy** (translated):
+All content lives in git (map of what lives where: `context/SITEMAP.md`). There is no CMS, no database and no MDX: every page, case studies included, follows a fixed template built from kit components. Content is split into **data** (language-independent) and **copy** (translated):
 
 | What                                                                                                     | Format                       | Where                                 |
 | -------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------- |
@@ -210,4 +211,3 @@ Scripts (run with pnpm): `dev` · `build` · `start` · `typecheck` · `lint` ·
 1. **Email provider:** Resend (proposed).
 2. Fifth font (EB Garamond Italic) for marginalia.
 3. Hero illustration mechanism, and whether to include a portrait.
-4. **Sheet (mobile menu) width:** `min(320px, 82vw)` (kit mockup and overlay rule) or 360px (`codex.css`). Deferred until the mobile menu (DESIGN.md §9.5, PROGRESS.md).
