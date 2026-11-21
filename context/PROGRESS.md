@@ -22,8 +22,8 @@
 _A snapshot. Overwrite it, don't append to it._
 
 - **Phase:** M2 Global layout (branch `ui/layout`). M1's later pass waits; only Dialog is pulled forward, for the mobile menu.
-- **Now:** M2 stage 3 (social rail) is done and waiting for review.
-- **Next:** M2 stage 4, the footer stamp. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
+- **Now:** M2 stage 4 (footer stamp) is done and waiting for review.
+- **Next:** M2 stage 5, the mobile menu with Dialog in the kit. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
 - **Blocked by:** nothing.
 
 ---
@@ -34,7 +34,7 @@ _A snapshot. Overwrite it, don't append to it._
 |---|---|---|---|
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
 | M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo] |
-| M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [in progress] | Stages: 1 Page frame [done] · 2 Header + monogram [done] · 3 Social rail [done] · 4 Footer stamp [todo] · 5 Mobile menu + Dialog in the kit [todo]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
+| M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [in progress] | Stages: 1 Page frame [done] · 2 Header + monogram [done] · 3 Social rail [done] · 4 Footer stamp [done] · 5 Mobile menu + Dialog in the kit [todo]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
 | M3 | Home (`/[locale]`) | | |
 | M4 | Work (`/[locale]/work`) | | |
 | M5 | Work detail / case study (`/[locale]/work/[slug]`) | | |
@@ -61,6 +61,21 @@ _One entry per meaningful step. Template:_
 
 <!-- entries below, newest first -->
 
+### 2026-11-21 — M2 stage 4: footer stamp
+- **Status:** [done]
+- **What:**
+  - Widget `footer-stamp`: the title block. Five cells (Drawn by, Role, Rev., Location, Source → the repo on GitHub, new tab) and the Primary "Let's talk" cell (`#contact`) with the status "Open for work" / "Say hello".
+  - Tablet: 3 columns; phone: 2 columns, Source and the button on full rows (Home design).
+  - Data: `siteConfig.revisionYear`, `siteConfig.available`, `siteConfig.links.source`. Copy: `layout.footer` in EN and FR.
+  - Page frame fix: the main row is `1fr`. Before, a page shorter than the rail stretched the footer row and left empty space under the stamp.
+- **Where:**
+  - `src/widgets/footer-stamp/`, `src/app/layouts/PageFrame.module.css`, `src/app/layouts/LocaleLayout.tsx`
+  - `src/shared/config/site.ts`, `messages/{en,fr}.json`
+  - Docs: `DESIGN.md` §1.9, `SITEMAP.md` §3 G4
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check` and `build` pass.
+  - In the production build: full-page screenshots at 1440, 768 and 375 and the FR footer compared with the Home design; axe (WCAG 2.2 AA) has no violations; the footer sits at the bottom of the sheet on the short placeholder page.
+
 ### 2026-11-21 — M2 stage 3: social rail
 - **Status:** [done]
 - **What:**
@@ -75,10 +90,7 @@ _One entry per meaningful step. Template:_
 - **Verified:**
   - `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check` and `build` pass.
   - In the production build: screenshots at 1440, 768 and 375 compared with the Home design; axe (WCAG 2.2 AA) has no violations; hover shows the "GitHub" tooltip and the sanguine icon; with a tall page the group stays 24px below the top while scrolling; the CV link has `download`.
-- **Follow-ups (content):**
-  - ⚠ LinkedIn URL is a placeholder, `public/cv.pdf` is missing (`TODO(content)` in `site.ts`).
-  - The GitHub URL comes from the repo's remote (`DagassaCoop`); confirm it.
-  - Email leads to `#contact`, which does not exist until the contact section is built.
+- **Follow-ups (content):** done by the author the same day: the real LinkedIn URL, the email (`siteConfig.links.email`, the Email button is now a `mailto:` link) and `public/cv.pdf`.
 
 ### 2026-11-21 — M2 stage 2: header and monogram
 - **Status:** [done]

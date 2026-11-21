@@ -15,7 +15,7 @@
 | Kind | What | Where |
 | --- | --- | --- |
 | **Copy** (translated) | Every visible string: UI labels, headings, project texts, job descriptions, accessible names | `messages/en.json` and `messages/fr.json`, the same keys in both. Read with `useTranslations` / `getTranslations` (`next-intl`); rich text with `t.rich` |
-| **Site data** (one language) | Author name and initials, revision, availability, email, social links, CV path, site URL | `src/shared/config/site.ts` (`siteConfig`) |
+| **Site data** (one language) | Author name and initials, revision and its year, availability, email, social links, CV path, source repo, site URL | `src/shared/config/site.ts` (`siteConfig`) |
 | **Project data** | Slug, Tav. number, type, year, stack, `featured`, links, images, metrics | `src/entities/project/model` |
 | **Experience data** | Company, dates, city, format, stack | `src/entities/experience/model` |
 | **Decor** (not content) | Ruler letters, construction labels, dimension values | Constants next to the component that draws them; `aria-hidden`, not translated |
@@ -32,7 +32,7 @@ Rules:
 | Namespace | Used by | Status |
 | --- | --- | --- |
 | `meta` | `<title>` and description (`src/app/layouts/LocaleLayout.tsx`) | [done] |
-| `layout` | the page frame and the global widgets (§3) | [done] frame, header, rail |
+| `layout` | the page frame and the global widgets (§3) | [done] frame, header, rail, footer |
 | `home` | Home page (`src/pages/home`) | [done] placeholder title only |
 
 ---
@@ -84,19 +84,29 @@ Sheet from the right: label, nav with folio numbers, EN | FR, "Let's talk". No t
 | Content | Kind | Where | Status |
 | --- | --- | --- | --- |
 | Landmark name "Links", group name "Social links" | copy | `layout.rail.{label,group}` | [done] |
-| GitHub link | data + copy | `siteConfig.links.github`; name and tooltip `layout.rail.github` | [done]. URL taken from the repo's remote, to be confirmed |
-| LinkedIn link | data + copy | `siteConfig.links.linkedin`; `layout.rail.linkedin` | [done]. ⚠ URL is a placeholder, `TODO(content)` |
-| Email | copy | `layout.rail.email`; links to `#contact` (as in the design) | [done]. The target section is not built yet |
-| CV (PDF), downloads | data + file + copy | `siteConfig.links.cv` → `public/cv.pdf`; name `layout.rail.cv`, tooltip `layout.rail.cvTip` | [done]. ⚠ `public/cv.pdf` is missing, `TODO(content)` |
+| GitHub link (new tab) | data + copy | `siteConfig.links.github`; name and tooltip `layout.rail.github` | [done] |
+| LinkedIn link (new tab) | data + copy | `siteConfig.links.linkedin`; `layout.rail.linkedin` | [done] |
+| Email (`mailto:`) | data + copy | `siteConfig.links.email`; `layout.rail.email` | [done] |
+| CV (PDF), downloads | data + file + copy | `siteConfig.links.cv` → `public/cv.pdf`; name `layout.rail.cv`, tooltip `layout.rail.cvTip` | [done] |
 | "Scroll · Fol. 01 — 04" | copy (decor, `aria-hidden`) | `layout.rail.scroll` | [done] |
 
 ### G3 · Contact section (Fol. 04) [todo]
 
 Not part of the layout for now (decided 2026-11-21). The form is M7.
 
-### G4 · Footer stamp [todo]
+### G4 · Footer stamp — `src/widgets/footer-stamp` [done]
 
-Drawn by, Role, Rev., Location, Source, and the "Let's talk" cell with the availability status.
+| Content | Kind | Where | Status |
+| --- | --- | --- | --- |
+| Landmark name "Title block" | copy | `layout.footer.label` | [done] |
+| Cell labels Drawn by / Role / Rev. / Location / Source | copy | `layout.footer.{drawnBy,role,rev,location,source}` | [done] |
+| Author name | data | `siteConfig.author.name` | [done] |
+| Role "Frontend / Fullstack" | copy | `layout.footer.roleValue` | [done] |
+| Revision "B · 2026" | data | `siteConfig.revision`, `siteConfig.revisionYear` | [done] |
+| Location "Toronto, ON" | copy | `layout.footer.locationValue` | [done] |
+| Source link "GitHub ↗" (new tab) | data + copy | `siteConfig.links.source`; `layout.footer.sourceLink` | [done] |
+| Status "Open for work" / "Say hello" | data + copy | `siteConfig.available`; `layout.footer.status.{available,unavailable}` | [done] |
+| "Let's talk" cell | copy | `layout.footer.letsTalk`; links to `#contact` | [done]. The target section is not built yet |
 
 ### G5 · Command palette [todo]
 

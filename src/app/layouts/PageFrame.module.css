@@ -38,12 +38,16 @@
 
 /* ---------- The sheet ---------- */
 
+/*
+ * The main row is 1fr: when the rail is taller than a short page, the extra height goes to main,
+ * so the footer stays at the bottom of the sheet instead of stretching.
+ */
 .frame {
   position: relative;
   display: grid;
   grid-template:
     'monogram header' 72px
-    'rail main' auto
+    'rail main' 1fr
     'rail footer' auto
     / 72px minmax(0, 1fr);
   max-width: 1680px;

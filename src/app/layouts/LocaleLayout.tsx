@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 import { siteConfig } from '@/shared/config';
 import { routing } from '@/shared/i18n';
 import { fontVariables } from '@/shared/styles';
+import { FooterStamp } from '@/widgets/footer-stamp';
 import { Header, Monogram } from '@/widgets/header';
 import { SocialRail } from '@/widgets/social-rail';
 
@@ -44,7 +45,12 @@ export async function LocaleLayout({ children, params }: LocaleLayoutProps) {
     <html lang={locale} className={fontVariables}>
       <body>
         <NextIntlClientProvider>
-          <PageFrame monogram={<Monogram />} rail={<SocialRail />} header={<Header />}>
+          <PageFrame
+            monogram={<Monogram />}
+            rail={<SocialRail />}
+            header={<Header />}
+            footer={<FooterStamp />}
+          >
             {children}
           </PageFrame>
         </NextIntlClientProvider>

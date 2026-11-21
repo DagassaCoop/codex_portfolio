@@ -164,11 +164,13 @@ The design also has a rule at 1180px for an element that is not drawn (`.h-tlabe
 - Paper around the sheet: padding `28 20 20 20` (phone: 12).
 - Ruler above the frame: letters A–L over the 12 content columns, mono 10px, +0.12em, `--muted`, 8px from the top of the paper. Decor (`aria-hidden`). Hidden on phones.
 - Frame: max-width **1680**, centered, 1px `--ink` border, bg `--paper`.
-- Grid: columns `72px | 1fr` (social rail 72). Rows: header **72**, main, footer.
+- Grid: columns `72px | 1fr` (social rail 72). Rows: header **72**, main, footer. **In the app** the main row is `1fr`, so on a page shorter than the rail the footer stays at the bottom instead of stretching.
   - Desktop / tablet: monogram (top left, 72×72) · header (top) · rail (left, under the monogram) · main · footer.
   - Phone: monogram + rail share a 72px strip (the rail turns horizontal), then the header (**64**), main, footer.
 - Lines between the cells: monogram bottom **2px ink** + right 1px ink · header bottom **2px ink** · rail right 1px ink (phone: bottom 1px ink, the monogram gets a 1px bottom and keeps its right line) · footer top **2px ink**.
 - Skip link "Skip to content" (first focusable element): ink bg, paper text, mono 12px +0.1em UPPER, padding 12 16, `--r`; hidden above the page, appears 16px from the top on focus with the dashed sanguine outline.
+
+**Footer stamp** (title block, G4): a 2px ink line above (the frame's); five cells (Drawn by, Role, Rev., Location, Source: padding 12 16, gap 6, `.cx-cap` label + 14px value, 1px ink between) and a wider (1.6fr) Primary button cell: padding 12 20, no radius, status in mono 9px +0.16em over "Let's talk" in display 700 20px −0.02em, a 40×40 ↗ box with a 1px border in the text colour. Tablet: 3 columns with a line between the rows; phone: 2 columns, Source and the button take a full row each. **In the app:** `src/widgets/footer-stamp`; the status reads "Open for work" or "Say hello" from `siteConfig.available`.
 
 **Section padding** inside `main` (`.h-pad` in the design): **32** desktop · **24** tablet · **16** phone. Section rhythm: head `40 / 24`, body bottom 56.
 

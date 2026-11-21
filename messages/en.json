@@ -33,6 +33,22 @@
       "cv": "Download CV, PDF",
       "cvTip": "CV · PDF",
       "scroll": "Scroll · Fol. 01 — 04"
+    },
+    "footer": {
+      "label": "Title block",
+      "drawnBy": "Drawn by",
+      "role": "Role",
+      "roleValue": "Frontend / Fullstack",
+      "rev": "Rev.",
+      "location": "Location",
+      "locationValue": "Toronto, ON",
+      "source": "Source",
+      "sourceLink": "GitHub ↗",
+      "status": {
+        "available": "Open for work",
+        "unavailable": "Say hello"
+      },
+      "letsTalk": "Let’s talk"
     }
   }
 }

@@ -39,7 +39,6 @@ export function SocialRail() {
       icon: <LinkedinIcon />,
       target: '_blank',
     },
-    // The contact section (Fol. 04) is on every page; it is not built yet (M7)
     { href: `mailto:${email}`, label: t('email'), tip: t('email'), icon: <MailIcon /> },
     { href: cv, label: t('cv'), tip: t('cvTip'), icon: <FileDownIcon />, download: true },
   ];

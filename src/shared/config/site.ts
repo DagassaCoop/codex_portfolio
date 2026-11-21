@@ -11,14 +11,20 @@ export const siteConfig = {
     initials: 'DB',
   },
 
-  /** Revision of the drawing (the site): "Codex · Rev. B" */
+  /** Revision of the drawing (the site) and its year: "Codex · Rev. B", "B · 2026" */
   revision: 'B',
+  revisionYear: 2026,
 
-  /** Profiles and files (social rail, footer). Email and availability come with the contact section. */
+  /** Open to job offers: the footer stamp shows "Open for work" instead of "Say hello" */
+  available: true,
+
+  /** Profiles, contacts and files (social rail, footer) */
   links: {
     github: 'https://github.com/DagassaCoop',
     linkedin: 'https://www.linkedin.com/in/dmytro-bondar/',
     email: 'dmytro.bondar.prof@gmail.com',
     cv: '/cv.pdf',
+    /** This site's source code (footer stamp) */
+    source: 'https://github.com/DagassaCoop/codex_portfolio',
   },
 } as const;

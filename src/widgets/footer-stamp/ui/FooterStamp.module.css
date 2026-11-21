@@ -1,0 +1,117 @@
+/*
+ * The title block fills the frame's footer cell (DESIGN.md §1.9). The frame draws the 2px line above it.
+ * Columns: five cells and a wider "Let's talk" cell; 3 columns on tablets, 2 on phones.
+ */
+
+.stamp {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(0, 1.6fr);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 16px;
+  border-right: 1px solid var(--ink);
+}
+
+.value {
+  font-size: 14px;
+}
+
+.name {
+  font-family: var(--display);
+  font-weight: 500;
+}
+
+.mono {
+  font-family: var(--mono);
+}
+
+/* ---------- "Let's talk": a Primary button the size of a cell ---------- */
+
+.cta {
+  justify-content: space-between;
+  gap: 16px;
+  height: auto;
+  padding: 12px 20px;
+  border-radius: 0;
+}
+
+.ctaText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.status {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ctaLabel {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* The arrow in a square drawn in the button's text colour */
+.ctaArrow {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid currentcolor;
+  border-radius: var(--r);
+  font-size: 18px;
+}
+
+/* ---------- Tablet: 3 columns, a line between the rows ---------- */
+
+@media (width <= 1024px) {
+  .stamp {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .cell {
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .cell:nth-child(3) {
+    border-right: 0;
+  }
+
+  .cell:nth-child(n + 4) {
+    border-bottom: 0;
+  }
+}
+
+/* ---------- Phone: 2 columns; Source and "Let's talk" take a full row each ---------- */
+
+@media (width <= 600px) {
+  .stamp {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cell,
+  .cell:nth-child(n + 4) {
+    border-right: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .cell:nth-child(2n),
+  .cell:nth-child(5) {
+    border-right: 0;
+  }
+
+  .cell:nth-child(5),
+  .cta {
+    grid-column: 1 / -1;
+  }
+}
