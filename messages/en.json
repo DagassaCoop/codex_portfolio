@@ -8,6 +8,7 @@
   },
   "layout": {
     "skipToContent": "Skip to content",
+    "newTab": "{label} (opens in a new tab)",
     "monogram": {
       "label": "{initials} — {name}, home"
     },
@@ -43,7 +44,7 @@
       "location": "Location",
       "locationValue": "Toronto, ON",
       "source": "Source",
-      "sourceLink": "GitHub ↗",
+      "sourceLink": "GitHub",
       "status": {
         "available": "Open for work",
         "unavailable": "Say hello"

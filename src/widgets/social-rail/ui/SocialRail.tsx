@@ -28,6 +28,7 @@ type RailLink = {
  */
 export function SocialRail() {
   const t = useTranslations('layout.rail');
+  const tLayout = useTranslations('layout');
   const { github, linkedin, email, cv } = siteConfig.links;
 
   const links: RailLink[] = [
@@ -51,7 +52,8 @@ export function SocialRail() {
             <Tooltip key={href} content={tip} side="right" className={styles.tip}>
               <a
                 href={href}
-                aria-label={label}
+                // Screen readers also hear that an external profile opens in a new tab
+                aria-label={target === '_blank' ? tLayout('newTab', { label }) : label}
                 download={download || undefined}
                 target={target}
                 // A new tab gets no access to this page (window.opener) and no referrer

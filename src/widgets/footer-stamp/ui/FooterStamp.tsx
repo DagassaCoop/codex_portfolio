@@ -15,6 +15,7 @@ import styles from './FooterStamp.module.css';
  */
 export function FooterStamp() {
   const t = useTranslations('layout.footer');
+  const tLayout = useTranslations('layout');
   const { author, revision, revisionYear, available, links } = siteConfig;
 
   return (
@@ -30,8 +31,14 @@ export function FooterStamp() {
       </StampCell>
       <StampCell label={t('location')}>{t('locationValue')}</StampCell>
       <StampCell label={t('source')}>
-        <a href={links.source} target="_blank" rel="noopener noreferrer" className="cx-tlink">
-          {t('sourceLink')}
+        <a
+          href={links.source}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={tLayout('newTab', { label: t('sourceLink') })}
+          className="cx-tlink"
+        >
+          {t('sourceLink')} <span aria-hidden="true">↗</span>
         </a>
       </StampCell>
 

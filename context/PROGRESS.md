@@ -21,9 +21,9 @@
 
 _A snapshot. Overwrite it, don't append to it._
 
-- **Phase:** M2 Global layout (branch `ui/layout`). M1's later pass waits; Dialog and Sheet were pulled forward for the mobile menu.
-- **Now:** M2 stage 5 (mobile menu, Dialog and Sheet in the kit) is done and waiting for review. All M2 stages are done.
-- **Next:** to be decided after the review: close M2 (commit, merge) and choose the next milestone (M3 Home, or the deferred command palette / toast). Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
+- **Phase:** M2 Global layout is done (2026-11-21, branch `ui/layout` merged into `main`).
+- **Now:** nothing in progress.
+- **Next:** to be decided: M3 (Home), or the deferred command palette (M8) / toast provider. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
 - **Blocked by:** nothing.
 
 ---
@@ -34,7 +34,7 @@ _A snapshot. Overwrite it, don't append to it._
 |---|---|---|---|
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
 | M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo]; Dialog and Sheet done early in M2 |
-| M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [in progress] | Stages: 1 Page frame [done] · 2 Header + monogram [done] · 3 Social rail [done] · 4 Footer stamp [done] · 5 Mobile menu + Dialog in the kit [done]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
+| M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [done] | 2026-11-21. Stages: 1 Page frame [done] · 2 Header + monogram [done] · 3 Social rail [done] · 4 Footer stamp [done] · 5 Mobile menu + Dialog in the kit [done]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
 | M3 | Home (`/[locale]`) | | |
 | M4 | Work (`/[locale]/work`) | | |
 | M5 | Work detail / case study (`/[locale]/work/[slug]`) | | |
@@ -60,6 +60,14 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-21 — M2 closed: review answers
+- **Status:** [done]
+- **What:**
+  - External links (rail GitHub / LinkedIn, footer Source) get "(opens in a new tab)" in their accessible names (`layout.newTab`); the footer's ↗ became decor (`aria-hidden`).
+  - `siteConfig.revisionYear` is the year of the build.
+- **Where:** `src/widgets/{social-rail,footer-stamp}`, `src/shared/config/site.ts`, `messages/{en,fr}.json`, `SITEMAP.md`
+- **Verified:** `typecheck`, `lint`, `lint:fsd`, `format:check` and `build` pass; in the production build the three external links read "GitHub (opens in a new tab)" etc. in EN and "… (s’ouvre dans un nouvel onglet)" in FR, the stamp shows "B · 2026", axe has no violations in either locale.
 
 ### 2026-11-21 — M2 stage 5: mobile menu, Dialog and Sheet in the kit
 - **Status:** [done]
@@ -395,6 +403,15 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 <!-- entries below, newest first -->
 
+### 2026-11-21 — M2 review answers
+- **Context:** Open points at the end of M2.
+- **Decision:**
+  - **"Let's talk" and the menu keep linking to `#contact`** until the contact section exists (M7).
+  - **FR copy stays as drafted**; it is reviewed once the components are done (Open questions).
+  - **The revision year is the build year** (`new Date().getFullYear()` in `siteConfig`, fixed by prerendering).
+  - **External links announce the new tab** to screen readers ("GitHub (opens in a new tab)"); tooltips and visible text stay short.
+- **Affects:** `src/shared/config/site.ts`, `src/widgets/{social-rail,footer-stamp}`, `SITEMAP.md`.
+
 ### 2026-11-21 — Mobile menu: Dialog and Sheet
 - **Context:** M2 stage 5. The mobile menu is the kit's Sheet; the kit has no Base UI mapping for overlays yet.
 - **Decision:**
@@ -595,6 +612,7 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 _Things waiting for an answer. Template: `- [ ] <question> — context / options · owner · since YYYY-MM-DD`_
 
+- [ ] **FR copy review.** All FR strings so far are drafts written during development (`messages/fr.json`). Review them once the components are done · owner: author · since 2026-11-21
 - [ ] **EB Garamond Italic** (fifth font, marginalia) · `PROJECT_OVERVIEW.md` §10.2 · owner: author
 - [ ] **Email provider:** Resend (proposed) · `PROJECT_OVERVIEW.md` §10.1 · owner: author
 - [ ] **Hero illustration** mechanism, and whether to include a portrait · `PROJECT_OVERVIEW.md` §10.3 · owner: author

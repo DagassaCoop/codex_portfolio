@@ -7,6 +7,8 @@
 > **Source.** The full content plan is `sitemap.md` in the Claude project "Portfolio" (not in the repo). This file brings it into the repo piece by piece: **an entry is added when the component that shows it is built**, so everything listed here exists in the code unless marked `[todo]`.
 >
 > Status markers: `[done]` in the code · `[todo]` planned, not built yet.
+>
+> **FR copy** is a first draft written during development; it is reviewed once the components are done (PROGRESS.md, Open questions).
 
 ---
 
@@ -60,6 +62,7 @@ Drawn on the Home page design; the frame and the cells are described in `DESIGN.
 | Content | Kind | Where | Status |
 | --- | --- | --- | --- |
 | Skip link "Skip to content" | copy | `layout.skipToContent` | [done] |
+| "(opens in a new tab)" added to the names of external links (rail, footer) | copy | `layout.newTab` (`{label}`) | [done] |
 | Ruler letters A–L | decor | `RULER_COLUMNS` in `PageFrame.tsx` | [done] |
 
 ### G1 · Header and navigation — `src/widgets/header` [done]
@@ -90,8 +93,8 @@ Drawn on the Home page design; the frame and the cells are described in `DESIGN.
 | Content | Kind | Where | Status |
 | --- | --- | --- | --- |
 | Landmark name "Links", group name "Social links" | copy | `layout.rail.{label,group}` | [done] |
-| GitHub link (new tab) | data + copy | `siteConfig.links.github`; name and tooltip `layout.rail.github` | [done] |
-| LinkedIn link (new tab) | data + copy | `siteConfig.links.linkedin`; `layout.rail.linkedin` | [done] |
+| GitHub link (new tab) | data + copy | `siteConfig.links.github`; tooltip `layout.rail.github`, name `layout.newTab` | [done] |
+| LinkedIn link (new tab) | data + copy | `siteConfig.links.linkedin`; tooltip `layout.rail.linkedin`, name `layout.newTab` | [done] |
 | Email (`mailto:`) | data + copy | `siteConfig.links.email`; `layout.rail.email` | [done] |
 | CV (PDF), downloads | data + file + copy | `siteConfig.links.cv` → `public/cv.pdf`; name `layout.rail.cv`, tooltip `layout.rail.cvTip` | [done] |
 | "Scroll · Fol. 01 — 04" | copy (decor, `aria-hidden`) | `layout.rail.scroll` | [done] |
@@ -108,9 +111,9 @@ Not part of the layout for now (decided 2026-11-21). The form is M7.
 | Cell labels Drawn by / Role / Rev. / Location / Source | copy | `layout.footer.{drawnBy,role,rev,location,source}` | [done] |
 | Author name | data | `siteConfig.author.name` | [done] |
 | Role "Frontend / Fullstack" | copy | `layout.footer.roleValue` | [done] |
-| Revision "B · 2026" | data | `siteConfig.revision`, `siteConfig.revisionYear` | [done] |
+| Revision "B · 2026" | data | `siteConfig.revision`; `siteConfig.revisionYear` = the year of the build | [done] |
 | Location "Toronto, ON" | copy | `layout.footer.locationValue` | [done] |
-| Source link "GitHub ↗" (new tab) | data + copy | `siteConfig.links.source`; `layout.footer.sourceLink` | [done] |
+| Source link "GitHub ↗" (new tab) | data + copy | `siteConfig.links.source`; `layout.footer.sourceLink` (the ↗ is decor in the component), name `layout.newTab` | [done] |
 | Status "Open for work" / "Say hello" | data + copy | `siteConfig.available`; `layout.footer.status.{available,unavailable}` | [done] |
 | "Let's talk" cell | copy | `layout.footer.letsTalk`; links to `#contact` | [done]. The target section is not built yet |
 

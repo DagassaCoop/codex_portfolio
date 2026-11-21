@@ -11,9 +11,13 @@ export const siteConfig = {
     initials: 'DB',
   },
 
-  /** Revision of the drawing (the site) and its year: "Codex · Rev. B", "B · 2026" */
+  /** Revision of the drawing (the site): "Codex · Rev. B" */
   revision: 'B',
-  revisionYear: 2026,
+  /**
+   * Year of the revision: the year the site is built ("B · 2026").
+   * Pages are prerendered, so it is fixed at build time and only changes with a new build.
+   */
+  revisionYear: new Date().getFullYear(),
 
   /** Open to job offers: the footer stamp shows "Open for work" instead of "Say hello" */
   available: true,
