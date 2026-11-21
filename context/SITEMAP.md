@@ -15,7 +15,7 @@
 | Kind | What | Where |
 | --- | --- | --- |
 | **Copy** (translated) | Every visible string: UI labels, headings, project texts, job descriptions, accessible names | `messages/en.json` and `messages/fr.json`, the same keys in both. Read with `useTranslations` / `getTranslations` (`next-intl`); rich text with `t.rich` |
-| **Site data** (one language) | Availability, email, social links, CV path, site URL | `src/shared/config/site.ts` (`siteConfig`) |
+| **Site data** (one language) | Author name and initials, revision, availability, email, social links, CV path, site URL | `src/shared/config/site.ts` (`siteConfig`) |
 | **Project data** | Slug, Tav. number, type, year, stack, `featured`, links, images, metrics | `src/entities/project/model` |
 | **Experience data** | Company, dates, city, format, stack | `src/entities/experience/model` |
 | **Decor** (not content) | Ruler letters, construction labels, dimension values | Constants next to the component that draws them; `aria-hidden`, not translated |
@@ -32,7 +32,7 @@ Rules:
 | Namespace | Used by | Status |
 | --- | --- | --- |
 | `meta` | `<title>` and description (`src/app/layouts/LocaleLayout.tsx`) | [done] |
-| `layout` | the page frame and the global widgets (§3) | [done] (frame) |
+| `layout` | the page frame and the global widgets (§3) | [done] frame, header |
 | `home` | Home page (`src/pages/home`) | [done] placeholder title only |
 
 ---
@@ -62,9 +62,18 @@ Drawn on the Home page design; the frame and the cells are described in `DESIGN.
 | Skip link "Skip to content" | copy | `layout.skipToContent` | [done] |
 | Ruler letters A–L | decor | `RULER_COLUMNS` in `PageFrame.tsx` | [done] |
 
-### G1 · Header and navigation [todo]
+### G1 · Header and navigation — `src/widgets/header` [done]
 
-Monogram (link home), nav (Home / Work / About; no counters, no Contact), EN | FR, ⌘K trigger, "Let's talk", menu button (tablet and phone).
+| Content | Kind | Where | Status |
+| --- | --- | --- | --- |
+| Monogram initials "DB" | data | `siteConfig.author.initials` | [done] |
+| Monogram accessible name "DB — Dmytro Bondar, home" | copy + data | `layout.monogram.label` (`{initials}`, `{name}` ← `siteConfig.author`) | [done] |
+| Sheet label "Codex · Rev. B" | copy + data | `layout.header.sheetLabel` (`{revision}` ← `siteConfig.revision`) | [done] |
+| Navigation name "Primary" and items Home / Work / About | copy | `layout.header.nav.{label,home,work,about}`; routes `/`, `/work`, `/about` in `Header.tsx` | [done]. No counters, no Contact item |
+| Language switch name "Language", items EN / FR | copy + data | `layout.locale.label`; items from `routing.locales` (`src/shared/i18n`) | [done] (`src/features/switch-locale`) |
+| "Let's talk" | copy | `layout.header.letsTalk`; links to `#contact` | [done]. The target section is not built yet |
+| ⌘K trigger | copy | — | [todo] with the command palette (M8) |
+| Menu button (tablet, phone) | copy | — | [todo] with the mobile menu (stage 5) |
 
 ### G1 · Mobile menu [todo]
 

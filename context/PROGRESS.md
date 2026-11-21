@@ -22,8 +22,8 @@
 _A snapshot. Overwrite it, don't append to it._
 
 - **Phase:** M2 Global layout (branch `ui/layout`). M1's later pass waits; only Dialog is pulled forward, for the mobile menu.
-- **Now:** M2 stage 1 (page frame) is done and waiting for review.
-- **Next:** M2 stage 2, the header (with the monogram). Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
+- **Now:** M2 stage 2 (header with the monogram) is done and waiting for review.
+- **Next:** M2 stage 3, the social rail. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
 - **Blocked by:** nothing.
 
 ---
@@ -34,7 +34,7 @@ _A snapshot. Overwrite it, don't append to it._
 |---|---|---|---|
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
 | M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo] |
-| M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [in progress] | Stages: 1 Page frame [done] · 2 Header + monogram [todo] · 3 Social rail [todo] · 4 Footer stamp [todo] · 5 Mobile menu + Dialog in the kit [todo]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
+| M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [in progress] | Stages: 1 Page frame [done] · 2 Header + monogram [done] · 3 Social rail [todo] · 4 Footer stamp [todo] · 5 Mobile menu + Dialog in the kit [todo]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
 | M3 | Home (`/[locale]`) | | |
 | M4 | Work (`/[locale]/work`) | | |
 | M5 | Work detail / case study (`/[locale]/work/[slug]`) | | |
@@ -60,6 +60,26 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-21 — M2 stage 2: header and monogram
+- **Status:** [done]
+- **What:**
+  - Widget `header`: `Monogram` (the "DB" link home in the frame's top-left cell) and `Header` (sheet label, nav Home / Work / About, language switch, "Let's talk"). `LocaleLayout` puts them into the frame's slots.
+  - Feature `switch-locale`: `LocaleSwitch`, the EN | FR Toggle Group. It opens the same path in the other locale (`router.replace` from `@/shared/i18n`); the current locale is the pressed item.
+  - Tablet hides the label and the nav, phone also hides the language switch (DESIGN.md §1.9).
+  - Data: `siteConfig.author` (name, initials) and `siteConfig.revision`. Copy: `layout.monogram`, `layout.header`, `layout.locale` in EN and FR.
+  - `steiger.config.ts`: `fsd/insignificant-slice` is off for `features/switch-locale` until the mobile menu becomes its second consumer (TODO in the file).
+- **Where:**
+  - `src/widgets/header/`, `src/features/switch-locale/`
+  - `src/shared/config/site.ts`, `src/app/layouts/LocaleLayout.tsx`, `messages/{en,fr}.json`, `steiger.config.ts`
+  - Docs: `DESIGN.md` §5 (Header), `SITEMAP.md` §3 G1
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check` and `build` pass.
+  - In the production build: screenshots at 1440, 768 and 375 compared with the Home design; axe (WCAG 2.2 AA) has no violations at any width; the second Tab focuses the monogram (dashed line inside the cell, name "DB — Dmytro Bondar, home"); clicking FR opens `/fr` with `lang="fr"`, the French nav and FR pressed.
+- **Follow-ups:**
+  - "Let's talk" links to `#contact`, which does not exist until the contact section is built.
+  - Work and About link to pages that do not exist yet (M4, M6).
+  - Until stage 5, tablets and phones have no navigation (the menu button comes with the mobile menu).
 
 ### 2026-11-21 — M2 stage 1: page frame
 - **Status:** [done]

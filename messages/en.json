@@ -7,6 +7,22 @@
     "title": "Codex"
   },
   "layout": {
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "monogram": {
+      "label": "{initials} — {name}, home"
+    },
+    "header": {
+      "sheetLabel": "Codex · Rev. {revision}",
+      "nav": {
+        "label": "Primary",
+        "home": "Home",
+        "work": "Work",
+        "about": "About"
+      },
+      "letsTalk": "Let’s talk"
+    },
+    "locale": {
+      "label": "Language"
+    }
   }
 }

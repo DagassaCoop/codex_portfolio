@@ -7,6 +7,22 @@
     "title": "Codex"
   },
   "layout": {
-    "skipToContent": "Aller au contenu"
+    "skipToContent": "Aller au contenu",
+    "monogram": {
+      "label": "{initials} — {name}, accueil"
+    },
+    "header": {
+      "sheetLabel": "Codex · Rév. {revision}",
+      "nav": {
+        "label": "Principale",
+        "home": "Accueil",
+        "work": "Projets",
+        "about": "À propos"
+      },
+      "letsTalk": "Discutons"
+    },
+    "locale": {
+      "label": "Langue"
+    }
   }
 }

@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 import { siteConfig } from '@/shared/config';
 import { routing } from '@/shared/i18n';
 import { fontVariables } from '@/shared/styles';
+import { Header, Monogram } from '@/widgets/header';
 
 import { PageFrame } from './PageFrame';
 
@@ -42,7 +43,9 @@ export async function LocaleLayout({ children, params }: LocaleLayoutProps) {
     <html lang={locale} className={fontVariables}>
       <body>
         <NextIntlClientProvider>
-          <PageFrame>{children}</PageFrame>
+          <PageFrame monogram={<Monogram />} header={<Header />}>
+            {children}
+          </PageFrame>
         </NextIntlClientProvider>
       </body>
     </html>

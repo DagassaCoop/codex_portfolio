@@ -366,6 +366,8 @@ Thumb hover: sanguine fill. Active/drag: `rotate(45deg) scale(1.15)`, sanguine-p
 **Header (kit composition):** height 72, padding 0 24, border-bottom **2px ink**, bg paper. Left: name in Space Grotesk 700 21px −0.03em + `.cx-cap` sheet label. Nav at `margin-left:auto`. Then ⌘K trigger = Secondary `sm` button with search icon + `<kbd class="cx-kbd" style="height:20px">⌘K</kbd>`, `aria-label="Open codex index"`.
 ⚠ Nav items in the kit (Work, About, Stack, Notes, Contact) are a demo. Real items: `sitemap.md` G1. **In the app:** `NavLink` marks itself `aria-current=\"page\"` from the URL.
 
+**In the app (M2), the header follows the Home page design, not this composition** (`src/widgets/header`, DESIGN.md §1.9): the name is the "DB" monogram in the frame's top-left cell (display 700 20px −0.03em; focus line drawn inside the cell, `outline-offset: -3px`); the bar holds the `.cx-cap` sheet label "Codex · Rev. B", the nav (Home / Work / About, no counters, no Contact), the EN | FR Toggle Group and a Primary `sm` "Let's talk"; gap 20, padding 0 24 (phone: gap 12, padding 0 12). Tablet hides the label and nav; phone also hides the language switch. The ⌘K trigger waits for the command palette (M8), the menu button for the mobile menu.
+
 ### Tabs — `.cx-tabs` / `.cx-tab` / `.cx-tabpanel`
 
 List: border-bottom 1px ink. Tab: h44, pad 0 18, mono 600 12px +0.1em UPPER, ink-2; `<sup>` muted 9px.
