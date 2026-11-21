@@ -1,0 +1,114 @@
+/*
+ * Sheet — .cx-sheet-panel (DESIGN.md §7, kit sheet 05 §04): the mobile menu.
+ *
+ * Not to be confused with .cx-sheet, the kit's documentation page scaffolding (never shipped).
+ * Right side, full height, surface, a 2px ink edge like the trimmed edge of a sheet of paper.
+ * The kit draws it inside a demo stage (position: absolute); the app pins it to the viewport in Sheet.module.css.
+ */
+
+@layer components {
+  /*
+   * Width: codex.css says 360px; the kit's overlay rule and mobile-menu mockup say 320 / 82vw.
+   * Decided 2026-11-21: the rule (DESIGN.md §9.5), so the page still shows beside it on a 360px phone.
+   */
+  .cx-sheet-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    width: min(320px, 82vw);
+    border-left: 2px solid var(--ink);
+    background: var(--surface);
+  }
+
+  .cx-sheet-panel--left {
+    right: auto;
+    left: 0;
+    border-right: 2px solid var(--ink);
+    border-left: 0;
+  }
+
+  /* 64px head with a 2px ink line: the label and the close button */
+  .cx-sheet-panel-head {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 10px 0 20px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .cx-sheet-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+  }
+
+  /* A row: big title on the left, folio number on the right */
+  .cx-sheet-nav a {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    text-decoration: none;
+    transition: background-color var(--t);
+  }
+
+  .cx-sheet-nav a b {
+    font-family: var(--display);
+    font-size: 24px;
+    letter-spacing: -0.02em;
+  }
+
+  .cx-sheet-nav a span {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+
+  .cx-sheet-nav a:hover {
+    background: var(--sunk);
+  }
+
+  /* The current section in sanguine */
+  .cx-sheet-nav a[aria-current='page'] b {
+    color: var(--sanguine);
+  }
+}
+
+/*
+ * Motion (DESIGN.md §2, overlay rules): 160ms, 8px shift + fade, sliding in from its edge.
+ * Not in codex.css. The scrim's fade is in dialog.css.
+ */
+@layer components {
+  .cx-sheet-panel {
+    transition:
+      opacity 160ms var(--ease),
+      transform 160ms var(--ease);
+  }
+
+  .cx-sheet-panel[data-starting-style],
+  .cx-sheet-panel[data-ending-style] {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+
+  .cx-sheet-panel--left[data-starting-style],
+  .cx-sheet-panel--left[data-ending-style] {
+    transform: translateX(-8px);
+  }
+}
+
+@layer motion {
+  @media (prefers-reduced-motion: reduce) {
+    .cx-sheet-panel {
+      transition: none;
+    }
+  }
+}

@@ -21,9 +21,9 @@
 
 _A snapshot. Overwrite it, don't append to it._
 
-- **Phase:** M2 Global layout (branch `ui/layout`). M1's later pass waits; only Dialog is pulled forward, for the mobile menu.
-- **Now:** M2 stage 4 (footer stamp) is done and waiting for review.
-- **Next:** M2 stage 5, the mobile menu with Dialog in the kit. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
+- **Phase:** M2 Global layout (branch `ui/layout`). M1's later pass waits; Dialog and Sheet were pulled forward for the mobile menu.
+- **Now:** M2 stage 5 (mobile menu, Dialog and Sheet in the kit) is done and waiting for review. All M2 stages are done.
+- **Next:** to be decided after the review: close M2 (commit, merge) and choose the next milestone (M3 Home, or the deferred command palette / toast). Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
 - **Blocked by:** nothing.
 
 ---
@@ -33,8 +33,8 @@ _A snapshot. Overwrite it, don't append to it._
 | # | Milestone | Status | Notes |
 |---|---|---|---|
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
-| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo] |
-| M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [in progress] | Stages: 1 Page frame [done] · 2 Header + monogram [done] · 3 Social rail [done] · 4 Footer stamp [done] · 5 Mobile menu + Dialog in the kit [todo]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
+| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo]; Dialog and Sheet done early in M2 |
+| M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [in progress] | Stages: 1 Page frame [done] · 2 Header + monogram [done] · 3 Social rail [done] · 4 Footer stamp [done] · 5 Mobile menu + Dialog in the kit [done]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
 | M3 | Home (`/[locale]`) | | |
 | M4 | Work (`/[locale]/work`) | | |
 | M5 | Work detail / case study (`/[locale]/work/[slug]`) | | |
@@ -60,6 +60,25 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-21 — M2 stage 5: mobile menu, Dialog and Sheet in the kit
+- **Status:** [done]
+- **What:**
+  - **Dialog** (`shared/ui/dialog`, Base UI Dialog): `Dialog`, `DialogTrigger`, `DialogPopup` (480 / 620 / 400), `DialogHeader`, `DialogBody`, `DialogDescription`, `DialogFooter`, `DialogClose`. Kit CSS for `.cx-scrim` and `.cx-dialog*` from codex.css, plus the overlay motion (fade, "laid down" from −8px) with reduced motion.
+  - **Sheet** (`shared/ui/sheet`, on the same Base UI Dialog): `SheetPopup`, `SheetHeader`, `SheetNav`, `SheetNavLink`, `SheetFooter`. Kit CSS for `.cx-sheet-panel*` and `.cx-sheet-nav`, width `min(320px, 82vw)`, slide-in motion.
+  - Stories: Overlays/Dialog (tavola preview, default, keyboard and focus test, close buttons test) and Overlays/Sheet (mobile menu on Work, hover row, current section and Esc test).
+  - **Widget `mobile-menu`:** a Secondary icon button (new `MenuIcon`), shown at 1024px and below in the header's new `menu` slot, opens the Sheet: "Codex · Index", Home / Work / About with folio numbers, EN | FR, "Let's talk". A section, a language or "Let's talk" closes it.
+  - `shared/config/navigation.ts`: one list of sections for the header and the menu; their titles moved from `layout.header.nav` to `layout.nav`. New copy: `layout.menu`.
+  - `isCurrentPath` in `shared/i18n`, used by `NavLink` and `SheetNavLink`.
+  - `steiger.config.ts` is back to the recommended config: `switch-locale` now has two consumers.
+- **Where:**
+  - `src/shared/ui/{dialog,sheet}/`, `src/shared/ui/icons/MenuIcon.tsx`, `src/shared/ui/nav-link/NavLink.tsx`, `src/shared/i18n/isCurrentPath.ts`, `src/shared/styles/index.css`
+  - `src/widgets/mobile-menu/`, `src/widgets/header/ui/Header.tsx`, `src/shared/config/navigation.ts`, `src/app/layouts/LocaleLayout.tsx`, `messages/{en,fr}.json`, `steiger.config.ts`
+  - Docs: `DESIGN.md` §2, §5, §7, §12; `SITEMAP.md` §3 G1
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` and `build-storybook` pass.
+  - `test:stories`: 127/127 (axe in every story).
+  - In the production build: the menu button is hidden at 1440 and shown at 768 and 375; keyboard open moves focus to "Close menu", Esc closes and returns focus to the button; the sheet is 320px at 768 and 82vw at 375; the current section is sanguine; axe has no violations with the menu open; FR in the menu opens `/fr` and closes it; a section link closes it. Screenshots of the app menu and of the Dialog / Sheet stories compared with kit sheet 05.
 
 ### 2026-11-21 — M2 stage 4: footer stamp
 - **Status:** [done]
@@ -375,6 +394,16 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-21 — Mobile menu: Dialog and Sheet
+- **Context:** M2 stage 5. The mobile menu is the kit's Sheet; the kit has no Base UI mapping for overlays yet.
+- **Decision:**
+  - **Sheet is its own kit component** (`shared/ui/sheet`), opened with `Dialog` + `DialogTrigger`: the kit lists Sheet and Dialog separately, and both sit on Base UI Dialog.
+  - **The scrim and the panels are pinned to the viewport in CSS Modules.** codex.css positions them `absolute` inside a demo stage; the kit CSS is kept as is.
+  - **The sheet's bottom area follows the kit** (pushed to the bottom with a line above), not the Home design (right under the nav). Its content follows the Home design: EN | FR and "Let's talk", no social group (the rail is visible on every width), no theme switch.
+  - **Folio numbers in the menu are decorative** (`aria-hidden`), so a link's name is the section's title.
+  - **One list of sections** (`shared/config/navigation.ts`) for the header and the menu.
+- **Affects:** `DESIGN.md` §7, §12; `src/shared/ui/{dialog,sheet}`, `src/widgets/mobile-menu`.
 
 ### 2026-11-21 — M2 scope and the layout decisions
 - **Context:** Start of M2. The Home page design on the canvas is the layout reference; it differs from the docs in a few places.

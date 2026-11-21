@@ -198,7 +198,7 @@ The design also has a rule at 1180px for an element that is not drawn (`.h-tlabe
 - Buttons (Button, Toggle, Chip, Pagination, Switch, `.cx-ibtn`): enter/exit a state in `220ms cubic-bezier(.25,.8,.25,1)`; press is fast, `90ms`; release is smooth again.
 - Everything else: `120ms cubic-bezier(.2,.7,.2,1)`. Menu items: `80ms` background.
 - Lines "drawing themselves" (stroke-dashoffset): 600ms.
-- Overlays appear in 160ms: 8px shift + fade (dialog "sheet laid down": −8px → 0). **In the app:** implemented for the menu surface (Select listbox, dropdown), the tooltip and the toast, each with a reduced-motion override.
+- Overlays appear in 160ms: 8px shift + fade (dialog "sheet laid down": −8px → 0). **In the app:** implemented for the menu surface (Select listbox, dropdown), the tooltip, the toast, the dialog (−8px → 0), the sheet (8px from its edge) and the scrim (fade), each with a reduced-motion override.
 - Tooltip delay 300ms. Toast lifetime 4s.
 - Spinner 1.4s/turn; skeleton hatch moves 1.6s; pulse dot 1.8s.
 - `prefers-reduced-motion: reduce` disables shifts and animations (see §9 for what the CSS actually covers).
@@ -368,7 +368,7 @@ Thumb hover: sanguine fill. Active/drag: `rotate(45deg) scale(1.15)`, sanguine-p
 **Header (kit composition):** height 72, padding 0 24, border-bottom **2px ink**, bg paper. Left: name in Space Grotesk 700 21px −0.03em + `.cx-cap` sheet label. Nav at `margin-left:auto`. Then ⌘K trigger = Secondary `sm` button with search icon + `<kbd class="cx-kbd" style="height:20px">⌘K</kbd>`, `aria-label="Open codex index"`.
 ⚠ Nav items in the kit (Work, About, Stack, Notes, Contact) are a demo. Real items: `sitemap.md` G1. **In the app:** `NavLink` marks itself `aria-current=\"page\"` from the URL.
 
-**In the app (M2), the header follows the Home page design, not this composition** (`src/widgets/header`, DESIGN.md §1.9): the name is the "DB" monogram in the frame's top-left cell (display 700 20px −0.03em; focus line drawn inside the cell, `outline-offset: -3px`); the bar holds the `.cx-cap` sheet label "Codex · Rev. B", the nav (Home / Work / About, no counters, no Contact), the EN | FR Toggle Group and a Primary `sm` "Let's talk"; gap 20, padding 0 24 (phone: gap 12, padding 0 12). Tablet hides the label and nav; phone also hides the language switch. The ⌘K trigger waits for the command palette (M8), the menu button for the mobile menu.
+**In the app (M2), the header follows the Home page design, not this composition** (`src/widgets/header`, DESIGN.md §1.9): the name is the "DB" monogram in the frame's top-left cell (display 700 20px −0.03em; focus line drawn inside the cell, `outline-offset: -3px`); the bar holds the `.cx-cap` sheet label "Codex · Rev. B", the nav (Home / Work / About, no counters, no Contact), the EN | FR Toggle Group and a Primary `sm` "Let's talk"; gap 20, padding 0 24 (phone: gap 12, padding 0 12). Tablet hides the label and nav; phone also hides the language switch. The ⌘K trigger waits for the command palette (M8). At 1024px and below the bar ends with the menu button (Secondary icon, `MenuIcon`) that opens the mobile menu (§7 Sheet).
 
 ### Tabs — `.cx-tabs` / `.cx-tab` / `.cx-tabpanel`
 
@@ -538,6 +538,8 @@ Default w480 (kit shows 620 for tavola preview, 400 for alert), max-w 100%, surf
 - `.cx-dialog-foot`: pad 14 24, top border line, **bg sunk**, buttons right, gap 10 (Ghost + Primary; Alert: Ghost "Stay" + Ink "Open site ↗").
   A11y: `role="dialog"`/`"alertdialog"`, `aria-modal="true"`, `aria-labelledby`, `aria-describedby`.
 
+**In the app** (`src/shared/ui/dialog`, Base UI Dialog; added in M2 for the mobile menu): `Dialog`, `DialogTrigger` (kit button look, Secondary by default), `DialogPopup` (`width` 480 / 620 / 400), `DialogHeader` (`label`, `title` → the dialog's name, `closeLabel` → Ghost icon close), `DialogBody`, `DialogDescription`, `DialogFooter`, `DialogClose` (Ghost by default). The kit draws the scrim and the dialog inside a demo stage (`position: absolute`); the app pins the scrim to the viewport and centres the dialog in a scrolling viewport with 20px padding (`Dialog.module.css`). Focus moves into the dialog and returns to the trigger; Esc and a click on the scrim close it. Alert Dialog is not built yet.
+
 ### Sheet — `.cx-sheet-panel` (mobile menu)
 
 ⚠ **Name clash:** `.cx-sheet` in `codex.css` is _documentation scaffolding_ (the 1440px kit page). The Sheet **component** is `.cx-sheet-panel`.
@@ -546,6 +548,8 @@ Right side, full height, surface, **left border 2px ink** (`--left` variant mirr
 - `.cx-sheet-panel-head`: h64, pad `0 10 0 20`, bottom 2px ink; `.cx-label` 11 + Ghost icon close.
 - `.cx-sheet-nav a`: pad 14 12, bottom 1px line; `<b>` display 24 −0.02em + `<span>` mono 11 muted (folio number); hover sunk; `aria-current="page"` → title in sanguine.
 - Bottom area: `margin-top:auto`, pad 16 20, top border line, gap 14 — Toggle Group (language) + horizontal Button Group of social icons.
+
+**In the app** (`src/shared/ui/sheet`, opened with `Dialog` + `DialogTrigger`): `SheetPopup` (`aria-label`, `side`), `SheetHeader` (`label`, `closeLabel`), `SheetNav`, `SheetNavLink` (locale-aware, `aria-current` from the URL like `NavLink`; `meta` = the folio number, decorative), `SheetFooter` (the kit's bottom area, inline on the sheet, in `Sheet.module.css`). Width `min(320px, 82vw)` (§9.5); the panel is pinned to the viewport and scrolls. `.cx-sheet-nav a` still has no dashed focus line (§9.6). The mobile menu (`src/widgets/mobile-menu`) follows the Home design: label "Codex · Index", Home / Work / About with "FOL. 0N", EN | FR and a Primary "Let's talk" in the bottom area; no social group, no theme switch.
 
 ### Drawer — `.cx-drawer`
 
@@ -646,6 +650,8 @@ Import components from their folder: `import { Button } from '@/shared/ui/button
 | `.cx-alert` | `alert/` — `Alert` | markup | done |
 | `.cx-toast` | `toast/` — `ToastProvider`, `useToast` | Base UI Toast | done (provider not yet in `src/app`) |
 | `.cx-navpanel`, Context menu, `.cx-cmd` | — | — | later pass |
-| `.cx-dialog`, `.cx-sheet-panel`, `.cx-drawer`, `.cx-hcard`, `.cx-stage`, `.cx-scrim` | — | — | later pass |
+| `.cx-dialog`, `.cx-scrim` | `dialog/` — `Dialog`, `DialogTrigger`, `DialogPopup`, `DialogHeader`, `DialogBody`, `DialogDescription`, `DialogFooter`, `DialogClose` | Base UI Dialog | done (M2) |
+| `.cx-sheet-panel`, `.cx-sheet-nav` | `sheet/` — `SheetPopup`, `SheetHeader`, `SheetNav`, `SheetNavLink`, `SheetFooter` (client) | Base UI Dialog + i18n `Link` | done (M2) |
+| Alert Dialog, `.cx-drawer`, `.cx-hcard`, `.cx-stage` | — | — | later pass |
 | `.cx-acc`, `.cx-table`, `.cx-code`, `.cx-trace`, `.cx-empty`, `.cx-avatar`, `.cx-carousel` | — | — | later pass |
 | `.cx-slider`, `.cx-progress`, `.cx-resizable`, `.cx-scroll`, `.cx-chart` (optional) | — | — | later pass |

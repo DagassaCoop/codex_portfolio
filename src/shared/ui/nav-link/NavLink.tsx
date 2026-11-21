@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import type { ComponentProps, ComponentPropsWithRef, ReactNode } from 'react';
 
-import { Link, usePathname } from '@/shared/i18n';
+import { isCurrentPath, Link, usePathname } from '@/shared/i18n';
 
 type LinkHref = ComponentProps<typeof Link>['href'];
 
@@ -44,9 +44,7 @@ export type NavLinkProps = {
  */
 export function NavLink({ href, children, count, current, disabled, className }: NavLinkProps) {
   const pathname = usePathname();
-  const isCurrent =
-    current ??
-    (href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`));
+  const isCurrent = current ?? isCurrentPath(pathname, href);
 
   const content = (
     <>

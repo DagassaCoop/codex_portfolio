@@ -1,0 +1,16 @@
+/* The menu button appears where the header's navigation disappears: 1024px and below (DESIGN.md §1.9) */
+
+.trigger {
+  display: none;
+}
+
+@media (width <= 1024px) {
+  .trigger {
+    display: inline-flex;
+  }
+}
+
+/* The language switch keeps its own width in the column */
+.locale {
+  align-self: flex-start;
+}

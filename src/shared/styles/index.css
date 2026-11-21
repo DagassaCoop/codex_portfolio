@@ -67,5 +67,9 @@
 @import url('../ui/alert/alert.css');
 @import url('../ui/toast/toast.css');
 
+/* Overlays (the sheet's scrim and its motion come from dialog.css) */
+@import url('../ui/dialog/dialog.css');
+@import url('../ui/sheet/sheet.css');
+
 /* Reduced motion — must stay last */
 @import url('./motion.css');

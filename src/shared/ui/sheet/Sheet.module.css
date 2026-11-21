@@ -1,0 +1,25 @@
+/* Placement and parts the kit draws only inline (kit sheet 05 §04) */
+
+/* The scrim and the panel are pinned to the viewport; the panel scrolls when it is taller */
+.backdrop {
+  position: fixed;
+}
+
+.panel {
+  position: fixed;
+  overflow-y: auto;
+}
+
+.label {
+  font-size: 11px;
+}
+
+/* The bottom area: language and actions, pushed to the bottom of the panel */
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: auto;
+  padding: 16px 20px;
+  border-top: 1px solid var(--line);
+}

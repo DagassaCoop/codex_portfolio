@@ -20,4 +20,5 @@ export { LayoutGridIcon } from './LayoutGridIcon';
 export { LinkedinIcon } from './LinkedinIcon';
 export { ListIcon } from './ListIcon';
 export { MailIcon } from './MailIcon';
+export { MenuIcon } from './MenuIcon';
 export { XIcon } from './XIcon';

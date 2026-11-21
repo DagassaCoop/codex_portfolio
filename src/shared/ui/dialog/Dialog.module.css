@@ -1,0 +1,23 @@
+/* Placement on the page: the kit only draws dialogs inside a demo stage */
+
+/* The scrim covers the viewport */
+.backdrop {
+  position: fixed;
+}
+
+/* Centres the dialog and scrolls it when it is taller than the screen; 20px = the phone page margin (DESIGN.md §1.8) */
+.viewport {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Label above the title (inline on kit sheet 05 §03) */
+.titles {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

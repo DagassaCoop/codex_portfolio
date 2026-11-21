@@ -9,6 +9,7 @@ import { routing } from '@/shared/i18n';
 import { fontVariables } from '@/shared/styles';
 import { FooterStamp } from '@/widgets/footer-stamp';
 import { Header, Monogram } from '@/widgets/header';
+import { MobileMenu } from '@/widgets/mobile-menu';
 import { SocialRail } from '@/widgets/social-rail';
 
 import { PageFrame } from './PageFrame';
@@ -48,7 +49,7 @@ export async function LocaleLayout({ children, params }: LocaleLayoutProps) {
           <PageFrame
             monogram={<Monogram />}
             rail={<SocialRail />}
-            header={<Header />}
+            header={<Header menu={<MobileMenu />} />}
             footer={<FooterStamp />}
           >
             {children}

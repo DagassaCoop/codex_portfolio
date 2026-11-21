@@ -13,13 +13,13 @@
     },
     "header": {
       "sheetLabel": "Codex · Rév. {revision}",
-      "nav": {
-        "label": "Principale",
-        "home": "Accueil",
-        "work": "Projets",
-        "about": "À propos"
-      },
       "letsTalk": "Discutons"
+    },
+    "nav": {
+      "label": "Principale",
+      "home": "Accueil",
+      "work": "Projets",
+      "about": "À propos"
     },
     "locale": {
       "label": "Langue"
@@ -49,6 +49,12 @@
         "unavailable": "Dites bonjour"
       },
       "letsTalk": "Discutons"
+    },
+    "menu": {
+      "label": "Menu",
+      "heading": "Codex · Index",
+      "open": "Ouvrir le menu",
+      "close": "Fermer le menu"
     }
   }
 }

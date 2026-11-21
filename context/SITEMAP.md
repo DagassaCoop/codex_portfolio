@@ -32,7 +32,7 @@ Rules:
 | Namespace | Used by | Status |
 | --- | --- | --- |
 | `meta` | `<title>` and description (`src/app/layouts/LocaleLayout.tsx`) | [done] |
-| `layout` | the page frame and the global widgets (§3) | [done] frame, header, rail, footer |
+| `layout` | the page frame and the global widgets (§3) | [done] frame, header, nav, mobile menu, rail, footer |
 | `home` | Home page (`src/pages/home`) | [done] placeholder title only |
 
 ---
@@ -69,15 +69,21 @@ Drawn on the Home page design; the frame and the cells are described in `DESIGN.
 | Monogram initials "DB" | data | `siteConfig.author.initials` | [done] |
 | Monogram accessible name "DB — Dmytro Bondar, home" | copy + data | `layout.monogram.label` (`{initials}`, `{name}` ← `siteConfig.author`) | [done] |
 | Sheet label "Codex · Rev. B" | copy + data | `layout.header.sheetLabel` (`{revision}` ← `siteConfig.revision`) | [done] |
-| Navigation name "Primary" and items Home / Work / About | copy | `layout.header.nav.{label,home,work,about}`; routes `/`, `/work`, `/about` in `Header.tsx` | [done]. No counters, no Contact item |
+| Navigation name "Primary" and items Home / Work / About | data + copy | sections, routes and folios in `src/shared/config/navigation.ts`; titles `layout.nav.{label,home,work,about}` (shared with the mobile menu) | [done]. No counters, no Contact item |
 | Language switch name "Language", items EN / FR | copy + data | `layout.locale.label`; items from `routing.locales` (`src/shared/i18n`) | [done] (`src/features/switch-locale`) |
 | "Let's talk" | copy | `layout.header.letsTalk`; links to `#contact` | [done]. The target section is not built yet |
 | ⌘K trigger | copy | — | [todo] with the command palette (M8) |
-| Menu button (tablet, phone) | copy | — | [todo] with the mobile menu (stage 5) |
+| Menu button (tablet, phone) | copy | `layout.menu.open`; rendered by `src/widgets/mobile-menu` in the header's `menu` slot | [done] |
 
-### G1 · Mobile menu [todo]
+### G1 · Mobile menu — `src/widgets/mobile-menu` [done]
 
-Sheet from the right: label, nav with folio numbers, EN | FR, "Let's talk". No theme switch.
+| Content | Kind | Where | Status |
+| --- | --- | --- | --- |
+| Dialog name "Menu", label "Codex · Index", close button "Close menu" | copy | `layout.menu.{label,heading,close}` | [done] |
+| Sections Home / Work / About | data + copy | `src/shared/config/navigation.ts`; `layout.nav.*` | [done] |
+| Folio numbers "FOL. 01–03" | decor (`aria-hidden`) | `navigation[].folio`, formatted in `MobileMenu.tsx` | [done] |
+| Language switch | — | `src/features/switch-locale` (as in the header) | [done] |
+| "Let's talk" | copy | `layout.header.letsTalk`; links to `#contact` | [done]. The target section is not built yet |
 
 ### G2 · Social rail — `src/widgets/social-rail` [done]
 

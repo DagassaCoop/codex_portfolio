@@ -13,13 +13,13 @@
     },
     "header": {
       "sheetLabel": "Codex · Rev. {revision}",
-      "nav": {
-        "label": "Primary",
-        "home": "Home",
-        "work": "Work",
-        "about": "About"
-      },
       "letsTalk": "Let’s talk"
+    },
+    "nav": {
+      "label": "Primary",
+      "home": "Home",
+      "work": "Work",
+      "about": "About"
     },
     "locale": {
       "label": "Language"
@@ -49,6 +49,12 @@
         "unavailable": "Say hello"
       },
       "letsTalk": "Let’s talk"
+    },
+    "menu": {
+      "label": "Menu",
+      "heading": "Codex · Index",
+      "open": "Open menu",
+      "close": "Close menu"
     }
   }
 }

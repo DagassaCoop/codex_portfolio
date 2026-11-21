@@ -1,0 +1,91 @@
+/*
+ * Dialog — .cx-dialog, .cx-scrim (DESIGN.md §7, kit sheet 05 §03)
+ *
+ * A tavola preview without leaving the page. Surface, ink outline, hard floating shadow, never blur.
+ * The scrim is ink at 45%. The kit draws it inside a demo stage (position: absolute);
+ * the app pins it to the viewport in Dialog.module.css.
+ */
+
+@layer components {
+  .cx-scrim {
+    position: absolute;
+    inset: 0;
+    background: var(--scrim);
+  }
+
+  .cx-dialog {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 480px;
+    max-width: 100%;
+    border: 1px solid var(--ink);
+    border-radius: var(--r);
+    background: var(--surface);
+    box-shadow: var(--float);
+  }
+
+  /* Label (Fol. 02 · Tav. I) and title on the left, the close button on the right */
+  .cx-dialog-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 20px 0 24px;
+  }
+
+  .cx-dialog-head .cx-label {
+    color: var(--sanguine);
+    font-size: 10px;
+  }
+
+  .cx-dialog-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 24px 20px;
+  }
+
+  /* Actions on the right, on a sunk strip */
+  .cx-dialog-foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 14px 24px;
+    border-top: 1px solid var(--line);
+    background: var(--sunk);
+  }
+}
+
+/*
+ * Motion (DESIGN.md §2, overlay rules): 160ms. The scrim fades; the dialog is "laid down" from 8px above.
+ * Not in codex.css; values from the kit's overlay rules.
+ */
+@layer components {
+  .cx-scrim,
+  .cx-dialog {
+    transition:
+      opacity 160ms var(--ease),
+      transform 160ms var(--ease);
+  }
+
+  .cx-scrim[data-starting-style],
+  .cx-scrim[data-ending-style] {
+    opacity: 0;
+  }
+
+  .cx-dialog[data-starting-style],
+  .cx-dialog[data-ending-style] {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@layer motion {
+  @media (prefers-reduced-motion: reduce) {
+    .cx-scrim,
+    .cx-dialog {
+      transition: none;
+    }
+  }
+}
