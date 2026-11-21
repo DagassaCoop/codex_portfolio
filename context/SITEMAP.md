@@ -32,7 +32,7 @@ Rules:
 | Namespace | Used by | Status |
 | --- | --- | --- |
 | `meta` | `<title>` and description (`src/app/layouts/LocaleLayout.tsx`) | [done] |
-| `layout` | the page frame and the global widgets (§3) | [done] frame, header |
+| `layout` | the page frame and the global widgets (§3) | [done] frame, header, rail |
 | `home` | Home page (`src/pages/home`) | [done] placeholder title only |
 
 ---
@@ -79,9 +79,16 @@ Drawn on the Home page design; the frame and the cells are described in `DESIGN.
 
 Sheet from the right: label, nav with folio numbers, EN | FR, "Let's talk". No theme switch.
 
-### G2 · Social rail [todo]
+### G2 · Social rail — `src/widgets/social-rail` [done]
 
-GitHub, LinkedIn, Email, CV (PDF), with tooltips; "Scroll · Fol. 01 — 04" (decor).
+| Content | Kind | Where | Status |
+| --- | --- | --- | --- |
+| Landmark name "Links", group name "Social links" | copy | `layout.rail.{label,group}` | [done] |
+| GitHub link | data + copy | `siteConfig.links.github`; name and tooltip `layout.rail.github` | [done]. URL taken from the repo's remote, to be confirmed |
+| LinkedIn link | data + copy | `siteConfig.links.linkedin`; `layout.rail.linkedin` | [done]. ⚠ URL is a placeholder, `TODO(content)` |
+| Email | copy | `layout.rail.email`; links to `#contact` (as in the design) | [done]. The target section is not built yet |
+| CV (PDF), downloads | data + file + copy | `siteConfig.links.cv` → `public/cv.pdf`; name `layout.rail.cv`, tooltip `layout.rail.cvTip` | [done]. ⚠ `public/cv.pdf` is missing, `TODO(content)` |
+| "Scroll · Fol. 01 — 04" | copy (decor, `aria-hidden`) | `layout.rail.scroll` | [done] |
 
 ### G3 · Contact section (Fol. 04) [todo]
 

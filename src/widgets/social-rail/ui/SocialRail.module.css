@@ -1,0 +1,80 @@
+/* The social rail fills its frame cell: a 72px column, a strip next to the monogram on phones (DESIGN.md §1.9) */
+
+.rail {
+  height: 100%;
+}
+
+/* Stays in view while the page scrolls */
+.inner {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding-top: 28px;
+}
+
+/* The icon turns sanguine on hover (inline on kit sheet 01, DESIGN.md §3 Button Group, §9.9) */
+.link:hover {
+  color: var(--sanguine);
+}
+
+/* "Scroll · Fol. 01 — 04" written along the rail, then an arrow down (decor) */
+.scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+}
+
+.scrollText {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transform: rotate(180deg);
+  writing-mode: vertical-rl;
+}
+
+/* ---------- Phone: a horizontal group at the end of the strip, no tooltips, no scroll hint ---------- */
+
+@media (width <= 600px) {
+  .rail {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+  }
+
+  .inner {
+    position: static;
+    flex-direction: row;
+    padding: 0;
+  }
+
+  .scroll,
+  .tip {
+    display: none;
+  }
+
+  /* The vertical group laid out with the kit's horizontal group rules (button-group.css) */
+  .group {
+    flex-direction: row;
+  }
+
+  .group > .link + .link {
+    margin-top: 0;
+    margin-left: -1px;
+  }
+
+  .group > .link:first-child {
+    border-radius: var(--r) 0 0 var(--r);
+  }
+
+  .group > .link:last-child {
+    border-radius: 0 var(--r) var(--r) 0;
+  }
+}

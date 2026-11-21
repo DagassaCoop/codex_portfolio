@@ -13,4 +13,12 @@ export const siteConfig = {
 
   /** Revision of the drawing (the site): "Codex · Rev. B" */
   revision: 'B',
+
+  /** Profiles and files (social rail, footer). Email and availability come with the contact section. */
+  links: {
+    github: 'https://github.com/DagassaCoop',
+    linkedin: 'https://www.linkedin.com/in/dmytro-bondar/',
+    email: 'dmytro.bondar.prof@gmail.com',
+    cv: '/cv.pdf',
+  },
 } as const;

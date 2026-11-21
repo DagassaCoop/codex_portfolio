@@ -23,6 +23,16 @@
     },
     "locale": {
       "label": "Langue"
+    },
+    "rail": {
+      "label": "Liens",
+      "group": "Réseaux",
+      "github": "GitHub",
+      "linkedin": "LinkedIn",
+      "email": "E-mail",
+      "cv": "Télécharger le CV, PDF",
+      "cvTip": "CV · PDF",
+      "scroll": "Défiler · Fol. 01 — 04"
     }
   }
 }

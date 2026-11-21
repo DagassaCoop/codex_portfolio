@@ -13,6 +13,7 @@ export { CheckIcon } from './CheckIcon';
 export { ChevronDownIcon } from './ChevronDownIcon';
 export { CopyIcon } from './CopyIcon';
 export { DownloadIcon } from './DownloadIcon';
+export { FileDownIcon } from './FileDownIcon';
 export { FileTextIcon } from './FileTextIcon';
 export { GithubIcon } from './GithubIcon';
 export { LayoutGridIcon } from './LayoutGridIcon';

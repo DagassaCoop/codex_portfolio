@@ -8,6 +8,7 @@ import { siteConfig } from '@/shared/config';
 import { routing } from '@/shared/i18n';
 import { fontVariables } from '@/shared/styles';
 import { Header, Monogram } from '@/widgets/header';
+import { SocialRail } from '@/widgets/social-rail';
 
 import { PageFrame } from './PageFrame';
 
@@ -43,7 +44,7 @@ export async function LocaleLayout({ children, params }: LocaleLayoutProps) {
     <html lang={locale} className={fontVariables}>
       <body>
         <NextIntlClientProvider>
-          <PageFrame monogram={<Monogram />} header={<Header />}>
+          <PageFrame monogram={<Monogram />} rail={<SocialRail />} header={<Header />}>
             {children}
           </PageFrame>
         </NextIntlClientProvider>
