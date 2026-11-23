@@ -33,7 +33,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 /**
  * Marginalia (--marg), italic only.
- * Still awaiting final approval (PROJECT_OVERVIEW.md §10.2). Not preloaded: marginalia is decorative, so a late swap is acceptable.
+ * Approved 2026-11-21. Not preloaded: marginalia is decorative, so a late swap is acceptable.
  */
 const ebGaramond = EB_Garamond({
   subsets: ['latin', 'latin-ext'],

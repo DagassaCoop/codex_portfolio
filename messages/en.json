@@ -4,7 +4,50 @@
     "description": "Portfolio of Dmytro Bondar, Frontend / Fullstack Developer in Toronto, ON."
   },
   "home": {
-    "title": "Codex"
+    "hero": {
+      "folio": "Fol. 01",
+      "sheet": "Frontispiece · Home",
+      "role": "Frontend & Fullstack developer",
+      "lead": "I build multi-brand products in React, TypeScript and Next.js — one shared core of logic and UI, every brand shipped from it.",
+      "available": "Available for work",
+      "unavailable": "Not available",
+      "location": "Toronto, ON · UTC−5",
+      "viewWork": "View work",
+      "downloadCv": "Download CV",
+      "rota": {
+        "label": "A hollow gear in the centre, outlined like the DMYTRO name. Four straight lines run from it to four circles set on an oval ring around it, each holding a small cropped outline drawing: a monitor on a stand for Client at top left, a stack of three rack servers for Server at top right, a database cylinder for Database at bottom right, a neural network for AI at bottom left. The circles are joined by the ring, clockwise: HTTP between client and server, SQL between server and database, context and embeddings between database and AI, prompt and stream between AI and client.",
+        "hub": "Z 16 · Ø 208 · BORE Ø 116",
+        "stamp": "1 HUB · 4 PARTS · RING 340 × 236",
+        "ring": {
+          "top": "HTTP · REQUEST / RESPONSE",
+          "right": "SQL · QUERY / ROWS",
+          "bottom": "CONTEXT · EMBEDDINGS",
+          "left": "PROMPT · STREAM"
+        },
+        "parts": {
+          "client": {
+            "title": "CLIENT",
+            "description": "the window in\nthe user’s hand",
+            "tags": "BROWSER · UI · STATE"
+          },
+          "server": {
+            "title": "SERVER",
+            "description": "where the rules turn",
+            "tags": "API · LOGIC · AUTH"
+          },
+          "database": {
+            "title": "DATABASE",
+            "description": "memory that outlives\na request",
+            "tags": "STORAGE · QUERIES · CACHE"
+          },
+          "ai": {
+            "title": "AI",
+            "description": "the part that reads\nand answers",
+            "tags": "MODELS · CONTEXT · AGENTS"
+          }
+        }
+      }
+    }
   },
   "layout": {
     "skipToContent": "Skip to content",

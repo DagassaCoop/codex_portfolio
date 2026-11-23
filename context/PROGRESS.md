@@ -21,9 +21,9 @@
 
 _A snapshot. Overwrite it, don't append to it._
 
-- **Phase:** M2 Global layout is done (2026-11-21, branch `ui/layout` merged into `main`).
-- **Now:** nothing in progress.
-- **Next:** to be decided: M3 (Home), or the deferred command palette (M8) / toast provider. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
+- **Phase:** M3 Home (branch `ui/home-page`). M2 is done (2026-11-21, merged into `main`).
+- **Now:** Hero step 3 (the Rota drawing) is done and waiting for review. Step 2 (the name) is accepted.
+- **Next:** Selected work (Fol. 02). Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
 - **Blocked by:** nothing.
 
 ---
@@ -35,7 +35,7 @@ _A snapshot. Overwrite it, don't append to it._
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
 | M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo]; Dialog and Sheet done early in M2 |
 | M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [done] | 2026-11-21. Stages: 1 Page frame [done] · 2 Header + monogram [done] · 3 Social rail [done] · 4 Footer stamp [done] · 5 Mobile menu + Dialog in the kit [done]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
-| M3 | Home (`/[locale]`) | | |
+| M3 | Home (`/[locale]`) | [in progress] | Hero: 1 Section + text column [done] · 2 Name [done] · 3 Rota [done]. Then Selected work, What I do, Experience |
 | M4 | Work (`/[locale]/work`) | | |
 | M5 | Work detail / case study (`/[locale]/work/[slug]`) | | |
 | M6 | About (`/[locale]/about`) | | |
@@ -60,6 +60,59 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-23 — Hero: one folder per component
+- **Status:** [done]
+- **What:** `pages/home/ui/hero` keeps only `index.ts`, `Hero.tsx` and `Hero.module.css`. Children moved to `components/`: `cursor-coordinates`, `constructed-name` (with its child `components/name-dimensions`), `rota`, each with an `index.ts`. `NameDimensions` got its own CSS Module (its label classes left `ConstructedName.module.css`). `HomePage` imports `./hero`. No visual change.
+- **Where:** `src/pages/home/ui/hero/`, `src/pages/home/ui/HomePage.tsx`; rule in `PROJECT_OVERVIEW.md` §4.3; paths in `SITEMAP.md` §4
+- **Verified:** `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check` and `build` pass; in the production build the hero at 1440 and 375 matches the screenshots from before, the name's labels read the same px, axe has no violations.
+- **Follow-ups:** the widgets do not follow the rule yet: `widgets/header/ui` holds `Header` and `Monogram` side by side (both are exported to the frame, neither is a child of the other).
+
+### 2026-11-23 — M3 Hero step 3: the Rota drawing
+- **Status:** [done]
+- **What:**
+  - `Rota` (server component, inline SVG in a `<figure>`) in the hero grid's columns 6–12, under the text on tablets and phones. From the Home design: the hollow gear (one turn a minute, stops with reduced motion), the spokes, the oval ring with arrows and labels on text paths, four parts cropped by their circles (monitor, rack servers, database, neural network) with titles, descriptions and tags, the hub's spec, the caption and the stamp. `<defs>` ids (arrow marker, label arcs, clip paths) come from `useId()`.
+  - Long path data in `rota.paths.ts` (taken from the design file by script). Colours with tokens; vignette fills are `--paper`.
+  - Copy: `home.hero.rota` in EN and FR (`aria-label`, ring labels, part titles / descriptions / tags, hub spec, stamp). The Italian note and caption stay in the component. Description lines split at `\n`; the tags line moves down with the number of lines.
+  - The SVG has `overflow: visible`: two EN tag rows run ~4 units past the viewBox (as on the design) and were cut ("ODELS", "CACH").
+- **Where:** `src/pages/home/ui/hero/{Rota.tsx,Rota.module.css,rota.paths.ts,Hero.tsx,Hero.module.css}`, `messages/{en,fr}.json`, `SITEMAP.md` §4
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check` and `build` pass.
+  - In the production build: screenshots at 1440, 768 and 375 (EN) and 1440 (FR) compared with the Home design; no FR text leaves the viewBox; no horizontal scroll at 1440 and 375; axe (WCAG 2.2 AA) has no violations; the figure is one image named by `home.hero.rota.label`; with reduced motion the hub has no animation.
+- **Follow-ups:**
+  - FR drawing copy is a draft, shortened to fit (part of the FR review, Open questions).
+  - The `aria-label` describes the drawing, not the copy; it is long (≈ 90 words). Shorten it if screen-reader testing finds it tiring.
+
+### 2026-11-23 — M3 Hero step 2: the constructed name
+- **Status:** [done]
+- **What:**
+  - `ConstructedName` (server component, inline SVG) inside the h1, from the Home design: DMYTRO over BONDAR in outline; DMYTRO's edges under BONDAR are dashed (two masks); cap lines and baselines with their labels (CAP · I … BASE · II); the compass constructions on the D and the O; the dimension lines. `<defs>` ids come from `useId()`.
+  - Glyph outlines and the drawing's geometry live in `constructedName.paths.ts` (taken from the design file by script, not retyped).
+  - `NameDimensions` (client, `ResizeObserver` on the SVG): the labels show the real px of the rendered drawing (the design shows em: "CAP 0.700 EM" → "CAP 156 PX"), as decided on 2026-11-21. Before JS: the values at the widest drawing (1140px): CAP 156 PX, Δy 137 PX, 19, WIDTH 951 PX.
+  - Colours with tokens (`--ink`, `--ink-2`, `--muted`, `--sanguine` and its `color-mix` tints); text in `--mono`. The labels are not translated (technical marks, like "520 PX").
+- **Where:** `src/pages/home/ui/hero/{ConstructedName.tsx,ConstructedName.module.css,NameDimensions.tsx,constructedName.paths.ts,Hero.tsx}`; `SITEMAP.md` §4
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd` and `build` pass.
+  - In the production build: screenshots at 1440, 768 and 375 compared with the Home design; the labels read CAP 156 / 83 / 43 PX at those widths; axe (WCAG 2.2 AA) has no violations; the h1's accessible name is "Dmytro Bondar" in EN and FR (the SVG is `aria-hidden`).
+- **Review:** accepted as is, phones included: the tiny labels stay as texture. The author centred the drawing in its zone (`margin: 0 auto` on `.drawing`).
+
+### 2026-11-21 — M3 Hero step 1: section and text column
+- **Status:** [done]
+- **What:**
+  - Hero (Fol. 01) in `pages/home/ui/hero`, rendered by `HomePage` instead of the placeholder:
+    - the section with the sheet's 40px drawing grid;
+    - the folio row "Fol. 01 · Frontispiece · Home" with live cursor coordinates (`CursorCoordinates`, a small client component, rAF-throttled, `aria-hidden`);
+    - the h1 with the author's name for screen readers (the drawing comes in step 2), in a 436px name zone;
+    - the text column: role, Dimension "520 PX", lead, availability and location badges, "View work" (`#work`) and "Download CV" (downloads `/cv.pdf`), the Italian marginalia.
+  - Tablet: one column, the name zone takes its height; phone: the folio row stacks. Padding 32 / 24 / 16 (DESIGN.md §1.9).
+  - New icon `ArrowRightIcon`. Copy `home.hero` in EN and FR (from the design; FR drafted).
+- **Where:** `src/pages/home/ui/HomePage.tsx`, `src/pages/home/ui/hero/`, `src/shared/ui/icons/ArrowRightIcon.tsx`, `messages/{en,fr}.json`; docs `PROJECT_OVERVIEW.md` §3, §4.2, §10; `SITEMAP.md` §4; `DESIGN.md` §9.4; `fonts.ts`
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd` and `build` pass.
+  - In the production build: screenshots at 1440, 768 and 375 compared with the Home design; axe (WCAG 2.2 AA) has no violations; the h1 reads "Dmytro Bondar"; the coordinates follow the pointer.
+- **Follow-ups:**
+  - Prefetching Work and About returns 404 until M4 / M6 (expected).
+  - "520 PX" is a fixed label: below 520px of column width (phones) it no longer matches the drawn line.
 
 ### 2026-11-21 — M2 closed: review answers
 - **Status:** [done]
@@ -403,6 +456,24 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 <!-- entries below, newest first -->
 
+### 2026-11-23 — One folder per component
+- **Context:** The hero's folder held five components and their styles and constants side by side.
+- **Decision:** A block's folder holds its `index.ts` and its own files; every child component lives in `components/<component-name>/` with its own `index.ts`, recursively. Folder names are kebab-case, like the slices and `shared/ui`.
+- **Affects:** `PROJECT_OVERVIEW.md` §4.3; `src/pages/home/ui/hero/`.
+
+### 2026-11-21 — Hero: how the name and the Rota drawing are built
+- **Context:** Start of M3. The Home design's hero (= canvas "Hero · Rev. B") has two drawings; the Name and Machine studies on the canvas were explorations.
+- **Decision:**
+  - **Both drawings are inline SVG in React server components**, not image files: tokens for colours, the app's fonts for text, translatable text, CSS animation with reduced motion, no requests. Long path data lives in constant files next to the components; `<defs>` ids are prefixed with `useId()`.
+  - **The name's dimension labels show real sizes**: computed in JS from the drawing's rendered width (a small client part); before JS they show the values for the desktop width.
+  - **Rota:** every text in the drawing is translated (`messages`) except the Italian marginalia and caption; the label sizes stay as drawn for now (small on phones).
+  - **The mechanism is Rota, with no portrait.** Closes `PROJECT_OVERVIEW.md` §10.3.
+  - **EB Garamond is approved.** Closes §10.2.
+  - **Hero copy comes from the design for now**; it will be rewritten (the lead and the marginalia mention brands, against the concept rule).
+  - **"Download CV" downloads the CV** (the design links it to `#contact`); "View work" goes to `#work` on the same page.
+  - **Page-only blocks live in the page slice** (`pages/home/ui/hero`), not in `widgets`: Steiger's `insignificant-slice` rule; a block moves to `widgets` when a second page uses it. Updates the slice map in `PROJECT_OVERVIEW.md` §4.2.
+- **Affects:** `PROJECT_OVERVIEW.md` §3, §4.2, §10; `DESIGN.md` §9.4; `SITEMAP.md` §4.
+
 ### 2026-11-21 — M2 review answers
 - **Context:** Open points at the end of M2.
 - **Decision:**
@@ -613,9 +684,7 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 _Things waiting for an answer. Template: `- [ ] <question> — context / options · owner · since YYYY-MM-DD`_
 
 - [ ] **FR copy review.** All FR strings so far are drafts written during development (`messages/fr.json`). Review them once the components are done · owner: author · since 2026-11-21
-- [ ] **EB Garamond Italic** (fifth font, marginalia) · `PROJECT_OVERVIEW.md` §10.2 · owner: author
 - [ ] **Email provider:** Resend (proposed) · `PROJECT_OVERVIEW.md` §10.1 · owner: author
-- [ ] **Hero illustration** mechanism, and whether to include a portrait · `PROJECT_OVERVIEW.md` §10.3 · owner: author
 
 ---
 

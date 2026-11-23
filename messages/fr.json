@@ -4,7 +4,50 @@
     "description": "Portfolio de Dmytro Bondar, développeur Frontend / Fullstack à Toronto (ON)."
   },
   "home": {
-    "title": "Codex"
+    "hero": {
+      "folio": "Fol. 01",
+      "sheet": "Frontispice · Accueil",
+      "role": "Développeur Frontend & Fullstack",
+      "lead": "Je conçois des produits multimarques avec React, TypeScript et Next.js : un seul socle de logique et d’interface, chaque marque livrée à partir de lui.",
+      "available": "Disponible",
+      "unavailable": "Non disponible",
+      "location": "Toronto (ON) · UTC−5",
+      "viewWork": "Voir les projets",
+      "downloadCv": "Télécharger le CV",
+      "rota": {
+        "label": "Un engrenage creux au centre, dessiné en contour comme le nom DMYTRO. Quatre lignes droites partent de lui vers quatre cercles posés sur un anneau ovale, chacun contenant un petit dessin au trait recadré : un écran sur pied pour le client en haut à gauche, trois serveurs en baie empilés pour le serveur en haut à droite, un cylindre de base de données pour les données en bas à droite, un réseau de neurones pour l’IA en bas à gauche. L’anneau relie les cercles dans le sens horaire : HTTP entre client et serveur, SQL entre serveur et données, contexte et embeddings entre données et IA, prompt et flux entre IA et client.",
+        "hub": "Z 16 · Ø 208 · ALÉSAGE Ø 116",
+        "stamp": "1 MOYEU · 4 PARTIES · ANNEAU 340 × 236",
+        "ring": {
+          "top": "HTTP · REQUÊTE / RÉPONSE",
+          "right": "SQL · REQ. / LIGNES",
+          "bottom": "CONTEXTE · EMBEDDINGS",
+          "left": "PROMPT · FLUX"
+        },
+        "parts": {
+          "client": {
+            "title": "CLIENT",
+            "description": "la fenêtre dans\nla main de l’usager",
+            "tags": "NAVIGATEUR · UI · ÉTAT"
+          },
+          "server": {
+            "title": "SERVEUR",
+            "description": "là où tournent\nles règles",
+            "tags": "API · LOGIQUE · AUTH"
+          },
+          "database": {
+            "title": "DONNÉES",
+            "description": "la mémoire qui\nsurvit à la requête",
+            "tags": "STOCKAGE · SQL · CACHE"
+          },
+          "ai": {
+            "title": "IA",
+            "description": "la partie qui lit\net qui répond",
+            "tags": "LLM · CONTEXTE · AGENTS"
+          }
+        }
+      }
+    }
   },
   "layout": {
     "skipToContent": "Aller au contenu",

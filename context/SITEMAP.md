@@ -35,7 +35,7 @@ Rules:
 | --- | --- | --- |
 | `meta` | `<title>` and description (`src/app/layouts/LocaleLayout.tsx`) | [done] |
 | `layout` | the page frame and the global widgets (§3) | [done] frame, header, nav, mobile menu, rail, footer |
-| `home` | Home page (`src/pages/home`) | [done] placeholder title only |
+| `home` | Home page (`src/pages/home`): `home.hero` | [in progress] |
 
 ---
 
@@ -43,7 +43,7 @@ Rules:
 
 | Route | Page | Sections | Status |
 | --- | --- | --- | --- |
-| `/[locale]` | Home | Hero (Fol. 01), Selected work (Fol. 02, 3 × Tav.), What I do (Fol. 03r), Experience (Fol. 03v) | [todo] (M3). Now a placeholder that shows the layout |
+| `/[locale]` | Home | Hero (Fol. 01), Selected work (Fol. 02, 3 × Tav.), What I do (Fol. 03r), Experience (Fol. 03v) | [in progress] (M3), see §4 |
 | `/[locale]/work` | Work | All tavole, filter chips, grid / list | [todo] (M4) |
 | `/[locale]/work/[slug]` | Case study | Spec table, Task / Solution / Result, gallery, code, prev / next | [todo] (M5) |
 | `/[locale]/about` | About | Skills / Experience / Education | [todo] (M6) |
@@ -120,3 +120,26 @@ Not part of the layout for now (decided 2026-11-21). The form is M7.
 ### G5 · Command palette [todo]
 
 Deferred (M8).
+
+---
+
+## 4. Home (`src/pages/home`)
+
+### Fol. 01 · Hero — `src/pages/home/ui/hero` [done]
+
+Copy is taken from the Home design for now; it will be rewritten (decided 2026-11-21).
+
+| Content | Kind | Where | Status |
+| --- | --- | --- | --- |
+| Folio "Fol. 01", sheet label "Frontispiece · Home" | copy | `home.hero.{folio,sheet}` | [done] |
+| Cursor coordinates "X 0412 · Y 0288" | decor (`aria-hidden`), live | `components/cursor-coordinates` | [done] |
+| h1: the author's name (screen readers; the drawing shows it) | data | `siteConfig.author.name` | [done] |
+| Constructed name drawing (outlines, construction lines, dimensions in real px) | decor (`aria-hidden`), labels not translated | `components/constructed-name` (outlines in `constructedName.paths.ts`), live px in its `components/name-dimensions` | [done] |
+| Role "Frontend & Fullstack developer" | copy | `home.hero.role` | [done] |
+| Dimension "520 PX" | decor | `Hero.tsx` | [done] |
+| Lead | copy | `home.hero.lead` | [done]. ⚠ mentions brands (PROJECT_OVERVIEW.md §5 concept rule); to be rewritten |
+| Badges "Available for work" / "Not available", "Toronto, ON · UTC−5" | data + copy | `siteConfig.available`; `home.hero.{available,unavailable,location}` | [done] |
+| "View work" → `#work`, "Download CV" → `siteConfig.links.cv` | copy + data | `home.hero.{viewWork,downloadCv}` | [done]. `#work` is built later in M3 |
+| Marginalia "— ogni marca, una sola macchina." | decor (Italian, `aria-hidden`), not translated | `MARGINALIA` in `Hero.tsx` | [done] |
+| Rota drawing: part titles, descriptions, ring labels, stamps, `aria-label` | copy (all but the Italian marginalia and caption) | `home.hero.rota.{label,hub,stamp,ring.*,parts.*.{title,description,tags}}`; numbers and geometry in `components/rota/Rota.tsx`, path data in `rota.paths.ts` | [done]. Descriptions break lines at `\n`. A line must fit ~21 characters (186 units beside the circles), so the FR copy is shortened ("DONNÉES", "SQL · REQ. / LIGNES") |
+| Rota marginalia "mozzo cavo — qui passa l’asse" and caption "Fig. 1 — Rota: …" | decor (Italian), not translated | `HUB_NOTE`, `CAPTION` in `components/rota/Rota.tsx` | [done] |

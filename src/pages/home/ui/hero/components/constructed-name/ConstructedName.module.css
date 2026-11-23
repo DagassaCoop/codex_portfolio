@@ -1,0 +1,87 @@
+/*
+ * The constructed name (Home page design, hero). Colours are the design's, written with tokens;
+ * stroke widths and text sizes are in the drawing's user units, so they scale with it.
+ */
+
+.drawing {
+  position: relative;
+  display: block;
+  max-width: 1140px; /* MAX_WIDTH in constructedName.paths.ts */
+  margin: 0 auto;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- Construction ---------- */
+
+.guide {
+  fill: none;
+  stroke: color-mix(in srgb, var(--sanguine) 60%, transparent);
+  stroke-dasharray: 4 4;
+  stroke-width: 1;
+}
+
+.guideLabels {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  fill: var(--sanguine);
+  text-anchor: end;
+}
+
+.compass {
+  fill: none;
+  stroke: color-mix(in srgb, var(--sanguine) 50%, transparent);
+  stroke-width: 1;
+}
+
+.compassCircle {
+  fill: none;
+  stroke-dasharray: 3 5;
+}
+
+/* The O's circle is drawn lighter than the D's */
+.compassFaint {
+  stroke: color-mix(in srgb, var(--sanguine) 40%, transparent);
+  stroke-width: 1;
+}
+
+.compassCross {
+  stroke-dasharray: 2 4;
+}
+
+.compassCentre {
+  fill: var(--sanguine);
+}
+
+/* ---------- Letters ---------- */
+
+.outline {
+  fill: none;
+  stroke: var(--ink);
+  stroke-linejoin: round;
+  stroke-width: 2.75;
+}
+
+.hiddenEdge {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-dasharray: 5 4;
+  stroke-width: 1.5;
+}
+
+/* ---------- Dimension lines (their labels: NameDimensions) ---------- */
+
+.dimension {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 0.8;
+}
+
+.extension {
+  stroke-dasharray: 2 3;
+}

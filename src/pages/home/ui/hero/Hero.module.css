@@ -1,0 +1,149 @@
+/*
+ * Fol. 01 — the hero (Home page design, section 1.1; DESIGN.md §1.9 for breakpoints and padding).
+ */
+
+/*
+ * The sheet's 40px drawing grid behind the hero (decor). The design draws it in sepia at 16%:
+ * the same colour mixed from the --sepia token.
+ */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 48px;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--sepia) 16%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--sepia) 16%, transparent) 1px,
+      transparent 1px
+    );
+  background-position: 0 17px;
+  background-size: 40px 40px;
+}
+
+/* ---------- Name zone: the folio row and the constructed name ---------- */
+
+.nameZone {
+  position: relative;
+  height: 436px;
+}
+
+.top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  height: 44px;
+  padding: 20px 32px 0;
+}
+
+.folio {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.folioNumber {
+  color: var(--sanguine);
+}
+
+.name {
+  position: relative;
+  padding: 8px 32px 0;
+}
+
+/* The h1's text for screen readers; the drawing shows it */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Text column and drawing ---------- */
+
+.grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 32px 24px;
+  align-items: start;
+  padding: 24px 32px 0;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / span 5;
+  align-self: center;
+  gap: 20px;
+}
+
+.drawing {
+  grid-column: 6 / span 7;
+}
+
+.measure {
+  max-width: 520px;
+}
+
+.badges {
+  gap: 8px;
+}
+
+.actions {
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.marginalia {
+  margin-top: 12px;
+}
+
+/* ---------- Tablet: one column, the name zone takes its content's height ---------- */
+
+@media (width <= 1024px) {
+  .nameZone {
+    height: auto;
+  }
+
+  .top,
+  .name,
+  .grid {
+    padding-inline: 24px;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .grid > * {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Phone: the folio row stacks ---------- */
+
+@media (width <= 600px) {
+  .top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    height: auto;
+  }
+
+  .top,
+  .name,
+  .grid {
+    padding-inline: 16px;
+  }
+}

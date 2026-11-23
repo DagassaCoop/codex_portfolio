@@ -1,0 +1,15 @@
+/*
+ * Dimension labels of the constructed name, in the drawing's user units (they scale with it).
+ */
+
+.labels {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  fill: var(--muted);
+}
+
+/* The overlap of the two lines is a construction value: sanguine */
+.overlap {
+  fill: var(--sanguine);
+}

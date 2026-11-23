@@ -1,0 +1,200 @@
+/*
+ * Fig. 1, Rota (Home page design, hero). Colours are the design's, written with tokens; stroke
+ * widths and text sizes are in the drawing's user units, so they scale with it (small on phones,
+ * decided 2026-11-21).
+ */
+
+.figure {
+  position: relative;
+  margin: 0;
+}
+
+/*
+ * The longest tag rows (STORAGE · QUERIES · CACHE, MODELS · CONTEXT · AGENTS) run ~4 units past the
+ * viewBox, as on the design; they spill into the column gap and the section padding instead of
+ * being cut.
+ */
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* ---------- Lines ---------- */
+
+.ink {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.25;
+}
+
+.tick {
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+.leader {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 0.8;
+}
+
+.hiddenLine {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-dasharray: 4 3;
+  stroke-width: 1;
+}
+
+/* ---------- Construction ---------- */
+
+.construction {
+  fill: none;
+  stroke: color-mix(in srgb, var(--sanguine) 50%, transparent);
+  stroke-width: 1;
+}
+
+.dashCross {
+  stroke-dasharray: 2 4;
+}
+
+.dashCircle {
+  stroke-dasharray: 3 5;
+}
+
+.dashDot {
+  stroke-dasharray: 1 5;
+}
+
+.axis {
+  fill: none;
+  stroke: color-mix(in srgb, var(--sanguine) 60%, transparent);
+  stroke-dasharray: 4 4;
+  stroke-width: 1;
+}
+
+.arrow,
+.arrowHead {
+  fill: none;
+  stroke: var(--sanguine);
+  stroke-width: 1.2;
+}
+
+.callout {
+  fill: none;
+  stroke: var(--sanguine);
+  stroke-width: 1.1;
+}
+
+.dot {
+  fill: var(--sanguine);
+}
+
+/* ---------- The hub turns: one revolution a minute ---------- */
+
+.hub {
+  transform-origin: 530px 290px;
+  animation: turn 60s linear infinite;
+}
+
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hub {
+    animation: none;
+  }
+}
+
+/* ---------- Parts ---------- */
+
+.parts {
+  fill: none;
+  stroke: var(--ink);
+  stroke-linejoin: round;
+  stroke-width: 1.25;
+}
+
+.paper {
+  fill: var(--paper);
+}
+
+.accent {
+  stroke: var(--sanguine);
+}
+
+.lit {
+  fill: var(--sanguine);
+  stroke: var(--sanguine);
+}
+
+.led {
+  stroke: var(--sanguine);
+  stroke-width: 1.6;
+}
+
+.edge {
+  stroke: var(--ink-2);
+  stroke-width: 0.7;
+}
+
+/* ---------- Text ---------- */
+
+.ringLabels {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 1.4px;
+  fill: var(--sanguine);
+}
+
+.spec,
+.stamp {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  fill: var(--muted);
+}
+
+.stamp {
+  letter-spacing: 1.2px;
+}
+
+.hubNote,
+.partDescription,
+.caption {
+  font-family: var(--marg);
+  font-style: italic;
+}
+
+.hubNote {
+  font-size: 18px;
+  fill: var(--sanguine);
+}
+
+.partTitle {
+  font-family: var(--mono);
+  font-size: 15px;
+  letter-spacing: 1.4px;
+  fill: var(--ink);
+}
+
+.partDescription {
+  font-size: 20px;
+  fill: var(--ink-2);
+}
+
+.partTags {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  fill: var(--muted);
+}
+
+.caption {
+  font-size: 20px;
+  fill: var(--ink);
+}

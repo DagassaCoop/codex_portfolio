@@ -8,6 +8,7 @@
  */
 export { Icon, type IconProps } from './Icon';
 
+export { ArrowRightIcon } from './ArrowRightIcon';
 export { ArrowUpRightIcon } from './ArrowUpRightIcon';
 export { CheckIcon } from './CheckIcon';
 export { ChevronDownIcon } from './ChevronDownIcon';
