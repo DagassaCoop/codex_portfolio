@@ -22,8 +22,8 @@
 _A snapshot. Overwrite it, don't append to it._
 
 - **Phase:** M3 Home (branch `ui/home-page`). M2 is done (2026-11-21, merged into `main`).
-- **Now:** Hero step 3 (the Rota drawing) is done and waiting for review. Step 2 (the name) is accepted.
-- **Next:** Selected work (Fol. 02). Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
+- **Now:** Selected work (Fol. 02) is done and waiting for review. The hero is done.
+- **Next:** What I do (Fol. 03r). Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
 - **Blocked by:** nothing.
 
 ---
@@ -35,7 +35,7 @@ _A snapshot. Overwrite it, don't append to it._
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
 | M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo]; Dialog and Sheet done early in M2 |
 | M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [done] | 2026-11-21. Stages: 1 Page frame [done] · 2 Header + monogram [done] · 3 Social rail [done] · 4 Footer stamp [done] · 5 Mobile menu + Dialog in the kit [done]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
-| M3 | Home (`/[locale]`) | [in progress] | Hero: 1 Section + text column [done] · 2 Name [done] · 3 Rota [done]. Then Selected work, What I do, Experience |
+| M3 | Home (`/[locale]`) | [in progress] | Hero: 1 Section + text column [done] · 2 Name [done] · 3 Rota [done]. Selected work [done]. Then What I do, Experience |
 | M4 | Work (`/[locale]/work`) | | |
 | M5 | Work detail / case study (`/[locale]/work/[slug]`) | | |
 | M6 | About (`/[locale]/about`) | | |
@@ -61,12 +61,49 @@ _One entry per meaningful step. Template:_
 
 <!-- entries below, newest first -->
 
-### 2026-11-23 — Hero: one folder per component
+### 2026-11-23 — Badge list: the stack keeps to one row on tablets
+- **Status:** [done]
+- **What:**
+  - **`BadgeList`** (new kit component, `shared/ui/badge-list`, client): badges in a list; with `collapse` (`true` / a media query / `false`) the badges that would wrap are hidden behind a **"…"** badge-button that shows them all. Measured before paint, refits on width change; clipped to one row before JS. `.cx-badge-more` joins the focus rule.
+  - **Card `link` variant:** `link="title"` puts the link on `CardTitle href` and stretches it over the card, so the card can hold buttons (a link cannot contain them). `CARD_ROW_QUERY`: the adaptive layout's media query, exported.
+  - **ProjectCard:** `link="title"`; the stack is a `BadgeList` that collapses only with `CARD_ROW_QUERY` when the card is `adaptive` (sideways on tablets); elsewhere it wraps. Copy `projectCard.showStack`.
+  - Stories: Data display / Badge list (collapsed, fits, wraps; tests for one row then "…", keyboard, no "…" when it fits, `collapse={false}`, media query on and off); Card → Title link (test: one link named by the title covering the card, "…" above it, focus line on the card).
+- **Where:** `src/shared/ui/{badge-list,card}/`, `src/shared/styles/{index.css,focus.css}`, `src/entities/project/ui/project-card/`, `messages/{en,fr}.json`; `DESIGN.md` §6, §12; `PROJECT_OVERVIEW.md` §4.3; `SITEMAP.md` §1, §4
+- **Verified:** `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` pass; `test:stories` 139/139. In the production build: "…" shows only at 601–1024px (768: Life Focus Tree; 601: all three), never at 1440, 1024's single rows, 600 or 375; resizing 768 → 1100 → 768 expands and collapses back; pressing "…" shows all, keeps the URL and moves focus to the list; a click on the media opens the case study; list heights are the same with and without JS (no shift); axe has no violations at any width.
+
+### 2026-11-23 — Kit Card follows the Home design; adaptive layout
+- **Status:** [done]
+- **What:**
+  - **Kit Card** (`shared/ui/card`): body padding 20 and gap 12; title `cx-h3` (22px, 700); the tag "TAV. I" on surface with `--ink-2` text (radius 2 kept); new `CardMedia caption` (`.cx-card-caption`, bottom left over the image), styled like the tag. The in-progress card keeps its dark tag (muted bg, paper text).
+  - **Layout variant** `<Card layout="vertical" | "adaptive">` (default `vertical`); `adaptive` lies sideways at 601–1024px as on the Home tablet board. `ProjectCard` forwards `layout`; Selected work passes `adaptive`.
+  - **Caption content:** the project's domain, `projects.<slug>.domain` (EN / FR drafts: iGaming, Personal productivity, Pharma · Lab software).
+  - Stories: Card → With caption, Adaptive; tags upper-case as in the kit.
+- **Where:** `src/shared/ui/card/{card.css,Card.tsx,Card.stories.tsx,index.ts}`, `src/entities/project/ui/project-card/ProjectCard.tsx`, `src/pages/home/ui/selected-work/SelectedWork.tsx`, `messages/{en,fr}.json`; `DESIGN.md` §6; `SITEMAP.md` §1, §4
+- **Verified:** `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` pass; `test:stories` 129/129 (axe in every story). In the production build: screenshots at 1440, 768 and 375 compared with the Home design; the card is a grid at 601, 768 and 1024 and a column at 600, 375 and 1440; no horizontal scroll; axe has no violations (EN, and FR at 768).
+- **Follow-ups:** the domain captions are drafts: replace them with the real wording.
+
+### 2026-11-23 — M3 Selected work (Fol. 02)
+- **Status:** [done]
+- **What:**
+  - **Entity `project`** (`src/entities/project`): `ProjectData` type; `projects` (Tav. I–III from the Home design, all featured) and `featuredProjects`; `toRoman`, `formatYears`; `ProjectCard`, the kit Card unchanged, linking to `/work/<slug>`: preview with the tag "TAV. I", label, title (h3), summary, stack badges, foot "2025—26 · SOFT2BET". Previews: `components/project-preview` covers the hatched media like an image (surface + 24px grid) with one drawing per project (`plates-drawing`, `tree-drawing`, `migration-drawing`), `aria-hidden`.
+  - **Section** `pages/home/ui/selected-work`: folio "Fol. 02", "Work · Tav. I — III of III" (from the data), h2, "All work" (Primary button → `/work`; the design draws a link button, changed on review), the cards in a list, 3 per row; one column on tablets and phones. 12 sepia column lines behind it, a line above.
+  - Copy: `home.work`, `projects.<slug>`, `projectCard` in EN and FR.
+  - `steiger.config.ts`: `insignificant-slice` off for `entities/project` until the Work page (M4) is its second consumer (TODO in the file), as was done for `switch-locale` in M2.
+- **Where:** `src/entities/project/`, `src/pages/home/ui/selected-work/`, `src/pages/home/ui/HomePage.tsx`, `messages/{en,fr}.json`, `steiger.config.ts`; docs `PROJECT_OVERVIEW.md` §3, §4.2, §5; `SITEMAP.md` §1, §4
+- **Verified:**
+  - `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check` and `build` pass.
+  - In the production build: screenshots at 1440, 768 and 375 (EN) and 1440 (FR) compared with the Home design; hover lifts the card, underlines the title and moves the ↗; no horizontal scroll; axe (WCAG 2.2 AA) has no violations; each card is one link named by its text, with an h3 inside; "View work" in the hero now lands on `#work`.
+- **Follow-ups:**
+  - ~~Tablet: one 16:10 card per row is tall.~~ Done the same day: `<Card layout="adaptive">`.
+  - The design's `hh2` hatch pattern (one seed of the tree) is not defined in the design file; the app hatches that seed like Tav. III's block.
+  - Concept rule: Tav. I's summary ("Five production brands … brand template") and its preview ("×5") speak about brands. Kept from the design, like the hero lead; to be rewritten with the copy.
+
+### 2026-11-23 — Hero and header: one folder per component
 - **Status:** [done]
 - **What:** `pages/home/ui/hero` keeps only `index.ts`, `Hero.tsx` and `Hero.module.css`. Children moved to `components/`: `cursor-coordinates`, `constructed-name` (with its child `components/name-dimensions`), `rota`, each with an `index.ts`. `NameDimensions` got its own CSS Module (its label classes left `ConstructedName.module.css`). `HomePage` imports `./hero`. No visual change.
 - **Where:** `src/pages/home/ui/hero/`, `src/pages/home/ui/HomePage.tsx`; rule in `PROJECT_OVERVIEW.md` §4.3; paths in `SITEMAP.md` §4
 - **Verified:** `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check` and `build` pass; in the production build the hero at 1440 and 375 matches the screenshots from before, the name's labels read the same px, axe has no violations.
-- **Follow-ups:** the widgets do not follow the rule yet: `widgets/header/ui` holds `Header` and `Monogram` side by side (both are exported to the frame, neither is a child of the other).
+- **Then the header:** `widgets/header/ui` keeps `Header.tsx` and its CSS; `Monogram` moved to `ui/components/monogram/` (the slice's `index.ts` still exports both). `typecheck`, `lint`, `lint:fsd`, `format:check` pass.
 
 ### 2026-11-23 — M3 Hero step 3: the Rota drawing
 - **Status:** [done]
@@ -456,10 +493,37 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 <!-- entries below, newest first -->
 
+### 2026-11-23 — Badge list and the card's title link
+- **Context:** On tablets the stack should keep to one row with a "…" that shows the rest. A button cannot sit inside the card's `<a>` (invalid HTML, axe `nested-interactive`, a click would navigate).
+- **Decision:**
+  - **`BadgeList` is a kit component** with a `collapse` variant (`true` / media query / `false`), so it serves the card and any other badge row.
+  - **Collapse only while the card lies sideways** (author's correction): `ProjectCard` passes `CARD_ROW_QUERY` when `layout="adaptive"`; on desktops and phones the stack wraps.
+  - **The card's link moves to the title, stretched over the card** (`<Card link="title">`, opt-in; the default whole-card link stays). Side effect, accepted: the link's name is now the title, not the whole card's text.
+  - **After "…" the list stays open**; there is no "show less".
+- **Affects:** `DESIGN.md` §6; `src/shared/ui/{badge-list,card}`.
+
+### 2026-11-23 — Kit Card takes the Home design's look
+- **Context:** Review of Selected work. The author chose the Home design's card over the kit sheet's.
+- **Decision:**
+  - **The kit Card itself changes** (the project is the kit's source of truth): body 20 / 12, title `cx-h3`, every media label on surface with `--ink-2` text — the tag included.
+  - **This reverses the 2026-11-20 fix** that kept the tag ink ("Data display: decisions"): the Home design's light tag came from codex.css's `.cx-card-media > span` rule, and it is now the intended look. The in-progress card keeps its dark tag.
+  - **New caption** on the media, bottom left: the project's domain.
+  - **Changes to a component's look go through props** (variants), not page CSS: the tablet layout is `<Card layout="adaptive">`, the default stays vertical.
+- **Affects:** `DESIGN.md` §6; `src/shared/ui/card`; supersedes the first point of "Selected work: kit card, count from the data" below.
+
+### 2026-11-23 — Selected work: kit card, count from the data
+- **Context:** Start of Fol. 02. The Home design draws bigger cards than the kit (body 20 / 12, title `cx-h3`, media on a grid) and says "Tav. I — III of VI" while only three projects are known.
+- **Decision:**
+  - **The kit Card as is** (body 16 / 10, title `cx-h4`). From the design only the content: label, summary, stack, previews. The preview covers the hatched media like an image would.
+  - **The total is counted from `projects`**: "of III" now, "of VI" once all projects are in the data. Rejected: a fixed VI.
+  - **Projects are an entity** (`entities/project`), with `ProjectCard` in it: the Work grid (M4) uses the same card.
+  - **Previews are decorative** (`aria-hidden`): inside a link card their descriptions would become part of the link's name.
+- **Affects:** `PROJECT_OVERVIEW.md` §4.2, §5; `SITEMAP.md` §4; `src/entities/project`.
+
 ### 2026-11-23 — One folder per component
 - **Context:** The hero's folder held five components and their styles and constants side by side.
 - **Decision:** A block's folder holds its `index.ts` and its own files; every child component lives in `components/<component-name>/` with its own `index.ts`, recursively. Folder names are kebab-case, like the slices and `shared/ui`.
-- **Affects:** `PROJECT_OVERVIEW.md` §4.3; `src/pages/home/ui/hero/`.
+- **Affects:** `PROJECT_OVERVIEW.md` §4.3; `src/pages/home/ui/hero/`, `src/widgets/header/ui/`.
 
 ### 2026-11-21 — Hero: how the name and the Rota drawing are built
 - **Context:** Start of M3. The Home design's hero (= canvas "Hero · Rev. B") has two drawings; the Name and Machine studies on the canvas were explorations.

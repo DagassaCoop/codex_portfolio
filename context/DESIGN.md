@@ -413,10 +413,12 @@ Inside a Dialog over scrim. **w600**, surface, border ink, `--r`, `--float`.
 
 Column, surface, border 1px ink, `--r`, overflow hidden.
 
-- `.cx-card-media`: aspect 16/10, bottom border ink, placeholder = sunk + `--xhatch`; inner label `<span>` mono 10px on surface. `.cx-card-tag` (e.g. `TAV. I`): absolute 10/10, mono 10px, ink bg, paper text, radius 2. **In the app:** codex.css writes the placeholder label as `.cx-card-media > span`, which also hits the tag and out-specifies its ink fill. Fixed as `> span:not(.cx-card-tag)`.
-- `.cx-card-body`: pad 16, gap 10 — title `.cx-card-title.cx-h4` + Badges.
+- `.cx-card-media`: aspect 16/10, bottom border ink, placeholder = sunk + `--xhatch`; inner label `<span>` mono 10px on surface. `.cx-card-tag` (e.g. `TAV. I`): absolute 10/10, radius 2. **In the app (changed 2026-11-23, Home design):** every label on the media is mono 10px +0.14em, `--ink-2` on `--surface`, padding 3 6: the placeholder label (centred), the tag (top left, radius 2; no longer ink — the kit sheet's ink tag is dropped) and the new **caption** `.cx-card-caption` (bottom left 10/10, over the image: the project's domain). An image or drawing covering the media hides the hatch. The in-progress card keeps a dark tag (muted bg, paper text).
+- `.cx-card-body`: **pad 20, gap 12** (kit sheet: 16 / 10; changed 2026-11-23 to the Home design) — title `.cx-card-title` **`.cx-h3`** (kit sheet: `.cx-h4`) + Badges.
 - `.cx-card-foot`: pad 12 16, top border line, mono 11px muted — year left, `.cx-card-arrow` `↗` right.
 - **Link card** `.cx-card--link` (`<a>`): hover `translate(-3px,-3px)` + `5px 5px 0 0 var(--ink)`, arrow moves `(3px,-3px)` and turns sanguine, title underlined. Active: `translate(0,0)`, shadow `1px 1px 0 0 ink`, bg sunk. Uses `--t`/`--ease` (120ms), not button timing.
+- **Link variant** (`<Card link>`, added 2026-11-23): `card` (default) — with `href` the whole card is the `<a>`; `title` → `.cx-card--title-link`: the card is a `<div>` with the link card's look, the link is `CardTitle href` and stretches over the card (`::after`, z 1), so the card can hold its own buttons (z 2; e.g. the stack's "…"). The link's name is the title alone. Focus: the construction line around the card (`:has(a:focus-visible)`); pressing an inner button keeps the hover look instead of the press.
+- **Layout variant** (`<Card layout>`, added 2026-11-23): `vertical` (default) or `adaptive` → `.cx-card--adaptive`: at 601–1024px the card lies sideways (grid `42% | 1fr`, media spans both rows, min-height 240, aspect auto, right border ink instead of bottom; body top right, foot bottom right); vertical on desktops and phones. From the Home design's tablet board. `CARD_ROW_QUERY` (`Card.tsx`) is the same media query for parts that change with the layout (e.g. `BadgeList collapse`).
 - Disabled / in progress `.cx-card.is-disabled` + `aria-disabled`: border line, muted text, media at opacity .55, tag bg muted (inline), Badge `warning` "Draft". **In the app:** `<Card disabled>` → `[data-disabled]`; its media is decorative (`aria-hidden`, §9.8).
 
 ### Item — list mode — `.cx-items` / `.cx-item`
@@ -442,6 +444,10 @@ pad 4 7, `--r-sm`, mono 500 11px +0.06em UPPER, lh 1.2.
 | `--warning`                                              | ochre-wash / ochre             | "Draft"                                           |
 | `--error`                                                | error-wash / error             | "Archived"                                        |
 | `.cx-dot`: 7×7 currentColor circle; `--pulse` 1.8s ring. |
+
+### Badge list — `ul.cx-badge-list` (not on the kit sheets; added 2026-11-23)
+
+A list of badges (flex, wrap, gap 6), one `<li>` each. **Collapsing** (`<BadgeList collapse>`): `true` (default) always · a media query (e.g. `CARD_ROW_QUERY`) only while it matches · `false` never. When collapsing and the badges would wrap, only those that fit on the first row stay, followed by **"…"** `button.cx-badge.cx-badge-more` (a default badge that is a button: hover `--sunk-2` + ink, active `--sunk-2` + `translate(1px,1px)`, dashed focus; accessible name from `moreLabel`, e.g. "Show all 5 technologies"; `aria-expanded="false"`, `aria-controls` the list). Pressing it shows every badge; the button goes away and focus moves to the list. Refits when the list's width changes. Before JS (server HTML) a collapsing list is clipped to one row (a media-query list: by the owning component's CSS, card.css for the adaptive card). Kit use: the project card's stack, collapsed only while the adaptive card lies sideways.
 
 ### Chip — interactive filter — `button.cx-chip` + `aria-pressed`
 
@@ -636,8 +642,9 @@ Import components from their folder: `import { Button } from '@/shared/ui/button
 | `.cx-spinner` | `spinner/` — `Spinner` | markup | done |
 | `.cx-sep`, `.cx-marker`, `.cx-dim` | `separator/` — `Separator`, `Marker`, `Dimension` | Base UI Separator + markup | done |
 | `.cx-badge`, `.cx-dot` | `badge/` — `Badge` | markup | done |
+| `.cx-badge-list`, `.cx-badge-more` | `badge-list/` — `BadgeList` (client: measures the row) | markup | done (not on the sheets, 2026-11-23) |
 | `.cx-chip` | `chip/` — `Chip` | Base UI Toggle | done |
-| `.cx-card` | `card/` — `Card`, `CardMedia`, `CardBody`, `CardTitle`, `CardFoot`, `CardArrow` | markup + i18n `Link` | done |
+| `.cx-card` | `card/` — `Card` (`layout`, `link`), `CardMedia` (`tag`, `caption`), `CardBody`, `CardTitle` (`href` for `link="title"`), `CardFoot`, `CardArrow`; `CARD_ROW_QUERY` | markup + i18n `Link` | done |
 | `.cx-items`, `.cx-item` | `item/` — `ItemList`, `Item` | markup + i18n `Link` | done |
 | `.cx-ratio` | `aspect-ratio/` — `AspectRatio` | markup | done |
 | `.cx-skel` | `skeleton/` — `Skeleton` | markup | done |

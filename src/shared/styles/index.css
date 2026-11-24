@@ -50,6 +50,7 @@
 /* Data display */
 @import url('../ui/separator/separator.css');
 @import url('../ui/badge/badge.css');
+@import url('../ui/badge-list/badge-list.css');
 @import url('../ui/chip/chip.css');
 @import url('../ui/card/card.css');
 @import url('../ui/item/item.css');

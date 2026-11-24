@@ -35,7 +35,9 @@ Rules:
 | --- | --- | --- |
 | `meta` | `<title>` and description (`src/app/layouts/LocaleLayout.tsx`) | [done] |
 | `layout` | the page frame and the global widgets (§3) | [done] frame, header, nav, mobile menu, rail, footer |
-| `home` | Home page (`src/pages/home`): `home.hero` | [in progress] |
+| `home` | Home page (`src/pages/home`): `home.hero`, `home.work` | [in progress] |
+| `projects` | Project copy by slug: `projects.<slug>.{domain,label,title,summary}` (`src/entities/project`) | [in progress] three featured projects |
+| `projectCard` | The project card's own strings (`personal`, `showStack`) | [done] |
 
 ---
 
@@ -143,3 +145,21 @@ Copy is taken from the Home design for now; it will be rewritten (decided 2026-1
 | Marginalia "— ogni marca, una sola macchina." | decor (Italian, `aria-hidden`), not translated | `MARGINALIA` in `Hero.tsx` | [done] |
 | Rota drawing: part titles, descriptions, ring labels, stamps, `aria-label` | copy (all but the Italian marginalia and caption) | `home.hero.rota.{label,hub,stamp,ring.*,parts.*.{title,description,tags}}`; numbers and geometry in `components/rota/Rota.tsx`, path data in `rota.paths.ts` | [done]. Descriptions break lines at `\n`. A line must fit ~21 characters (186 units beside the circles), so the FR copy is shortened ("DONNÉES", "SQL · REQ. / LIGNES") |
 | Rota marginalia "mozzo cavo — qui passa l’asse" and caption "Fig. 1 — Rota: …" | decor (Italian), not translated | `HUB_NOTE`, `CAPTION` in `components/rota/Rota.tsx` | [done] |
+
+### Fol. 02 · Selected work — `src/pages/home/ui/selected-work` [done]
+
+Copy is taken from the Home design for now, like the hero's.
+
+| Content | Kind | Where | Status |
+| --- | --- | --- | --- |
+| Folio "Fol. 02", sheet label "Work · Tav. I — III of III" | copy + data | `home.work.{folio,sheet}`; first and last featured tavola and the total from `projects` (`src/entities/project`), in Roman numerals | [done]. The design's "of VI" comes once all projects are in the data |
+| Heading "Selected work" | copy | `home.work.title` | [done] |
+| "All work" → `/work`, Primary button | copy | `home.work.allWork` | [done]. The Work page is M4 (404 until then) |
+| Featured projects, in tavola order | data | `projects` with `featured: true` (`src/entities/project/model/projects.ts`) | [done] Tav. I–III |
+| Card: tag "TAV. I", years "2025—26", company, stack | data | `tav`, `years`, `company`, `stack` | [done]. Tag and foot upper-case |
+| Card caption: the project's domain ("IGAMING") over the preview | copy | `projects.<slug>.domain` (upper-cased by the card) | [done]. ⚠ Drafted by the AI, check: "iGaming", "Personal productivity", "Pharma · Lab software" |
+| Card: label, title, summary | copy | `projects.<slug>.{label,title,summary}` | [done]. ⚠ Tav. I mentions the brand count (PROJECT_OVERVIEW.md §5 concept rule) |
+| Card foot for a project without a company: "Personal" | copy | `projectCard.personal` | [done] |
+| Stack "…" button name "Show all 5 technologies" (tablets, when the stack would wrap) | copy | `projectCard.showStack` (`{count}`) | [done] |
+| Card link → the case study | data | `/work/<slug>`, on the title, stretched over the card | [done]. Case studies are M5 (404 until then). The link's name is the title |
+| Card previews (stacked plates, radial tree, AngularJS → Vue) | decor (`aria-hidden`), labels not translated | `src/entities/project/ui/project-card/components/project-preview` | [done]. Stand in for images until the case studies have them. ⚠ Tav. I draws "×5" (concept rule) |

@@ -1,4 +1,5 @@
 export {
+  CARD_ROW_QUERY,
   Card,
   CardArrow,
   CardBody,
@@ -6,6 +7,8 @@ export {
   CardMedia,
   CardTitle,
   type CardBodyProps,
+  type CardLayout,
+  type CardLink,
   type CardFootProps,
   type CardMediaProps,
   type CardProps,

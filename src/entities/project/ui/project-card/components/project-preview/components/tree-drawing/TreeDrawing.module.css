@@ -1,0 +1,45 @@
+/* Tav. II preview: colours from the Home design, written with tokens */
+
+.svg {
+  width: 78%;
+  height: auto;
+}
+
+.orbit {
+  fill: none;
+  stroke: var(--sepia);
+  stroke-dasharray: 2 3;
+  stroke-width: 0.7;
+}
+
+.branch {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 0.9;
+}
+
+/* Nodes are filled with surface; the hatched seed carries its own `fill` (CSS would beat it) */
+.node circle:not([fill]) {
+  fill: var(--surface);
+}
+
+.node {
+  stroke: var(--ink);
+  stroke-width: 0.9;
+}
+
+.root {
+  fill: var(--ink);
+}
+
+.hatchLine {
+  stroke: var(--ink-2);
+  stroke-width: 0.6;
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.8px;
+  fill: var(--ink-2);
+}

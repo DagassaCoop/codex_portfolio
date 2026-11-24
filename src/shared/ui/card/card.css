@@ -1,7 +1,8 @@
 /*
  * Card — the tavola (project) card, .cx-card (DESIGN.md §6, kit sheet 04 §01)
  *
- * media (16:10, hatched placeholder) → body (title + badges) → foot (year · ↗).
+ * media (16:10, hatched placeholder or an image; tag and caption on it) → body (title + badges)
+ * → foot (year · ↗). The adaptive card lies sideways on tablets.
  * As a link (.cx-card--link) the sheet lifts 3px on hover and the arrow leaves ↗ in sanguine.
  * Uses the general 120ms timing, not the buttons'.
  *
@@ -38,11 +39,11 @@
   }
 
   /*
-   * Placeholder label, "[ SCREEN ]". codex.css writes this as `.cx-card-media > span`, which also
-   * hits the tag and out-specifies it (the tag would lose its ink fill). `:not(.cx-card-tag)` fixes
-   * that (PROGRESS.md, Decisions).
+   * Labels on the media, all on surface (as on the Home design; decided 2026-11-23):
+   * the placeholder label "[ SCREEN ]" (centred, without an image), the tavola number (top left)
+   * and the caption, the project's domain (bottom left, over the image).
    */
-  .cx-card-media > span:not(.cx-card-tag) {
+  .cx-card-media > span {
     padding: 3px 6px;
     background: var(--surface);
     color: var(--ink-2);
@@ -56,13 +57,14 @@
     position: absolute;
     top: 10px;
     left: 10px;
-    padding: 3px 6px;
     border-radius: 2px;
-    background: var(--ink);
-    color: var(--paper);
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.14em;
+  }
+
+  /* The caption, bottom left: the project's domain */
+  .cx-card-caption {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
   }
 
   /* ---------- Body and foot ---------- */
@@ -70,8 +72,8 @@
   .cx-card-body {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 16px;
+    gap: 12px;
+    padding: 20px;
   }
 
   .cx-card-foot {
@@ -120,6 +122,51 @@
     transform: translate(0, 0);
   }
 
+  /*
+   * ---------- Link on the title (.cx-card--title-link, <Card link="title">) ----------
+   * The title's <a> stretches over the card (::after), so the card still reads and clicks as one
+   * link card (hover, press and focus come from .cx-card--link and the rules below), while buttons
+   * inside sit above it. The card itself is a <div>.
+   */
+  .cx-card--title-link {
+    position: relative;
+  }
+
+  .cx-card--title-link .cx-card-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .cx-card--title-link .cx-card-title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  /* The card's own controls stay clickable above the stretched link */
+  .cx-card--title-link :is(button, [role='button']) {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Focus: the construction line goes around the card, not the title text */
+  .cx-card--title-link .cx-card-title a:focus-visible {
+    outline: none;
+  }
+
+  .cx-card--title-link:has(.cx-card-title a:focus-visible) {
+    outline: 2px dashed var(--sanguine);
+    outline-offset: 3px;
+  }
+
+  /* Pressing a control inside keeps the card's hover look, not its press */
+  .cx-card--title-link:has(button:active):active {
+    background: var(--surface);
+    box-shadow: 5px 5px 0 0 var(--ink);
+    transform: translate(-3px, -3px);
+  }
+
   /* ---------- In progress (disabled) ---------- */
 
   .cx-card[data-disabled] {
@@ -136,8 +183,53 @@
     opacity: 0.55;
   }
 
-  /* Muted tag (inline on the kit sheet) */
+  /* Muted tag with paper text (inline on the kit sheet): an in-progress card keeps the dark tag */
   .cx-card[data-disabled] .cx-card-tag {
     background: var(--muted);
+    color: var(--paper);
+  }
+
+  /*
+   * ---------- Adaptive card (.cx-card--adaptive) ----------
+   * Lies sideways on tablets (601–1024px, DESIGN.md §1.9), as on the Home design: media on the left
+   * (42%, at least 240px high), body and foot on the right. Upright on desktops and phones.
+   * Media queries cannot read custom properties: the breakpoints are literals, the same as
+   * CARD_ROW_QUERY in Card.tsx.
+   */
+  @media (width > 600px) and (width <= 1024px) {
+    .cx-card--adaptive {
+      display: grid;
+      grid-template-columns: minmax(0, 42%) minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr) auto;
+    }
+
+    .cx-card--adaptive > .cx-card-media {
+      grid-row: 1 / span 2;
+      grid-column: 1;
+      min-height: 240px;
+      aspect-ratio: auto;
+      border-right: 1px solid var(--ink);
+      border-bottom: 0;
+    }
+
+    .cx-card--adaptive > .cx-card-body {
+      grid-row: 1;
+      grid-column: 2;
+    }
+
+    .cx-card--adaptive > .cx-card-foot {
+      grid-row: 2;
+      grid-column: 2;
+    }
+
+    .cx-card--adaptive[data-disabled] > .cx-card-media {
+      border-right-color: var(--line);
+    }
+
+    /* A badge list that collapses with this layout (CARD_ROW_QUERY): one row before JS */
+    .cx-card--adaptive .cx-badge-list[data-collapse='query']:not([data-ready]) {
+      max-height: calc(11px * 1.2 + 8px);
+      overflow: hidden;
+    }
   }
 }

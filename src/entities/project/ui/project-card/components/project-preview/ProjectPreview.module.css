@@ -1,0 +1,24 @@
+/*
+ * A project card's preview: fills the card media (16:10) like an image, surface with the 24px
+ * drawing grid (sepia at 16%, as in the hero), the drawing centred.
+ */
+.preview {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--surface);
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--sepia) 16%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--sepia) 16%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 24px 24px;
+}

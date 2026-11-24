@@ -33,7 +33,7 @@ Pages (details in `sitemap.md`):
 
 | Route                   | Page                     | Notes                                                                                   |
 | ----------------------- | ------------------------ | --------------------------------------------------------------------------------------- |
-| `/[locale]`             | Home                     | Hero (Fol. 01), Featured work (3 × Tav.), What I do, Experience (spec table + timeline) |
+| `/[locale]`             | Home                     | Hero (Fol. 01), Selected work (Fol. 02, 3 × Tav.), What I do, Experience (spec table + timeline) |
 | `/[locale]/work`        | Work                     | All tavole, filter chips, grid/list toggle                                              |
 | `/[locale]/work/[slug]` | Work detail (case study) | Spec table, Task / Solution / Result, gallery, code, prev/next                          |
 | `/[locale]/about`       | About                    | Skills / Experience / Education                                                         |
@@ -114,9 +114,9 @@ The Next.js `app/` router lives in the **repo root** and only re-exports FSD pag
 | Layer      | Slices                                                                                                                                                                                                                                                            |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `widgets`  | `header`, `mobile-menu`, `social-rail`, `footer-stamp` (built in M2); planned: `contact-section`, `command-palette`, `drawing-layer` (grid, "+", marginalia — decorative), and any page block used by more than one page (e.g. `experience` on Home and About) |
-| `pages`    | Blocks used by one page only live in that page's slice, as Steiger's `insignificant-slice` rule asks: `pages/home/ui/hero` (Fol. 01), later `featured-work`, `services`, …; `work-grid` in `pages/work`, `case-study` in `pages/work-detail`. A block moves to `widgets` once a second page uses it |
+| `pages`    | Blocks used by one page only live in that page's slice, as Steiger's `insignificant-slice` rule asks: `pages/home/ui/hero` (Fol. 01), `pages/home/ui/selected-work` (Fol. 02), later `services`, …; `work-grid` in `pages/work`, `case-study` in `pages/work-detail`. A block moves to `widgets` once a second page uses it |
 | `features` | `send-message` (contact form + server action), `copy-email`, `switch-locale`, `filter-work`, `toggle-work-view`                                                                                                                                                   |
-| `entities` | `project` (Tav.), `experience` (job / education entry), `tech` (stack item + tooltip text)                                                                                                                                                                        |
+| `entities` | `project` (Tav.: data, `ProjectCard` with its preview drawings; built in M3), `experience` (job / education entry), `tech` (stack item + tooltip text)                                                                                                                                                                        |
 | `shared`   | `ui` (kit components on Base UI, one folder each, plus `icons`), `styles` (kit stylesheet, fonts), `config` (site config: availability status, links, email), `lib` (`storybook` helpers for stories), `api` (email client), `i18n`                                                                                          |
 
 ### 4.3 Rules
@@ -125,7 +125,7 @@ The Next.js `app/` router lives in the **repo root** and only re-exports FSD pag
 - Each slice exposes a public API through `index.ts`. No deep imports. This is enforced by Steiger and ESLint.
 - **One folder per component.** A block's folder holds only its `index.ts` and the block's own files (`Hero.tsx`, `Hero.module.css`). Each child component lives in `components/<component-name>/` (kebab-case, like slice folders) with its own `index.ts`, styles and constants, and its children nest the same way. Example: `pages/home/ui/hero/components/constructed-name/components/name-dimensions/`. Imports go through the folder's `index.ts`.
 - Server-only code (Resend, secrets) lives in `*.server.ts` files and is marked with `import 'server-only'`.
-- Components are Server Components by default. `'use client'` only where there is interaction or browser-only state (form, palette, carousel; in `shared/ui`: `NavLink` reads the URL, `Toast` holds the toast list). Base UI parts are client components themselves, so thin wrappers need no directive.
+- Components are Server Components by default. `'use client'` only where there is interaction or browser-only state (form, palette, carousel; in `shared/ui`: `NavLink` reads the URL, `Toast` holds the toast list, `BadgeList` measures its row). Base UI parts are client components themselves, so thin wrappers need no directive.
 - `shared/ui` components never import CSS. `src/shared/styles/index.css` is the only entry point for kit CSS. Layout that the kit draws only inline goes into a CSS Module next to the component.
 
 ---
@@ -146,15 +146,17 @@ All content lives in git (map of what lives where: `context/SITEMAP.md`). There 
 export const projects = [
   {
     slug: 'innopharma-migration',
-    tav: 'III',
+    tav: 3, // written as "Tav. III"
     type: 'fullstack',
-    year: 2023,
-    stack: ['Vue', 'TypeScript', 'Docker'],
+    years: [2022, 2024], // "2022—24"
+    company: 'Innopharma', // none: a personal project
+    stack: ['Vue', 'TypeScript', 'AngularJS', 'Docker'],
     featured: true,
   },
-] as const satisfies Project[];
+] as const satisfies readonly ProjectData[];
 
-// copy: messages/en.json → projects.innopharma-migration.{title, task, solution, result}
+// copy: messages/en.json → projects.innopharma-migration.{label, title, summary} (card);
+// task, solution, result come with the case study (M5)
 ```
 
 - A single page template (`pages/work-detail`) renders every case study from its data and its messages.

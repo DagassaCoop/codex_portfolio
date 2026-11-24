@@ -1,0 +1,17 @@
+/*
+ * The card is the kit's, unchanged. Here: layout (in a row of cards the body takes the free height,
+ * so the stacks and the feet line up) and the label's size and colour from the Home design.
+ */
+
+.label {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.body {
+  flex: 1;
+}
+
+.stack {
+  margin-top: auto;
+}

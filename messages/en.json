@@ -47,6 +47,12 @@
           }
         }
       }
+    },
+    "work": {
+      "folio": "Fol. 02",
+      "sheet": "Work · Tav. {first} — {last} of {total}",
+      "title": "Selected work",
+      "allWork": "All work"
     }
   },
   "layout": {
@@ -99,6 +105,30 @@
       "heading": "Codex · Index",
       "open": "Open menu",
       "close": "Close menu"
+    }
+  },
+  "projectCard": {
+    "personal": "Personal",
+    "showStack": "Show all {count} technologies"
+  },
+  "projects": {
+    "soft2bet-platform": {
+      "domain": "iGaming",
+      "label": "Frontend architecture",
+      "title": "Multi-brand iGaming platform",
+      "summary": "Five production brands shipped from one monorepo: shared logic, UI Kit and a brand template."
+    },
+    "life-focus-tree": {
+      "domain": "Personal productivity",
+      "label": "Fullstack · Pet project",
+      "title": "Life Focus Tree",
+      "summary": "Goals grow as a radial perk tree from a single root — “Life” — with animated, evenly spread seeds."
+    },
+    "innopharma-migration": {
+      "domain": "Pharma · Lab software",
+      "label": "Fullstack · Migration",
+      "title": "AngularJS → Vue migration",
+      "summary": "Moved a lab product to Vue and TypeScript: +27% performance, 3× faster debugging and new features."
     }
   }
 }

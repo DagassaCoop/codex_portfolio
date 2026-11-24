@@ -1,0 +1,45 @@
+/* Tav. III preview: colours from the Home design, written with tokens */
+
+.svg {
+  width: 78%;
+  height: auto;
+}
+
+.hatchLine {
+  stroke: var(--ink-2);
+  stroke-width: 0.6;
+}
+
+.block {
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+.surface {
+  fill: var(--surface);
+}
+
+.vue {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.2;
+}
+
+.arrow {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+.dimension {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 0.7;
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.8px;
+  fill: var(--ink-2);
+}

@@ -1,0 +1,73 @@
+/*
+ * Badge list — .cx-badge-list (DESIGN.md §6). Not on the kit sheets: added 2026-11-23 for the
+ * project cards' stack. A row of badges that keeps to one line; the "…" badge-button shows the rest.
+ */
+
+@layer components {
+  .cx-badge-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    position: relative; /* the offset parent the fitting reads positions against */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Each item is as tall as its badge (no line box around the inline-flex badge) */
+  .cx-badge-list > li:not([hidden]) {
+    display: flex;
+  }
+
+  /*
+   * Before JS (server HTML): a list that always collapses is clipped to one row of badges
+   * (11px × 1.2 line + 4px padding top and bottom, badge.css). A list that collapses under a media
+   * query is clipped by the CSS that owns the query (card.css, adaptive layout).
+   */
+  .cx-badge-list[data-collapse='always']:not([data-ready]) {
+    max-height: calc(11px * 1.2 + 8px);
+    overflow: hidden;
+  }
+
+  /* Focus lands on the list after "…" opens it: no outline, the badges are not interactive */
+  .cx-badge-list:focus {
+    outline: none;
+  }
+
+  /* The "…" is laid out while measuring, but never painted */
+  .cx-badge-list > [data-measuring] {
+    visibility: hidden;
+  }
+
+  /* ---------- "…": a badge that is a button (flat element: fill only, DESIGN.md §2) ---------- */
+
+  .cx-badge-more {
+    border: 0;
+    cursor: pointer;
+    transition:
+      background-color var(--t-btn) var(--ease-btn),
+      transform var(--t-btn) var(--ease-btn);
+  }
+
+  .cx-badge-more:hover {
+    background: var(--sunk-2);
+    color: var(--ink);
+  }
+
+  .cx-badge-more:active {
+    background: var(--sunk-2);
+    transform: translate(1px, 1px);
+    transition-duration: var(--t-press);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cx-badge-more {
+      transition: none;
+    }
+
+    .cx-badge-more:active {
+      transform: none;
+    }
+  }
+}

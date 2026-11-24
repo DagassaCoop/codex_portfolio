@@ -4,6 +4,7 @@ import { use } from 'react';
 import type { Locale } from '@/shared/i18n';
 
 import { Hero } from './hero';
+import { SelectedWork } from './selected-work';
 
 type HomePageProps = {
   params: Promise<{ locale: string }>;
@@ -14,5 +15,10 @@ export function HomePage({ params }: HomePageProps) {
   const { locale } = use(params);
   setRequestLocale(locale as Locale);
 
-  return <Hero />;
+  return (
+    <>
+      <Hero />
+      <SelectedWork />
+    </>
+  );
 }

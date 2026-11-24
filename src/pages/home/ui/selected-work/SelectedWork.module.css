@@ -1,0 +1,93 @@
+/*
+ * Fol. 02 — Selected work (Home page design, section 1.2; DESIGN.md §1.9 for breakpoints and padding).
+ */
+
+/* A line above the folio; the 12 columns drawn behind it in sepia at 12% (decor) */
+.section {
+  border-top: 1px solid var(--ink);
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--sepia) 12%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: calc(100% / 12) 100%;
+}
+
+/* ---------- Head: folio · title · "All work" ---------- */
+
+.head {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 12px 24px;
+  align-items: end;
+  padding: 40px 32px 24px;
+}
+
+.folio {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / span 3;
+  gap: 8px;
+}
+
+.folioNumber {
+  color: var(--sanguine);
+}
+
+.title {
+  grid-column: 4 / span 6;
+}
+
+.allWork {
+  grid-column: 10 / span 3;
+  justify-self: end;
+}
+
+/* ---------- Cards ---------- */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 8px 32px 56px;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+}
+
+/* The card fills its cell, so the cards in a row are the same height */
+.card {
+  flex: 1;
+}
+
+/* ---------- Tablet: one column ---------- */
+
+@media (width <= 1024px) {
+  .head,
+  .cards {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: 24px;
+  }
+
+  .folio,
+  .title,
+  .allWork {
+    grid-column: 1 / -1;
+  }
+
+  .allWork {
+    justify-self: start;
+  }
+}
+
+/* ---------- Phone ---------- */
+
+@media (width <= 600px) {
+  .head,
+  .cards {
+    padding-inline: 16px;
+  }
+}
