@@ -22,6 +22,15 @@ export const siteConfig = {
   /** Open to job offers: the footer stamp shows "Open for work" instead of "Say hello" */
   available: true,
 
+  /**
+   * The author's stack (Home, What I do): the main technologies (outline badges), then the others.
+   * Names are not translated.
+   */
+  stack: {
+    main: ['React', 'TypeScript', 'Next.js', 'Vue', 'Node.js'],
+    other: ['GraphQL', 'Prisma', 'AngularJS', 'Docker', 'Jenkins', 'GitLab CI/CD'],
+  },
+
   /** Profiles, contacts and files (social rail, footer) */
   links: {
     github: 'https://github.com/DagassaCoop',

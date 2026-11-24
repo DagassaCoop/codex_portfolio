@@ -53,6 +53,35 @@
       "sheet": "Projets · Tav. {first} — {last} sur {total}",
       "title": "Projets choisis",
       "allWork": "Tous les projets"
+    },
+    "services": {
+      "folio": "Fol. 03r",
+      "sheet": "Pratique · {count, plural, one {# direction} other {# directions}}",
+      "title": "Ce que je fais",
+      "dimension": "{count, plural, one {# DIRECTION} other {# DIRECTIONS}} · 1 INGÉNIEUR",
+      "direction": "Dir. {number}",
+      "directions": {
+        "architecture": {
+          "title": "Architecture frontend",
+          "text": "Des monorepos où la logique métier et l’interface s’écrivent une seule fois, chaque marque n’étant qu’un mince gabarit par-dessus.",
+          "tags": ["Monorepo", "Logique partagée", "UI Kit", "Multimarque"]
+        },
+        "product": {
+          "title": "Interfaces produit",
+          "text": "Des interfaces en React, TypeScript et Next.js dont chaque état est conçu — chargement, vide, erreur, désactivé — et utilisables au clavier.",
+          "tags": ["React", "Next.js", "Accessibilité", "États d’interface"]
+        },
+        "fullstack": {
+          "title": "Fullstack",
+          "text": "Services Node.js, couches d’API et intégrations : passerelles OAuth, permissions et la CI/CD qui les livre.",
+          "tags": ["Node.js", "API", "OAuth 2", "CI/CD"]
+        }
+      },
+      "stack": {
+        "label": "Stack",
+        "main": "Stack principal",
+        "other": "Utilisé aussi"
+      }
     }
   },
   "layout": {

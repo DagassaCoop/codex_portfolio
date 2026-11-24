@@ -26,9 +26,10 @@ export type BadgeListProps = Omit<ComponentPropsWithRef<'ul'>, 'children'> & {
   collapse?: boolean | string;
   /**
    * Accessible name of the "…" button that shows the rest, e.g. "Show all 5 technologies".
-   * The button itself only shows "…".
+   * The button itself only shows "…". Needed whenever the list can collapse: without it there is
+   * no "…" to press.
    */
-  moreLabel: string;
+  moreLabel?: string;
 };
 
 /** How many badges fit on the first row with the "…" button after them; null: all fit */
@@ -175,7 +176,7 @@ export function BadgeList({
           {item}
         </li>
       ))}
-      {withMore && (
+      {withMore && moreLabel != null && (
         <li
           ref={moreRef}
           hidden={!measuring && fit == null}

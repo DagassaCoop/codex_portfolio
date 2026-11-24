@@ -17,7 +17,7 @@
 | Kind | What | Where |
 | --- | --- | --- |
 | **Copy** (translated) | Every visible string: UI labels, headings, project texts, job descriptions, accessible names | `messages/en.json` and `messages/fr.json`, the same keys in both. Read with `useTranslations` / `getTranslations` (`next-intl`); rich text with `t.rich` |
-| **Site data** (one language) | Author name and initials, revision and its year, availability, email, social links, CV path, source repo, site URL | `src/shared/config/site.ts` (`siteConfig`) |
+| **Site data** (one language) | Author name and initials, revision and its year, availability, email, social links, CV path, source repo, site URL, the author's stack | `src/shared/config/site.ts` (`siteConfig`) |
 | **Project data** | Slug, Tav. number, type, year, stack, `featured`, links, images, metrics | `src/entities/project/model` |
 | **Experience data** | Company, dates, city, format, stack | `src/entities/experience/model` |
 | **Decor** (not content) | Ruler letters, construction labels, dimension values | Constants next to the component that draws them; `aria-hidden`, not translated |
@@ -35,7 +35,7 @@ Rules:
 | --- | --- | --- |
 | `meta` | `<title>` and description (`src/app/layouts/LocaleLayout.tsx`) | [done] |
 | `layout` | the page frame and the global widgets (§3) | [done] frame, header, nav, mobile menu, rail, footer |
-| `home` | Home page (`src/pages/home`): `home.hero`, `home.work` | [in progress] |
+| `home` | Home page (`src/pages/home`): `home.hero`, `home.work`, `home.services` | [in progress] |
 | `projects` | Project copy by slug: `projects.<slug>.{domain,label,title,summary}` (`src/entities/project`) | [in progress] three featured projects |
 | `projectCard` | The project card's own strings (`personal`, `showStack`) | [done] |
 
@@ -163,3 +163,16 @@ Copy is taken from the Home design for now, like the hero's.
 | Stack "…" button name "Show all 5 technologies" (tablets, when the stack would wrap) | copy | `projectCard.showStack` (`{count}`) | [done] |
 | Card link → the case study | data | `/work/<slug>`, on the title, stretched over the card | [done]. Case studies are M5 (404 until then). The link's name is the title |
 | Card previews (stacked plates, radial tree, AngularJS → Vue) | decor (`aria-hidden`), labels not translated | `src/entities/project/ui/project-card/components/project-preview` | [done]. Stand in for images until the case studies have them. ⚠ Tav. I draws "×5" (concept rule) |
+
+### Fol. 03r · What I do — `src/pages/home/ui/services` [done]
+
+Copy is taken from the Home design for now, like the sections above.
+
+| Content | Kind | Where | Status |
+| --- | --- | --- | --- |
+| Folio "Fol. 03r", sheet label "Practice · 3 directions" | copy | `home.services.{folio,sheet}` (`{count}`: the number of directions) | [done] |
+| Heading "What I do" | copy | `home.services.title` | [done] |
+| Dimension "3 DIRECTIONS · 1 ENGINEER" | copy (decor, `aria-hidden`) | `home.services.dimension` (`{count}`) | [done] |
+| Directions: numeral (I–III), "Dir. 01", title, text, tags | copy | order in `Services.tsx` (`DIRECTIONS`); `home.services.direction` (`{number}`); `home.services.directions.<key>.{title,text,tags}` (`tags` is an array, read with `t.raw`) | [done] architecture, product, fullstack |
+| Stack: label, main (outline badges), others | data + copy | `siteConfig.stack.{main,other}`; `home.services.stack.{label,main,other}` (`main` / `other` name the two lists for screen readers) | [done] |
+

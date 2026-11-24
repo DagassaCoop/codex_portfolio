@@ -1,12 +1,13 @@
-import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 
-import { featuredProjects, ProjectCard, projects, toRoman } from '@/entities/project';
+import { featuredProjects, ProjectCard, projects } from '@/entities/project';
 import { Link } from '@/shared/i18n';
+import { toRoman } from '@/shared/lib/roman';
 import { buttonClassName } from '@/shared/ui/button';
 import { ArrowRightIcon } from '@/shared/ui/icons';
 
 import styles from './SelectedWork.module.css';
+import { SectionHead } from '../components/section-head';
 
 /**
  * Fol. 02, Selected work (Home page design, section 1.2): the featured projects as tavola cards,
@@ -21,29 +22,23 @@ export function SelectedWork() {
 
   return (
     <section id="work" aria-labelledby="work-title" className={styles.section}>
-      <div className={styles.head}>
-        <div className={styles.folio}>
-          <span className={clsx('cx-label', styles.folioNumber)}>{t('folio')}</span>
-          <span className="cx-cap">
-            {t('sheet', {
-              first: toRoman(first.tav),
-              last: toRoman(last.tav),
-              total: toRoman(projects.length),
-            })}
-          </span>
-        </div>
-        <h2 id="work-title" className={clsx('cx-h2', styles.title)}>
-          {t('title')}
-        </h2>
-        {/* The Work page is built in M4; until then the link opens the 404 page */}
-        <Link
-          href="/work"
-          className={clsx(buttonClassName({ variant: 'primary' }), styles.allWork)}
-        >
-          {t('allWork')}
-          <ArrowRightIcon />
-        </Link>
-      </div>
+      <SectionHead
+        folio={t('folio')}
+        sheet={t('sheet', {
+          first: toRoman(first.tav),
+          last: toRoman(last.tav),
+          total: toRoman(projects.length),
+        })}
+        title={t('title')}
+        titleId="work-title"
+        action={
+          // The Work page is built in M4; until then the link opens the 404 page
+          <Link href="/work" className={buttonClassName({ variant: 'primary' })}>
+            {t('allWork')}
+            <ArrowRightIcon />
+          </Link>
+        }
+      />
 
       <ul className={styles.cards}>
         {featuredProjects.map((project) => (

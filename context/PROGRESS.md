@@ -22,8 +22,8 @@
 _A snapshot. Overwrite it, don't append to it._
 
 - **Phase:** M3 Home (branch `ui/home-page`). M2 is done (2026-11-21, merged into `main`).
-- **Now:** Selected work (Fol. 02) is done and waiting for review. The hero is done.
-- **Next:** What I do (Fol. 03r). Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
+- **Now:** What I do (Fol. 03r) is done and waiting for review. Hero and Selected work are done.
+- **Next:** Experience (Fol. 03v), the last Home section. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
 - **Blocked by:** nothing.
 
 ---
@@ -35,7 +35,7 @@ _A snapshot. Overwrite it, don't append to it._
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
 | M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo]; Dialog and Sheet done early in M2 |
 | M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [done] | 2026-11-21. Stages: 1 Page frame [done] · 2 Header + monogram [done] · 3 Social rail [done] · 4 Footer stamp [done] · 5 Mobile menu + Dialog in the kit [done]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
-| M3 | Home (`/[locale]`) | [in progress] | Hero: 1 Section + text column [done] · 2 Name [done] · 3 Rota [done]. Selected work [done]. Then What I do, Experience |
+| M3 | Home (`/[locale]`) | [in progress] | Hero: 1 Section + text column [done] · 2 Name [done] · 3 Rota [done]. Selected work [done]. What I do [done]. Then Experience |
 | M4 | Work (`/[locale]/work`) | | |
 | M5 | Work detail / case study (`/[locale]/work/[slug]`) | | |
 | M6 | About (`/[locale]/about`) | | |
@@ -60,6 +60,20 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-23 — M3 What I do (Fol. 03r)
+- **Status:** [done]
+- **What:**
+  - Section `pages/home/ui/services` (`id="services"`): head; the dimension "3 DIRECTIONS · 1 ENGINEER"; one surface panel with three directions (`components/direction`: `cx-item-num` numeral, "Dir. 01", h3, text, tags as a `BadgeList collapse={false}`), lines between them; the stack strip (`components/stack-strip`: "Stack", main technologies as outline badges, the others as default badges, each group a named list, vertical separators hidden on phones).
+  - Tablet: the directions stack, each a row (numeral and title in 200px, text and tags on the right), as on the design; phone: columns.
+  - **`SectionHead`** (`pages/home/ui/components/section-head`): the folio, sheet label, h2 and optional action, shared by the Home sections; Selected work now uses it.
+  - **`toRoman` moved to `shared/lib/roman`** (projects and directions use it). `BadgeList.moreLabel` is optional (needed only when the list can collapse).
+  - Data: `siteConfig.stack`. Copy: `home.services` in EN and FR.
+- **Where:** `src/pages/home/ui/{services,components/section-head,selected-work}/`, `src/pages/home/ui/HomePage.tsx`, `src/shared/lib/roman/`, `src/shared/config/site.ts`, `src/shared/ui/badge-list/BadgeList.tsx`, `src/entities/project/`, `messages/{en,fr}.json`; docs `PROJECT_OVERVIEW.md` §4.2, §5; `SITEMAP.md` §1, §4
+- **Verified:** `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` pass; `test:stories` 139/139. In the production build: screenshots at 1440, 768 and 375 (EN) and 1440 (FR) compared with the Home design; Selected work unchanged after the move to `SectionHead`; no horizontal scroll; axe (WCAG 2.2 AA) has no violations; the section reads as h2 → three articles with h3 and tag lists → "Main stack" and "Also used" lists.
+- **Follow-ups:**
+  - The kit's vertical `Separator` is `height: 100%`, which does not resolve in an auto-height row (it renders 0px tall); the stack strip sets 22px. Consider fixing it in the kit (e.g. `height: auto` + `align-self: stretch`).
+  - Dir. 01 speaks about brands ("every brand is a thin template", "Multi-brand"). The concept rule (PROJECT_OVERVIEW.md §5) covers the hero and the illustration callouts only, so it is allowed here; flagging it for the copy rewrite.
 
 ### 2026-11-23 — Badge list: the stack keeps to one row on tablets
 - **Status:** [done]

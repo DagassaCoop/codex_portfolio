@@ -114,10 +114,10 @@ The Next.js `app/` router lives in the **repo root** and only re-exports FSD pag
 | Layer      | Slices                                                                                                                                                                                                                                                            |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `widgets`  | `header`, `mobile-menu`, `social-rail`, `footer-stamp` (built in M2); planned: `contact-section`, `command-palette`, `drawing-layer` (grid, "+", marginalia — decorative), and any page block used by more than one page (e.g. `experience` on Home and About) |
-| `pages`    | Blocks used by one page only live in that page's slice, as Steiger's `insignificant-slice` rule asks: `pages/home/ui/hero` (Fol. 01), `pages/home/ui/selected-work` (Fol. 02), later `services`, …; `work-grid` in `pages/work`, `case-study` in `pages/work-detail`. A block moves to `widgets` once a second page uses it |
+| `pages`    | Blocks used by one page only live in that page's slice, as Steiger's `insignificant-slice` rule asks: `pages/home/ui/hero` (Fol. 01), `selected-work` (Fol. 02), `services` (Fol. 03r), later `experience`; parts shared by the Home sections in `pages/home/ui/components` (`section-head`); `work-grid` in `pages/work`, `case-study` in `pages/work-detail`. A block moves to `widgets` once a second page uses it |
 | `features` | `send-message` (contact form + server action), `copy-email`, `switch-locale`, `filter-work`, `toggle-work-view`                                                                                                                                                   |
 | `entities` | `project` (Tav.: data, `ProjectCard` with its preview drawings; built in M3), `experience` (job / education entry), `tech` (stack item + tooltip text)                                                                                                                                                                        |
-| `shared`   | `ui` (kit components on Base UI, one folder each, plus `icons`), `styles` (kit stylesheet, fonts), `config` (site config: availability status, links, email), `lib` (`storybook` helpers for stories), `api` (email client), `i18n`                                                                                          |
+| `shared`   | `ui` (kit components on Base UI, one folder each, plus `icons`), `styles` (kit stylesheet, fonts), `config` (site config: availability status, links, email), `lib` (`storybook` helpers for stories, `roman`), `api` (email client), `i18n`                                                                                          |
 
 ### 4.3 Rules
 
@@ -138,7 +138,7 @@ All content lives in git (map of what lives where: `context/SITEMAP.md`). There 
 | -------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------- |
 | Project data: slug, Tav. number, type, year, stack, `featured`, links, images, metrics                   | Typed TS objects             | `entities/project/model`              |
 | Experience and education data: company, dates, city, format, stack                                       | Typed TS objects             | `entities/experience/model`           |
-| Site config: availability, email, social links, CV path                                                  | TS                           | `shared/config`                       |
+| Site config: availability, email, social links, CV path, the author's stack                              | TS                           | `shared/config`                       |
 | All copy: UI strings, section headings, project titles, Task / Solution / Result texts, job descriptions | JSON messages, keyed by slug | `messages/{en,fr}.json` (`next-intl`) |
 
 ```ts

@@ -13,36 +13,6 @@
   background-size: calc(100% / 12) 100%;
 }
 
-/* ---------- Head: folio · title · "All work" ---------- */
-
-.head {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 12px 24px;
-  align-items: end;
-  padding: 40px 32px 24px;
-}
-
-.folio {
-  display: flex;
-  flex-direction: column;
-  grid-column: 1 / span 3;
-  gap: 8px;
-}
-
-.folioNumber {
-  color: var(--sanguine);
-}
-
-.title {
-  grid-column: 4 / span 6;
-}
-
-.allWork {
-  grid-column: 10 / span 3;
-  justify-self: end;
-}
-
 /* ---------- Cards ---------- */
 
 .cards {
@@ -66,27 +36,15 @@
 /* ---------- Tablet: one column ---------- */
 
 @media (width <= 1024px) {
-  .head,
   .cards {
     grid-template-columns: minmax(0, 1fr);
     padding-inline: 24px;
-  }
-
-  .folio,
-  .title,
-  .allWork {
-    grid-column: 1 / -1;
-  }
-
-  .allWork {
-    justify-self: start;
   }
 }
 
 /* ---------- Phone ---------- */
 
 @media (width <= 600px) {
-  .head,
   .cards {
     padding-inline: 16px;
   }

@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 
+import { toRoman } from '@/shared/lib/roman';
 import { Badge } from '@/shared/ui/badge';
 import { BadgeList } from '@/shared/ui/badge-list';
 import {
@@ -15,7 +16,7 @@ import {
 
 import { ProjectPreview } from './components/project-preview';
 import styles from './ProjectCard.module.css';
-import { formatYears, toRoman } from '../../lib/format';
+import { formatYears } from '../../lib/format';
 import type { Project } from '../../model/projects';
 
 type ProjectCardProps = {

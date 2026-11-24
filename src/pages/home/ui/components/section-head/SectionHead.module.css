@@ -1,0 +1,64 @@
+/*
+ * A Home section's head (Home page design, sections 1.2–1.4; DESIGN.md §1.9 for breakpoints and
+ * padding).
+ */
+
+.head {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 12px 24px;
+  align-items: end;
+  padding: 40px 32px 24px;
+}
+
+.folio {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / span 3;
+  gap: 8px;
+}
+
+.folioNumber {
+  color: var(--sanguine);
+}
+
+.title {
+  grid-column: 4 / span 6;
+}
+
+/* No action: the title runs to the end */
+.wide {
+  grid-column: 4 / span 9;
+}
+
+.action {
+  grid-column: 10 / span 3;
+  justify-self: end;
+}
+
+/* ---------- Tablet: one column ---------- */
+
+@media (width <= 1024px) {
+  .head {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: 24px;
+  }
+
+  .folio,
+  .title,
+  .action {
+    grid-column: 1 / -1;
+  }
+
+  .action {
+    justify-self: start;
+  }
+}
+
+/* ---------- Phone ---------- */
+
+@media (width <= 600px) {
+  .head {
+    padding-inline: 16px;
+  }
+}

@@ -5,6 +5,7 @@ import type { Locale } from '@/shared/i18n';
 
 import { Hero } from './hero';
 import { SelectedWork } from './selected-work';
+import { Services } from './services';
 
 type HomePageProps = {
   params: Promise<{ locale: string }>;
@@ -19,6 +20,7 @@ export function HomePage({ params }: HomePageProps) {
     <>
       <Hero />
       <SelectedWork />
+      <Services />
     </>
   );
 }
