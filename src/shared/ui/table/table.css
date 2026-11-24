@@ -1,0 +1,73 @@
+/*
+ * Table — the spec sheet, .cx-table-wrap > table.cx-table (DESIGN.md §6, kit sheet 04 Data display)
+ *
+ * Framed in ink; mono upper-case headers on sunk with a 2px ink line below; rows split by lines,
+ * sunk on hover, sanguine-wash when selected. `.num` cells align right in mono.
+ * The caption sits below, in EB Garamond italic ("Tav. I — specifica tecnica").
+ *
+ * ⚠ The kit's class-only .is-selected maps to [data-selected], set by the component.
+ */
+
+@layer components {
+  .cx-table-wrap {
+    overflow: hidden;
+    border: 1px solid var(--ink);
+    border-radius: var(--r);
+  }
+
+  .cx-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    font-size: 14px;
+  }
+
+  .cx-table th {
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--ink);
+    background: var(--sunk);
+    color: var(--ink-2);
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .cx-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    vertical-align: top;
+  }
+
+  .cx-table td.num,
+  .cx-table th.num {
+    font-family: var(--mono);
+    text-align: right;
+  }
+
+  .cx-table tbody tr {
+    transition: background-color var(--t);
+  }
+
+  .cx-table tbody tr:hover {
+    background: var(--sunk);
+  }
+
+  .cx-table tbody tr[data-selected] {
+    background: var(--sanguine-wash);
+  }
+
+  /* The caption's padding is inline on the kit sheet */
+  .cx-table caption {
+    padding: 10px 0 10px 14px;
+    caption-side: bottom;
+    color: var(--ink-2);
+    font-family: var(--marg);
+    font-size: 15px;
+    font-style: italic;
+    text-align: left;
+  }
+}

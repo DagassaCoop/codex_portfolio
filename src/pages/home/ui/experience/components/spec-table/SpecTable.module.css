@@ -1,0 +1,31 @@
+/*
+ * The author's spec sheet (Home page design, section 1.4): the kit Table, with the values set as
+ * figures (display 700 22px) and the line under a label.
+ */
+
+.figure {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+/* The one highlighted value */
+.accent {
+  color: var(--sanguine);
+}
+
+/* A value in words (education): body text, line breaks kept */
+.text {
+  font-family: var(--body);
+  font-size: 14px;
+  white-space: pre-line;
+}
+
+.note {
+  display: block;
+  color: var(--muted);
+  font-family: var(--body);
+  font-size: 12px;
+  line-height: 1.5;
+}

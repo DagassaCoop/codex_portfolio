@@ -82,6 +82,60 @@
         "main": "Main stack",
         "other": "Also used"
       }
+    },
+    "experience": {
+      "folio": "Fol. 03v",
+      "sheet": "Experience · {from} — {to}",
+      "title": "Where I’ve built",
+      "about": "About me",
+      "spec": {
+        "spec": "Specification",
+        "value": "Value",
+        "rows": {
+          "experience": {
+            "label": "Commercial experience",
+            "value": "4+ yrs"
+          },
+          "brands": {
+            "label": "Production brands, one codebase",
+            "value": "5"
+          },
+          "projects": {
+            "label": "Web projects shipped in React",
+            "value": "10+"
+          },
+          "performance": {
+            "label": "Best performance gain",
+            "value": "+31%"
+          },
+          "countries": {
+            "label": "Countries worked in",
+            "note": "Kharkiv · Dublin · Toronto",
+            "value": "3"
+          },
+          "education": {
+            "label": "Education",
+            "value": "BSc CS,\nNTU «KhPI»"
+          }
+        }
+      },
+      "next": {
+        "year": "next",
+        "title": "Your team?",
+        "link": "Let’s talk"
+      },
+      "years": "{count, plural, one {# yr} other {# yrs}}",
+      "months": "{count, plural, one {# mo} other {# mos}}",
+      "education": "Education",
+      "format": {
+        "onSite": "On-site",
+        "hybrid": "Hybrid",
+        "remote": "Remote"
+      },
+      "employment": {
+        "contractFullTime": "Contract, full-time",
+        "contract": "Contract"
+      }
     }
   },
   "layout": {
@@ -158,6 +212,50 @@
       "label": "Fullstack · Migration",
       "title": "AngularJS → Vue migration",
       "summary": "Moved a lab product to Vue and TypeScript: +27% performance, 3× faster debugging and new features."
+    }
+  },
+  "experience": {
+    "brightit": {
+      "role": "Frontend Developer",
+      "points": [
+        "Built features and reviewed code across five production brands.",
+        "Worked in a monorepo: shared business logic, a UI Kit library and a per-brand app template.",
+        "Deployed to test and production through GitLab CI/CD."
+      ]
+    },
+    "fitofan": {
+      "role": "Full Stack Developer",
+      "points": [
+        "Built the client of a sports platform in Next.js and TypeScript.",
+        "Designed the API layer behind an OAuth gateway.",
+        "Worked directly with design and backend."
+      ]
+    },
+    "innopharma": {
+      "role": "Full Stack Developer",
+      "points": [
+        "Migrated AngularJS to Vue + TypeScript: +27% performance, 3× faster debugging and feature work.",
+        "Shipped a new product feature end to end.",
+        "Implemented permissions on OAuth 2.",
+        "Ran two TypeScript trainings for the team.",
+        "Automated lab workflows together with a chemist; Docker + Jenkins."
+      ]
+    },
+    "goracio": {
+      "role": "Frontend Developer",
+      "points": [
+        "Delivered 10+ projects in React.",
+        "Optimised a CMS-based site: +31% performance.",
+        "Built features for CMS-based sites."
+      ]
+    },
+    "distributed-lab": {
+      "role": "Internet Researcher",
+      "points": []
+    },
+    "khpi": {
+      "role": "BSc, Computer Science",
+      "points": []
     }
   }
 }

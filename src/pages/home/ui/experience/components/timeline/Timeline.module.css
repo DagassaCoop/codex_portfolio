@@ -1,0 +1,9 @@
+/* "Your team?": the open next step, muted, with room below like the entries */
+
+.next {
+  padding-bottom: 36px;
+}
+
+.nextTitle {
+  color: var(--muted);
+}

@@ -22,8 +22,8 @@
 _A snapshot. Overwrite it, don't append to it._
 
 - **Phase:** M3 Home (branch `ui/home-page`). M2 is done (2026-11-21, merged into `main`).
-- **Now:** What I do (Fol. 03r) is done and waiting for review. Hero and Selected work are done.
-- **Next:** Experience (Fol. 03v), the last Home section. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
+- **Now:** Experience (Fol. 03v) is done and waiting for review: every Home section of M3 is built (the contact section is G3, M7).
+- **Next:** after review, close M3; then M4 Work. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
 - **Blocked by:** nothing.
 
 ---
@@ -33,9 +33,9 @@ _A snapshot. Overwrite it, don't append to it._
 | # | Milestone | Status | Notes |
 |---|---|---|---|
 | M0 | Project init: Next.js + FSD skeleton, i18n routing, tooling | [done] | 2026-11-19. Storybook added the same day |
-| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo]; Dialog and Sheet done early in M2 |
+| M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo]; done early: Dialog and Sheet (M2), Table and Trace (M3); new in M3: Badge list |
 | M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [done] | 2026-11-21. Stages: 1 Page frame [done] · 2 Header + monogram [done] · 3 Social rail [done] · 4 Footer stamp [done] · 5 Mobile menu + Dialog in the kit [done]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
-| M3 | Home (`/[locale]`) | [in progress] | Hero: 1 Section + text column [done] · 2 Name [done] · 3 Rota [done]. Selected work [done]. What I do [done]. Then Experience |
+| M3 | Home (`/[locale]`) | [in progress] | Hero: 1 Section + text column [done] · 2 Name [done] · 3 Rota [done]. Selected work [done]. What I do [done]. Experience [done]. Waiting for review |
 | M4 | Work (`/[locale]/work`) | | |
 | M5 | Work detail / case study (`/[locale]/work/[slug]`) | | |
 | M6 | About (`/[locale]/about`) | | |
@@ -60,6 +60,20 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-23 — M3 Experience (Fol. 03v); Table and Trace in the kit
+- **Status:** [done]
+- **What:**
+  - **Kit:** `Table` (`shared/ui/table`) and `Trace` (`shared/ui/trace`, `layout="adaptive"`: on phones the year moves above the body), from codex.css, pulled from M1's later pass; stories with tests (headers and caption, the selected row; an ordered list with decorative rails).
+  - **Entity `experience`** (`src/entities/experience`): six jobs and studies (company, start and end month, place, format, employment, stack), `duration` (both ends included) and `formatPeriod` (month names from `Intl`). `formatYears` moved to `shared/lib/years` (projects and experience).
+  - **Section** `pages/home/ui/experience`: head with "About me" (Primary, like "All work") → `/about`; `components/spec-table` (the author's spec sheet, values as display figures, "+31%" in sanguine, Italian caption; sticky 24px from the top on desktops); `components/timeline` ("Your team?" → `#contact` on a dashed node, then `components/experience-entry`: company h3, role · employment, period · duration · place · format, bullets with sanguine markers, the stack). One column on tablets; on phones the years move above the entries.
+  - Copy: `home.experience` and `experience.<id>` in EN and FR. `steiger.config.ts`: `insignificant-slice` off for `entities/experience` until About (M6) uses it.
+- **Where:** `src/shared/ui/{table,trace}/`, `src/shared/lib/years/`, `src/shared/styles/index.css`, `src/entities/{experience,project}/`, `src/pages/home/ui/{experience,HomePage.tsx}`, `messages/{en,fr}.json`, `steiger.config.ts`; docs `DESIGN.md` §6, §12; `PROJECT_OVERVIEW.md` §4.2; `SITEMAP.md` §1, §2, §4
+- **Verified:** `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` pass; `test:stories` 144/144. In the production build: screenshots at 1440, 768 and 375 (EN) and 1440 (FR) compared with the Home design; every period line matches the design ("Oct 2025 — Nov 2026 · 1 yr 2 mos · Toronto · On-site" …), FR months are localised ("oct. 2025 — nov. 2026 · 1 an 2 mois"); the spec sheet sticks 24px from the top while the timeline scrolls; no horizontal scroll; axe (WCAG 2.2 AA) has no violations.
+- **Follow-ups:**
+  - "About me" is a Primary button for consistency with "All work" (the design draws a link button). Revert if the link look is wanted here.
+  - The spec values are copy ("4+ yrs", "10+"…), not computed from the data.
+  - Bullets inside the timeline render as circles (a list nested in the `ol`), as on the design.
 
 ### 2026-11-23 — M3 What I do (Fol. 03r)
 - **Status:** [done]

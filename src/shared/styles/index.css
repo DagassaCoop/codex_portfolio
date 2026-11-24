@@ -56,6 +56,8 @@
 @import url('../ui/item/item.css');
 @import url('../ui/aspect-ratio/aspect-ratio.css');
 @import url('../ui/skeleton/skeleton.css');
+@import url('../ui/table/table.css');
+@import url('../ui/trace/trace.css');
 
 /* Navigation (the menu surface and items are in menu.css, above) */
 @import url('../ui/nav-link/nav-link.css');

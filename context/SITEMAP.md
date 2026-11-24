@@ -35,7 +35,8 @@ Rules:
 | --- | --- | --- |
 | `meta` | `<title>` and description (`src/app/layouts/LocaleLayout.tsx`) | [done] |
 | `layout` | the page frame and the global widgets (§3) | [done] frame, header, nav, mobile menu, rail, footer |
-| `home` | Home page (`src/pages/home`): `home.hero`, `home.work`, `home.services` | [in progress] |
+| `home` | Home page (`src/pages/home`): `home.hero`, `home.work`, `home.services`, `home.experience` | [done] (the contact section is G3, M7) |
+| `experience` | Job and study copy by id: `experience.<id>.{role,points}` (`src/entities/experience`) | [done] |
 | `projects` | Project copy by slug: `projects.<slug>.{domain,label,title,summary}` (`src/entities/project`) | [in progress] three featured projects |
 | `projectCard` | The project card's own strings (`personal`, `showStack`) | [done] |
 
@@ -45,7 +46,7 @@ Rules:
 
 | Route | Page | Sections | Status |
 | --- | --- | --- | --- |
-| `/[locale]` | Home | Hero (Fol. 01), Selected work (Fol. 02, 3 × Tav.), What I do (Fol. 03r), Experience (Fol. 03v) | [in progress] (M3), see §4 |
+| `/[locale]` | Home | Hero (Fol. 01), Selected work (Fol. 02, 3 × Tav.), What I do (Fol. 03r), Experience (Fol. 03v) | [done] (M3), see §4 |
 | `/[locale]/work` | Work | All tavole, filter chips, grid / list | [todo] (M4) |
 | `/[locale]/work/[slug]` | Case study | Spec table, Task / Solution / Result, gallery, code, prev / next | [todo] (M5) |
 | `/[locale]/about` | About | Skills / Experience / Education | [todo] (M6) |
@@ -175,4 +176,21 @@ Copy is taken from the Home design for now, like the sections above.
 | Dimension "3 DIRECTIONS · 1 ENGINEER" | copy (decor, `aria-hidden`) | `home.services.dimension` (`{count}`) | [done] |
 | Directions: numeral (I–III), "Dir. 01", title, text, tags | copy | order in `Services.tsx` (`DIRECTIONS`); `home.services.direction` (`{number}`); `home.services.directions.<key>.{title,text,tags}` (`tags` is an array, read with `t.raw`) | [done] architecture, product, fullstack |
 | Stack: label, main (outline badges), others | data + copy | `siteConfig.stack.{main,other}`; `home.services.stack.{label,main,other}` (`main` / `other` name the two lists for screen readers) | [done] |
+
+### Fol. 03v · Experience — `src/pages/home/ui/experience` [done]
+
+Copy is taken from the Home design for now, like the sections above.
+
+| Content | Kind | Where | Status |
+| --- | --- | --- | --- |
+| Folio "Fol. 03v", sheet label "Experience · 2018 — 2026" | copy + data | `home.experience.{folio,sheet}`; the years are the first start and the last end in `experience` | [done] |
+| Heading "Where I’ve built" | copy | `home.experience.title` | [done] |
+| "About me" → `/about` (Primary button) | copy | `home.experience.about` | [done]. The About page is M6 (404 until then) |
+| Spec sheet: headers, row labels and values, the note under "Countries worked in" | copy | `home.experience.spec.{spec,value}`, `home.experience.spec.rows.<key>.{label,value,note}`; row order and the accent row in `SpecTable.tsx` | [done]. Values are copy, not computed. ⚠ "Production brands, one codebase: 5" (concept rule covers only the hero and illustrations) |
+| Spec sheet caption "Tav. — specifica dell’autore" | decor (Italian), not translated | `CAPTION` in `SpecTable.tsx` | [done] |
+| "Your team?" with "Let’s talk ↗" → `#contact`, year "next" | copy | `home.experience.next.{year,title,link}` | [done]. `#contact` is M7 |
+| Jobs and studies: company, dates, place, format, employment, stack | data | `experience` (`src/entities/experience/model/experience.ts`) | [done] six entries |
+| Role, what was done | copy | `experience.<id>.{role,points}` (`points` is an array, read with `t.raw`) | [done] |
+| Years "2025—26", period "Oct 2025 — Nov 2026", duration "1 yr 2 mos" | data, formatted | `formatYears` (`shared/lib/years`), `formatPeriod` (month names from `Intl` in the page's locale), `duration` (both ends included); units `home.experience.{years,months}` | [done] |
+| Format "On-site" / "Hybrid" / "Remote", employment, "Education" | copy | `home.experience.{format,employment,education}` | [done] |
 

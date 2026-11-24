@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 
 import { toRoman } from '@/shared/lib/roman';
+import { formatYears } from '@/shared/lib/years';
 import { Badge } from '@/shared/ui/badge';
 import { BadgeList } from '@/shared/ui/badge-list';
 import {
@@ -16,7 +17,6 @@ import {
 
 import { ProjectPreview } from './components/project-preview';
 import styles from './ProjectCard.module.css';
-import { formatYears } from '../../lib/format';
 import type { Project } from '../../model/projects';
 
 type ProjectCardProps = {
@@ -63,7 +63,7 @@ export function ProjectCard({ project, layout, className }: ProjectCardProps) {
         </BadgeList>
       </CardBody>
       <CardFoot>
-        <span>{`${formatYears(years)} · ${company}`.toUpperCase()}</span>
+        <span>{`${formatYears(years[0], years.at(-1))} · ${company}`.toUpperCase()}</span>
         <CardArrow />
       </CardFoot>
     </Card>

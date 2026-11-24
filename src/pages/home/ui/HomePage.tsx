@@ -3,6 +3,7 @@ import { use } from 'react';
 
 import type { Locale } from '@/shared/i18n';
 
+import { Experience } from './experience';
 import { Hero } from './hero';
 import { SelectedWork } from './selected-work';
 import { Services } from './services';
@@ -21,6 +22,7 @@ export function HomePage({ params }: HomePageProps) {
       <Hero />
       <SelectedWork />
       <Services />
+      <Experience />
     </>
   );
 }

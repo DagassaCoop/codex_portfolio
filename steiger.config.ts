@@ -8,4 +8,9 @@ export default defineConfig([
     files: ['./src/entities/project/**'],
     rules: { 'fsd/insignificant-slice': 'off' },
   },
+  {
+    // TODO(M6): remove once the About page shows the experience too (the slice's second consumer).
+    files: ['./src/entities/experience/**'],
+    rules: { 'fsd/insignificant-slice': 'off' },
+  },
 ]);

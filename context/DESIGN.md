@@ -475,6 +475,7 @@ border ink, sunk + xhatch, label `<span>` bottom-left mono 10. Ratios in kit: 16
 
 `.cx-table-wrap` (border ink, `--r`) > `table.cx-table` (14px, surface).
 `th`: pad 10 14, bg sunk, **bottom 2px ink**, mono 600 10px +0.14em UPPER ink-2. `td`: pad 12 14, bottom 1px line. `.num` right + mono. Row hover sunk; `.is-selected` sanguine-wash. `caption`: bottom, EB Garamond italic 15 ink-2 (e.g. "Tav. I — specifica tecnica").
+**In the app** (`src/shared/ui/table`, added 2026-11-23 for Experience, pulled from M1's later pass): `Table` (`caption`, the ink frame), `TableHead`, `TableBody`, `TableRow` (`selected` → `[data-selected]`, the class-only `.is-selected`), `TableHeader` (`numeric`, `scope="col"` by default), `TableCell` (`numeric`). The caption's padding `10 0 10 14`, inline on the sheet, is in table.css.
 
 ### Code Block — `.cx-code`
 
@@ -497,6 +498,7 @@ Syntax tokens: `.tk-k` keyword sanguine · `.tk-s` string verdigris · `.tk-c` c
 ### Trace — timeline (optional) — `ol.cx-trace`
 
 `li`: grid `72px 24px 1fr`, gap `0 14`. `.cx-trace-year` mono 12 right. `.cx-trace-rail` 1px ink vertical line (last item stops at 10px). `.cx-trace-node` 14×14: default ink fill (past job/study) · `--current` surface + sanguine border + 3px sanguine-wash ring · `--future` paper, **dashed** ("Your team?" → link to contact). `.cx-trace-body`: pad-bottom 24, gap 4 — `.cx-h4` company + `.cx-small` details.
+**In the app** (`src/shared/ui/trace`, added 2026-11-23 for Experience, pulled from M1's later pass): `Trace` (`ol`; `layout` `columns` default, or `adaptive` → `.cx-trace--adaptive`: on phones ≤ 600 the year moves above the body, the grid becomes `24px | 1fr`, from the Home mobile board), `TraceItem` (`year`, `node` `past` | `current` | `future`, `bodyClassName`; the rail and node are `aria-hidden`).
 
 ### Empty (optional) — `.cx-empty`
 
@@ -660,5 +662,7 @@ Import components from their folder: `import { Button } from '@/shared/ui/button
 | `.cx-dialog`, `.cx-scrim` | `dialog/` — `Dialog`, `DialogTrigger`, `DialogPopup`, `DialogHeader`, `DialogBody`, `DialogDescription`, `DialogFooter`, `DialogClose` | Base UI Dialog | done (M2) |
 | `.cx-sheet-panel`, `.cx-sheet-nav` | `sheet/` — `SheetPopup`, `SheetHeader`, `SheetNav`, `SheetNavLink`, `SheetFooter` (client) | Base UI Dialog + i18n `Link` | done (M2) |
 | Alert Dialog, `.cx-drawer`, `.cx-hcard`, `.cx-stage` | — | — | later pass |
-| `.cx-acc`, `.cx-table`, `.cx-code`, `.cx-trace`, `.cx-empty`, `.cx-avatar`, `.cx-carousel` | — | — | later pass |
+| `.cx-table-wrap`, `.cx-table` | `table/` — `Table`, `TableHead`, `TableBody`, `TableRow`, `TableHeader`, `TableCell` | markup | done (2026-11-23, pulled from the later pass) |
+| `.cx-trace` | `trace/` — `Trace` (`layout`), `TraceItem` | markup | done (2026-11-23, pulled from the later pass) |
+| `.cx-acc`, `.cx-code`, `.cx-empty`, `.cx-avatar`, `.cx-carousel` | — | — | later pass |
 | `.cx-slider`, `.cx-progress`, `.cx-resizable`, `.cx-scroll`, `.cx-chart` (optional) | — | — | later pass |

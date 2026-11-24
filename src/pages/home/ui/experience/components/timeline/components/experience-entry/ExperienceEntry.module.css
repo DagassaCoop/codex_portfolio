@@ -1,0 +1,34 @@
+/* One entry of the timeline (Home page design, section 1.4) */
+
+.body {
+  gap: 6px;
+  padding-bottom: 36px;
+}
+
+/* The last entry ends the timeline: the kit's own spacing */
+li:last-child > .body {
+  padding-bottom: 24px;
+}
+
+/* What was done: a bulleted list with sanguine markers */
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+.points > li {
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.points > li::marker {
+  color: var(--sanguine);
+}
+
+.stack {
+  margin-top: 6px;
+}

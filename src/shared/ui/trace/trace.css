@@ -1,0 +1,112 @@
+/*
+ * Trace — the timeline, ol.cx-trace (DESIGN.md §6, kit sheet 04 Data display)
+ *
+ * Each item: year (mono, right) · rail with a node · body (company, details).
+ * Nodes: past (ink fill) · current (surface, sanguine ring) · future (paper, dashed: "Your team?").
+ * The rail of the last item stops at its node.
+ */
+
+@layer components {
+  .cx-trace {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cx-trace > li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 72px 24px minmax(0, 1fr);
+    gap: 0 14px;
+  }
+
+  .cx-trace-year {
+    padding-top: 2px;
+    color: var(--ink-2);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-align: right;
+  }
+
+  .cx-trace-rail {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .cx-trace-rail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    border-left: 1px solid var(--ink);
+  }
+
+  .cx-trace > li:last-child .cx-trace-rail::before {
+    bottom: auto;
+    height: 10px;
+  }
+
+  .cx-trace-node {
+    position: relative;
+    z-index: 1;
+    width: 14px;
+    height: 14px;
+    margin-top: 3px;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    background: var(--ink);
+  }
+
+  .cx-trace-node--current {
+    border-color: var(--sanguine);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px var(--sanguine-wash);
+  }
+
+  .cx-trace-node--future {
+    border-style: dashed;
+    background: var(--paper);
+  }
+
+  .cx-trace-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 24px;
+  }
+
+  /*
+   * ---------- Adaptive trace (.cx-trace--adaptive, <Trace layout="adaptive">) ----------
+   * On phones (≤ 600px, DESIGN.md §1.9) the year moves above the body, next to the rail, so the
+   * body gets the width (Home design, mobile board).
+   */
+  @media (width <= 600px) {
+    .cx-trace--adaptive > li {
+      grid-template-columns: 24px minmax(0, 1fr);
+      column-gap: 12px;
+    }
+
+    .cx-trace--adaptive .cx-trace-year {
+      grid-row: 1;
+      grid-column: 2;
+      margin-bottom: 4px;
+      padding-top: 0;
+      text-align: left;
+    }
+
+    .cx-trace--adaptive .cx-trace-rail {
+      grid-row: 1 / span 2;
+      grid-column: 1;
+    }
+
+    .cx-trace--adaptive .cx-trace-body {
+      grid-row: 2;
+      grid-column: 2;
+    }
+  }
+}
