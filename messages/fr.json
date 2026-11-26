@@ -138,6 +138,132 @@
       }
     }
   },
+  "projectsPage": {
+    "meta": {
+      "title": "Projets — Dmytro Bondar"
+    },
+    "intro": {
+      "folio": "Fol. 02",
+      "sheet": "Opera · Index des tavole",
+      "breadcrumb": {
+        "label": "Fil d’Ariane",
+        "root": "Codex",
+        "current": "Fol. 02 · Projets"
+      },
+      "title": "Projets",
+      "dimension": "{count} TAVOLE · {first} — {last}",
+      "lead": "Sept tavole tirées de six ans de travail pour le web — des produits commerciaux en Ukraine, en Irlande et au Canada, une migration de framework, et des choses faites pour moi.",
+      "body": "Certaines sont des fondations sur lesquelles d’autres équipes construisent : un monorepo qui livre cinq marques, un design system où chaque état est dessiné. D’autres sont du travail produit mesuré en vitesse — un produit de laboratoire passé à Vue et rendu 27 % plus rapide, un site client rendu 31 % plus rapide. Et certaines sont à moi : un arbre d’objectifs qui pousse depuis une seule racine, et une application de club encore sur la planche à dessin.",
+      "stats": {
+        "label": "En chiffres",
+        "tavole": "Tavole",
+        "commercial": "Commerciaux",
+        "personal": "Personnels",
+        "countries": "Pays"
+      },
+      "legend": {
+        "title": "Légende · {count} directions",
+        "count": "Nb de tav.",
+        "countLabel": "{count, plural, one {# projet} other {# projets}}",
+        "directions": {
+          "architecture": {
+            "title": "Architecture frontend",
+            "text": "Monorepos, logique partagée et UI Kits sur lesquels d’autres équipes construisent."
+          },
+          "product": {
+            "title": "UI produit",
+            "text": "Sites et écrans clients — chaque état conçu, et rapides."
+          },
+          "fullstack": {
+            "title": "Fullstack",
+            "text": "Next.js et Node.js des deux côtés de l’API, authentification comprise."
+          },
+          "designSystem": {
+            "title": "Design system",
+            "text": "Tokens, composants et le langage de leurs états."
+          }
+        },
+        "status": {
+          "label": "Statut",
+          "wip": {
+            "badge": "En cours",
+            "text": "encore en dessin"
+          },
+          "draft": {
+            "badge": "Brouillon",
+            "text": "sur la planche à dessin"
+          }
+        }
+      }
+    },
+    "notebook": {
+      "folio": "Fol. 02.1",
+      "sheet": "Carnet · une double page par projet",
+      "title": "Tournez les pages",
+      "marginalia": "— tournez la page, ou ouvrez le sommaire",
+      "label": "Carnet des projets",
+      "roledescription": "carnet",
+      "contents": {
+        "label": "Sommaire",
+        "range": "Projets {first} — {last}",
+        "note": "— tournez la page : chaque projet est une double page."
+      },
+      "titlePage": {
+        "label": "Fol. 02.1 · Carnet",
+        "title": "Projets",
+        "range": "{first} — {last}",
+        "subtitle": "Un carnet de ce que j’ai construit",
+        "text": "Sept projets, un par double page. Tournez la page — ou choisissez-en un dans le sommaire.",
+        "signature": "{name} · Frontend / Fullstack"
+      },
+      "project": {
+        "tag": "Projet {id}",
+        "commercial": "Commercial",
+        "personal": "Personnel",
+        "fig": "Fig. {id} — {caption}",
+        "stack": "Stack",
+        "stackCount": "{count} technologies",
+        "direction": "Direction",
+        "domain": "Domaine",
+        "role": "01 · Rôle",
+        "impact": "02 · Impact",
+        "challenge": "03 · Défi"
+      },
+      "links": {
+        "product": "Produit en ligne",
+        "demo": "Démo en ligne",
+        "github": "GitHub"
+      },
+      "linkNotes": {
+        "internal": "Produit interne · pas de lien public",
+        "notBuilt": "Pas encore construit"
+      },
+      "draftCta": "Vous avez un club ? Parlons-en",
+      "controls": {
+        "label": "Tourner les pages",
+        "prev": "Préc.",
+        "next": "Suiv.",
+        "contents": "Sommaire",
+        "counterContents": "Sommaire · {folios}",
+        "counterProject": "Projet {id} sur {total} · {folios}",
+        "announceContents": "Sommaire",
+        "announceProject": "Double page {spread} sur {spreads} : projet {id}, {title}"
+      },
+      "slider": {
+        "sheet": "Carnet · une page par projet",
+        "marginalia": "— glissez à gauche ou à droite, ou utilisez les boutons",
+        "label": "Carnet des projets",
+        "roledescription": "carnet à feuilleter",
+        "contentsTitle": "Tous les projets",
+        "details": "Détails",
+        "detailsLabel": "Ouvrir les détails : {title}",
+        "close": "Fermer les détails",
+        "counterContents": "Sommaire",
+        "counterProject": "Projet {id} sur {total}",
+        "announceProject": "Projet {id} sur {total} : {title}"
+      }
+    }
+  },
   "layout": {
     "skipToContent": "Aller au contenu",
     "newTab": "{label} (s’ouvre dans un nouvel onglet)",
@@ -151,7 +277,7 @@
     "nav": {
       "label": "Principale",
       "home": "Accueil",
-      "work": "Projets",
+      "projects": "Projets",
       "about": "À propos"
     },
     "locale": {
@@ -197,19 +323,179 @@
       "domain": "iGaming",
       "label": "Architecture frontend",
       "title": "Plateforme iGaming multimarque",
-      "summary": "Cinq marques en production livrées depuis un seul monorepo : logique partagée, UI Kit et gabarit de marque."
+      "summary": "Cinq marques en production livrées depuis un seul monorepo : logique partagée, UI Kit et gabarit de marque.",
+      "fig": "un noyau, cinq marques",
+      "task": "Cinq marques en production livrées depuis un seul monorepo : logique métier partagée, un UI Kit et un gabarit d’application par marque.",
+      "role": "Développeur frontend · équipe de 3 + tech lead",
+      "contribution": "Développement de fonctionnalités et revue de code sur toutes les marques ; travail dans la logique partagée, l’UI Kit et le gabarit de marque ; livraison en test et en production via GitLab CI/CD.",
+      "impact": "Cinq marques en production tournent sur une seule base de code — logique et UI écrites une fois.",
+      "challenge": "Garder cinq marques visiblement différentes alors que leur logique et leur UI restent une seule base de code — pour qu’un changement pour une marque n’en casse jamais une autre.",
+      "stack": [
+        {
+          "label": "Frontend",
+          "items": ["React", "TypeScript"]
+        },
+        {
+          "label": "Architecture",
+          "items": ["Monorepo", "Logique métier partagée", "UI Kit", "Gabarit de marque"]
+        },
+        {
+          "label": "Livraison",
+          "items": ["GitLab CI/CD", "Revue de code"]
+        }
+      ]
     },
     "life-focus-tree": {
       "domain": "Productivité personnelle",
       "label": "Fullstack · Projet perso",
       "title": "Life Focus Tree",
-      "summary": "Les objectifs poussent en arbre de compétences radial depuis une seule racine, « Life », avec des graines animées, réparties régulièrement."
+      "summary": "Les objectifs poussent en arbre de compétences radial depuis une seule racine, « Life », avec des graines animées, réparties régulièrement.",
+      "fig": "un arbre, une racine",
+      "task": "Les objectifs poussent en arbre de compétences radial depuis une seule racine, « Life », avec des graines animées, réparties régulièrement.",
+      "role": "Seul — produit, design et code",
+      "contribution": "Tout de bout en bout : la disposition radiale et son animation, une API GraphQL légère, le modèle de données et les comptes.",
+      "impact": "Objectifs et domaines de focus se lisent comme un seul arbre qui grandit, pas comme une liste de tâches.",
+      "challenge": "Disposer des centaines de nœuds régulièrement autour d’une racine, et animer les nouvelles graines pendant que leurs voisines s’écartent en douceur au lieu de sauter.",
+      "stack": [
+        {
+          "label": "Frontend",
+          "items": ["Next.js", "TypeScript", "Tailwind", "Motion", "d3-hierarchy"]
+        },
+        {
+          "label": "API et données",
+          "items": ["GraphQL Yoga", "Pothos", "Prisma", "Neon Postgres"]
+        },
+        {
+          "label": "Auth et infra",
+          "items": ["Better Auth", "Vercel"]
+        }
+      ]
     },
     "innopharma-migration": {
       "domain": "Pharma · Logiciel de laboratoire",
       "label": "Fullstack · Migration",
       "title": "Migration AngularJS → Vue",
-      "summary": "Passage d’un produit de laboratoire à Vue et TypeScript : +27 % de performances, débogage 3× plus rapide et nouvelles fonctionnalités."
+      "summary": "Passage d’un produit de laboratoire à Vue et TypeScript : +27 % de performances, débogage 3× plus rapide et nouvelles fonctionnalités.",
+      "fig": "ancien bloc, nouveau bloc",
+      "task": "Passage d’un produit de laboratoire d’AngularJS à Vue et TypeScript, en continuant à livrer des fonctionnalités.",
+      "role": "Développeur full stack",
+      "contribution": "Migration du produit vers Vue + TypeScript, une nouvelle fonctionnalité livrée de bout en bout, des permissions OAuth 2 et deux formations TypeScript pour l’équipe.",
+      "impact": "+27 % de performances, débogage et nouvelles fonctionnalités 3× plus rapides.",
+      "challenge": "Remplacer le framework sous un produit de laboratoire en service, pièce par pièce, pendant que de nouvelles fonctionnalités continuaient d’arriver.",
+      "stack": [
+        {
+          "label": "Frontend",
+          "items": ["Vue", "TypeScript", "AngularJS (legacy)"]
+        },
+        {
+          "label": "Auth",
+          "items": ["OAuth 2", "Permissions"]
+        },
+        {
+          "label": "Livraison",
+          "items": ["Docker", "Jenkins"]
+        }
+      ]
+    },
+    "sports-platform": {
+      "domain": "Sport et fitness",
+      "label": "Fullstack",
+      "title": "Client d’une plateforme sportive",
+      "summary": "Le client web d’une plateforme sportive, et la couche d’API qui lui parle à travers une passerelle OAuth.",
+      "fig": "client, passerelle, API",
+      "task": "Le client web d’une plateforme sportive, et la couche d’API qui lui parle à travers une passerelle OAuth.",
+      "role": "Développeur full stack",
+      "contribution": "Le client Next.js + TypeScript et la conception de la couche d’API derrière la passerelle OAuth, en direct avec le designer et l’équipe backend.",
+      "impact": "Le client et une couche d’API sécurisée, livrés avec le design et le backend.",
+      "challenge": "Garder chaque requête du client derrière la passerelle OAuth, tout en restant fidèle au design et au rythme du backend.",
+      "stack": [
+        {
+          "label": "Frontend",
+          "items": ["Next.js", "TypeScript"]
+        },
+        {
+          "label": "API et auth",
+          "items": ["Couche d’API", "Passerelle OAuth"]
+        }
+      ]
+    },
+    "studio-sites": {
+      "domain": "Sites clients",
+      "label": "UI produit",
+      "title": "Sites clients d’un studio",
+      "summary": "Des sites pour les clients d’un studio de design, beaucoup sur un CMS.",
+      "fig": "dix fenêtres et une jauge",
+      "task": "Des sites pour les clients d’un studio de design, beaucoup sur un CMS.",
+      "role": "Développeur frontend",
+      "contribution": "Des projets React pour les clients du studio, des fonctionnalités sur des sites CMS, et l’optimisation de l’un d’eux.",
+      "impact": "Plus de 10 projets React livrés ; un site CMS rendu 31 % plus rapide.",
+      "challenge": "Rendre rapide un site CMS lent sans le reconstruire — le gain devait venir de l’existant.",
+      "stack": [
+        {
+          "label": "Frontend",
+          "items": ["React"]
+        },
+        {
+          "label": "Plateforme",
+          "items": ["CMS"]
+        },
+        {
+          "label": "Focus",
+          "items": ["Performance", "Optimisation"]
+        }
+      ]
+    },
+    "codex-portfolio": {
+      "domain": "Design systems",
+      "label": "Design system",
+      "title": "Codex — ce portfolio",
+      "summary": "Un design system dessiné comme le carnet d’un ingénieur — tokens, un UI Kit avec chaque état — et le site construit dessus.",
+      "fig": "compas, règle et tokens",
+      "task": "Un design system dessiné comme le carnet d’un ingénieur — tokens, un UI Kit avec chaque état — et le site construit dessus.",
+      "role": "Seul — design et code",
+      "contribution": "Le concept, les tokens et l’UI Kit, puis le site Next.js : architecture FSD, contenu EN / FR, formulaire de contact protégé du spam et tests.",
+      "impact": "Chaque page est assemblée à partir d’un seul jeu de tokens et d’un seul UI Kit, chaque état dessiné.",
+      "challenge": "Transformer une métaphore visuelle — le carnet d’un ingénieur — en système strict : chaque composant, chaque état, un seul jeu de tokens.",
+      "stack": [
+        {
+          "label": "Frontend",
+          "items": ["Next.js", "TypeScript", "Base UI", "Tokens CSS"]
+        },
+        {
+          "label": "Contenu et formulaires",
+          "items": ["next-intl", "React Hook Form", "zod"]
+        },
+        {
+          "label": "Qualité",
+          "items": ["Vitest", "Playwright", "ESLint", "Stylelint", "Steiger"]
+        },
+        {
+          "label": "Structure",
+          "items": ["FSD", "pnpm"]
+        }
+      ]
+    },
+    "sports-club-manager": {
+      "domain": "Gestion de club sportif",
+      "label": "Fullstack · Projet perso",
+      "title": "Gestion de club sportif",
+      "summary": "Une application pour gérer un club sportif — membres, séances et le club lui-même. Encore sur la planche à dessin.",
+      "fig": "une première esquisse",
+      "task": "Une application pour gérer un club sportif — membres, séances et le club lui-même. Encore sur la planche à dessin.",
+      "role": "Seul",
+      "contribution": "Conception du modèle de données autour de trois entités : membres, séances et le club.",
+      "impact": "Pas encore construit.",
+      "challenge": "Décider comment membres, séances et club sont liés avant d’écrire la moindre ligne de code.",
+      "stack": [
+        {
+          "label": "Modèle de données",
+          "items": ["Membres", "Séances", "Club"]
+        },
+        {
+          "label": "Stack",
+          "items": ["À choisir"]
+        }
+      ]
     }
   },
   "experience": {

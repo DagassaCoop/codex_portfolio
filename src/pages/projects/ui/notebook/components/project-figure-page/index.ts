@@ -1,0 +1,1 @@
+export { ProjectFigurePage } from './ProjectFigurePage';

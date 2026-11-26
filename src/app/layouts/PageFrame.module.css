@@ -50,7 +50,7 @@
     'rail main' 1fr
     'rail footer' auto
     / 72px minmax(0, 1fr);
-  max-width: 1680px;
+  max-width: 1440px;
   margin: 0 auto;
   border: 1px solid var(--ink);
   background: var(--paper);
@@ -60,7 +60,7 @@
  * Column letters above the content columns (decor).
  * The design sets the ruler 8px from the top of the paper: 28px paper padding − 8px + 1px frame border = 21px
  * above the frame. It is anchored to the frame (not to the paper, as on the canvas), so the letters stay over
- * the columns when the frame stops growing at 1680px.
+ * the columns when the frame stops growing at 1440px (1680px on the design, narrowed 2026-11-26).
  */
 .ruler {
   position: absolute;

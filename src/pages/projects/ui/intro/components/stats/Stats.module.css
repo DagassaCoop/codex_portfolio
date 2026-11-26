@@ -1,0 +1,57 @@
+/*
+ * The intro's numbers (Projects page design): a framed surface strip, cells divided by --line.
+ */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  border: 1px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--surface);
+}
+
+/* The value is drawn above its caption, though the caption (the term) comes first */
+.cell {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 14px 16px;
+  border-right: 1px solid var(--line);
+}
+
+.cell:last-child {
+  border-right: 0;
+}
+
+.value {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.accent {
+  color: var(--sanguine);
+}
+
+/* ---------- Phone: two in a row ---------- */
+
+@media (width <= 600px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cell {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* The frame closes the last row */
+  .cell:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+}

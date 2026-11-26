@@ -1,0 +1,22 @@
+/* Role / Impact / Challenge, between --line rules */
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.title {
+  margin: 0;
+  color: var(--sanguine);
+  font-size: 11px;
+  font-weight: 600;
+}

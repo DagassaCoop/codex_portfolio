@@ -21,9 +21,9 @@
 
 _A snapshot. Overwrite it, don't append to it._
 
-- **Phase:** M3 Home (branch `ui/home-page`). M2 is done (2026-11-21, merged into `main`).
-- **Now:** M7 stage 1 (the contact section and form: RHF + zod, server action, spam checks) is done and waiting for review. M3 (Home) is waiting for review too.
-- **Next:** M7 stage 2, email delivery with Resend + React Email (needs the API key and a verified domain); then M4 Work. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
+- **Phase:** M4 Projects (branch `ui/projects`). M3 (Home) and M7 stage 1 (contact form) are done and waiting for review.
+- **Now:** M4 stages 1–3 are done and waiting for review: route, data and intro; the notebook on desktops (spread, 3D page turn); on tablets and phones (slider with swipe, Details dialog). Kit overlays (Dialog, Sheet, Toast) now sit above raised page elements.
+- **Next:** M4 stage 4: Home cards open the project's notebook page (`/projects#…`), the notebook reads the hash; then M4 review. M7 stage 2 (Resend) waits for the API key and domain. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
 - **Blocked by:** nothing.
 
 ---
@@ -36,8 +36,8 @@ _A snapshot. Overwrite it, don't append to it._
 | M1 | Foundation: kit styles + `shared/ui` components on Base UI, with stories | [in progress] | Two passes: base first, the rest later (Decisions, 2026-11-19). Base pass stages: 1 Styles [done] · 2 Actions [done] · 3 Forms [done] · 4 Data display [done] · 5 Navigation [done] · 6 Feedback [done]. Later pass [todo]; done early: Dialog and Sheet (M2), Table and Trace (M3); new in M3: Badge list |
 | M2 | Global layout: header, mobile menu, social rail, footer stamp, locale switch | [done] | 2026-11-21. Stages: 1 Page frame [done] · 2 Header + monogram [done] · 3 Social rail [done] · 4 Footer stamp [done] · 5 Mobile menu + Dialog in the kit [done]. Command palette (M8) and the toast provider wait (Decisions, 2026-11-21) |
 | M3 | Home (`/[locale]`) | [in progress] | Hero: 1 Section + text column [done] · 2 Name [done] · 3 Rota [done]. Selected work [done]. What I do [done]. Experience [done]. Waiting for review |
-| M4 | Work (`/[locale]/work`) | | |
-| M5 | Work detail / case study (`/[locale]/work/[slug]`) | | |
+| M4 | Projects (`/[locale]/projects`) | [in progress] | Variant F · Notebook (Decisions, 2026-11-26). 1 Route, data, intro [done] · 2 Notebook, desktop spread [done] · 3 Tablet / phone slider + Details dialog [done] · 4 Home cards → notebook page [todo] |
+| M5 | ~~Work detail / case study~~ | [dropped] | 2026-11-26: the notebook shows each project in full (Decisions) |
 | M6 | About (`/[locale]/about`) | | |
 | M7 | Contact form: server action, email, spam protection | [in progress] | 1 Section + form + validation + server action + spam checks [done] · 2 Email delivery (Resend) [todo] |
 | M8 | Command palette (⌘K) | | |
@@ -60,6 +60,73 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-26 — M4 stage 3: the notebook on tablets and phones; overlay fixes in the kit
+- **Status:** [done]
+- **What:**
+  - **Layouts:** `Notebook` renders both layouts and CSS switches them at 1024px (spread above, slider at and below); the head shows the slider's sheet label ("one page per project") and marginalia ("swipe left or right…") and lines up with the slider (720px, centred), the h2 at `clamp(26px, 6vw, 32px)`.
+  - **`components/notebook-slider`** (client, "pad" on the design): one page at a time, 720px at most, bound on the left (hatched binding, sanguine stitches), page edges on the right. Page 0 is the contents (`components/slider-contents`: "All projects", rows with the numeral, title, leader and →); then a card per project (`components/slide-card`, server: tag, outlined numeral, title clamped to 2 lines, the drawing 16:10 with the status badge, task clamped to 3 lines) and a Details button. An invisible card (with its Details row) gives every page the same height.
+  - **Paging:** swipe (pointer events; a horizontal move past 8px starts a drag, `touch-action: pan-y` keeps vertical scrolling; 30% resistance past the ends; more than 18% of the width turns the page, less snaps back), Prev / Next (full-width group), contents rows, Contents. 360ms on `--ease`; with reduced motion the page changes at once. The neighbour page is `inert` + `aria-hidden`. Focus: a contents row focuses the card's h3, Contents the first row, a disabled Prev / Next hands focus to the other; a live region reads "Project II of VII: Life Focus Tree".
+  - **Details dialog** (kit `Dialog`, 620px): head "Project II · Personal" + the title + close; body `components/project-details` (direction / domain, status badge, task, Role / Impact / Challenge, the stack); footer the links (`ProjectLinks`), wrapping on phones. "Let’s talk" (draft) closes the dialog and goes to `#contact`. A tap anywhere on a card opens it too (a click handler on the page, ignored after a drag); the Details button is the keyboard way. A stretched `::after` on the button was tried and dropped: the kit button's hover `transform` makes the button the containing block, so the hit area collapses under the pointer.
+  - **Shared parts** split out of the spread's pages so the dialog reuses them: `project-meta`, `project-sections`, `project-links` (`hasProjectLinks`), `stack-table` (groups wrap the badges under the caption when narrow).
+  - **Kit fixes:** Dialog viewport is one column no wider than the screen (a 620px dialog overflowed phones); Dialog scrim + viewport and Sheet scrim + panel on `z-index: 40`, the toast stack on 45 (the page designs' values): before, anything a page raised (the notebook's pages, the Home cards' `z-index` 1–2) painted over the open dialog or the mobile menu.
+  - Copy: `projectsPage.notebook.slider` in EN and FR.
+- **Where:** `src/pages/projects/ui/notebook/` (`Notebook.*`, `components/{notebook-slider,slide-card,project-details,project-meta,project-sections,project-links,stack-table,project-text-page,project-figure-page}`), `src/shared/ui/{dialog,sheet,toast}/*.module.css`, `messages/{en,fr}.json`; docs `DESIGN.md` §7, `SITEMAP.md` §1, §5
+- **Verified:** `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` pass; `test` 17/17; `test:stories` 152/152. In the production build (Playwright) at 768×1024 and 375×812: screenshots of the contents, Project II, a drag in progress, Project VII and the dialogs compared with the Projects design (tablet and mobile Details boards); contents → Project II focuses its h3; a long mouse drag turns to Project III, a short one snaps back; Enter on Details opens the dialog with focus on Close, Esc returns focus to Details; taps at four heights of a card open it, a swipe does not; Next to the end leaves focus on Prev; "Let’s talk" closes the dialog and lands on `#contact`; Contents focuses the first row; axe (WCAG 2.2 AA) has no violations on the contents and with the dialog open; no horizontal scroll. At 1024 the slider shows, at 1025 the spread; the desktop spread checks from stage 2 still pass. The mobile menu on Home now opens above the cards.
+- **Follow-ups:**
+  - Menu, Select and Tooltip popups (Base UI positioners) have no `z-index` either; give them one if one ever opens over a raised element.
+  - The dialog's footer keeps the kit's right alignment (the design aligns the links left) and its 620px width (the design: 680).
+  - The slide's 360ms is the design's value, not a kit duration.
+
+### 2026-11-26 — Frame 1440px; the notebook fits the window
+- **Status:** [done]
+- **What:**
+  - **Page frame** max-width 1680 → 1440px (author's request: the first section should fit the screen's height). The Home hero's Rota grows with the width; at 1920 the hero now ends 1045px down the page instead of 1129. The Projects intro does not depend on the width (837px).
+  - **Notebook height:** the spread is `clamp(520px, 90svh − 72px, 800px)`, so the book and its controls (28 + 44px) take at most 90% of the window and Prev / Next stay in view (800px from a 970px-tall window up). A page whose content does not fit scrolls inside (paper, gutter and folio stay put); it then becomes keyboard-focusable (`tabIndex=0`, dashed focus line inside), as Safari does not focus scrollers. On the left page the figure gives way first (268 → down to 150px); the stack is never cut.
+- **Where:** `src/app/layouts/PageFrame.module.css`; `src/pages/projects/ui/notebook/components/{notebook-page,notebook-spread,project-figure-page}/`; docs `DESIGN.md` §1.9
+- **Verified:** `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` pass. In the production build: the frame is 1440 at 1920; book + controls = 872 / 810 / 684 / 630 / 592px at 1920×1080, 1440×900, 1440×760, 1280×700, 1100×640 (all ≤ 90vh); at 1100×640 the right page of Tav. III scrolls and takes focus, at 1440×900 nothing scrolls; axe has no violations on the notebook.
+
+### 2026-11-26 — M4 stage 2: the notebook on desktops (Fol. 02.1)
+- **Status:** [done]
+- **What:**
+  - **Section** `pages/projects/ui/notebook` (`Notebook`, server): head (folio, h2 "Turn the pages", marginalia) and the spreads, all rendered on the server and handed to the client spread: spread 0 = contents + title page, then one per project. Folios ("fol. 3v — 4r") computed in `Notebook.tsx` (decor).
+  - **`components/notebook-spread`** (client): the book (two page edges behind, the spine with sanguine stitches), Prev / Next (kit Button Group), the counter, Contents (Mono `sm`). A turn lays a leaf over the half being turned and rotates it 180° about the spine (`perspective: 2600px`, 820ms, the design's easing); with reduced motion the spread changes at once. Every page sits in its side's cell, the others `visibility: hidden`, so the book is as tall as its tallest page (800px minimum) and does not jump. The leaf copy is `inert` + `aria-hidden`.
+  - **Focus and announcements:** a contents row turns to its project and focuses the project's h3; Contents focuses the first contents row; when Next / Prev becomes disabled at an end, focus moves to the other one. A polite live region reads "Spread 3 of 8: Project II, Life Focus Tree" after the turn.
+  - **Pages:** `components/notebook-page` (ruled surface paper, hatched gutter by the spine, folio); `title-page` (compass drawing, "Projects I — VII"); `contents-page` (rows on the kit's `.cx-menu-item` look, with the dashed focus line drawn inside, since outside a menu focus is not the highlight); `project-figure-page` (tag, origin, the drawing with the status badge, caption, the stack as a `dl` of groups); `project-text-page` (direction / domain as a `dl`, the outlined numeral, h3, task, Role / Impact / Challenge with h4s, links in a new tab, or the reason there are none, and the draft's "Let’s talk").
+  - **Data:** `ProjectData.links` (`kind`: product / demo / github, `href`) and `linkNote` (internal / notBuilt). Only Tav. VI has links (the site and its repo).
+  - **Entity:** `ProjectPreview` moved to `entities/project/ui/project-preview` and exported (card and notebook).
+  - **Icons:** `ArrowLeftIcon`, `GlobeIcon` (Lucide).
+  - Copy: `projectsPage.notebook` and `projects.<slug>.{fig,task,role,contribution,impact,challenge,stack}` in EN and FR (FR drafts).
+- **Where:** `src/pages/projects/ui/{ProjectsPage.tsx,notebook/}`, `src/entities/project/`, `src/shared/ui/icons/`, `messages/{en,fr}.json`; docs `SITEMAP.md` §1, §5
+- **Verified:** `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` pass. In the production build (Playwright, 1440): screenshots of spreads 0, II, VI, VII and mid-turn compared with the Projects design; the spread is 800px on every spread at 1440, 1280 and 1100 and in FR (no page overflows); contents → Project II focuses its h3 and announces "Spread 3 of 8: Project II, Life Focus Tree"; Next to the end disables Next and leaves focus on Prev (also with reduced motion, where no leaf is drawn); Contents focuses the first row; axe (WCAG 2.2 AA) has no violations on spreads 0, 2 and 7; no horizontal scroll.
+- **Follow-ups:**
+  - Below 1024px the spread still renders (squeezed) until stage 3 replaces it with the slider.
+  - Without JS only the first spread is readable (the goal "works without JS for reading content", PROJECT_OVERVIEW.md §1).
+  - Real URLs for Tav. I, II, IV, V (TODO(content) in `types.ts`).
+  - Text sizes follow the kit where the design is a half step off (role / impact / challenge in `cx-small` 14px, design 14.5px; stack badges are the kit's default badge, the design draws them on surface with a line border); title 30px and task 16px follow the design.
+  - The turn's 820ms and its easing are the design's own, not kit motion tokens (decor motion, like the hero's hub).
+
+### 2026-11-26 — M4 stage 1: /projects, seven projects, the intro (Fol. 02)
+- **Status:** [done]
+- **What:**
+  - **Route** `app/[locale]/projects` → `src/pages/projects` (`ProjectsPage`, `generateMetadata`: "Projects — Dmytro Bondar"). Navigation `work` → `projects` (`/projects`, "Projects" / "Projets"); "All work" on Home opens `/projects`.
+  - **Data:** `ProjectData.type` → `direction` (`architecture` | `product` | `fullstack` | `designSystem`), new `status` (`live` | `wip` | `draft`) and `country` (commercial projects). Four new projects from the Projects design: IV Sports platform client (Fitofan, 2025), V Studio client sites (Goracio, 2020—21), VI Codex — this portfolio (wip), VII Sports club manager (draft). Copy `projects.<slug>.{domain,label,title,summary}` for them in EN and FR (FR drafts).
+  - **Previews:** Tav. IV–VII have no drawing; `ProjectPreview` shows the kit hatching for them (`TODO(design)`; the design's `TavPreview` is not on the canvas).
+  - **Intro** `pages/projects/ui/intro`: folio row with the kit Breadcrumb; h1 at 128 / 96 / 64px (design); Dimension "07 TAVOLE · 2020 — 2026"; lead and body; `components/stats` (a `dl`: tavole, commercial, personal, countries, all counted from the data; the value drawn above its caption); Italian marginalia; `components/legend` (an `aside`: the four directions as kit `Item` rows with a letter, text and a count badge, "1 project" for screen readers; the status key "In progress" / "Draft"). One column on tablets; numbers two by two on phones.
+  - Copy: `projectsPage.{meta,intro}` in EN and FR. `steiger.config.ts`: the `entities/project` override is gone (the Projects page is its second consumer).
+- **Where:** `app/[locale]/projects/page.tsx`, `src/pages/projects/`, `src/entities/project/`, `src/shared/config/navigation.ts`, `src/pages/home/ui/selected-work/SelectedWork.tsx`, `messages/{en,fr}.json`, `steiger.config.ts`; docs `PROJECT_OVERVIEW.md` §1, §2, §4.1, §4.2, §5; `SITEMAP.md` §1, §2, §3, §4, §5
+- **Verified:** `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` pass (`/en/projects`, `/fr/projects` prerendered). In the production build: screenshots of the intro at 1440, 768 and 375 (EN) and 1440 (FR) compared with the Projects design; no horizontal scroll; axe (WCAG 2.2 AA) has no violations on the page; the header marks "Projects" as the current page; `<title>` is "Projects — Dmytro Bondar".
+- **Follow-ups:**
+  - Real URLs for the notebook's Live / GitHub links (the design has `#`): needed in stage 2.
+  - Home card links still go to `/work/<slug>` (404) until stage 4.
+  - Lead and body name the counts in words ("Seven", "six years") and mention five brands (concept rule covers only the hero and illustrations).
+  - The legend's Item rows keep the kit's centred alignment and 44px number column (the design draws them top-aligned at 40px).
+
+### 2026-11-26 — CLAUDE.md
+- **Status:** [done]
+- **What:** `CLAUDE.md` at the root: where the context files are, what each holds (sections), which to read for which task, the sources of truth, what lives outside the repo (UI Kit canvas and its files, the `codex.css` asset id, the Claude project's documents) and when to update each file.
+- **Where:** `CLAUDE.md`; `PROJECT_OVERVIEW.md` §4.1 (repo tree)
+- **Verified:** `format:check` passes.
 
 ### 2026-11-26 — Footer stamp: hatched blank cell instead of "Let's talk"
 - **Status:** [done]
@@ -551,6 +618,21 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-26 — Frame 1440px, notebook within 90% of the window
+- **Context:** on the author's screen the first section did not fit the window's height, and the 800px notebook hid its Prev / Next.
+- **Decision (author):** the page frame stops at 1440px (the design: 1680; the kit's own grid is 1440). The notebook with its controls is at most ~90vh (pages scroll inside when needed). Rejected for now: limiting the hero's Rota or the intro by the window's height.
+- **Affects:** `DESIGN.md` §1.9; `src/app/layouts/PageFrame.module.css`; the notebook.
+
+### 2026-11-26 — Projects page: the notebook, no case studies
+- **Context:** M4. The canvas page "Projects" draws the page as Fol. 02 (intro) + the projects section in six variants (A Grid … F Notebook) + the contact section; the spec planned `/work` with filter chips, a grid / list toggle and case-study pages (M5).
+- **Decision (author, 2026-11-26):**
+  - **Route `/projects`, "Projects"** (as on the design) instead of `/work`, "Work". The nav keeps no counters and no Contact item (Decisions, 2026-11-21).
+  - **Variant F · Notebook**, the design's default and the only one with tablet and mobile boards. Desktop (> 1024px): a spread per project with a 3D page turn and a contents page. Tablets and phones (≤ 1024px): a slider of single pages with swipe and Prev / Next, each project's details in a dialog. No filters, no grid / list toggle (`features/filter-work`, `toggle-work-view` dropped).
+  - **No case-study pages (M5 dropped):** the notebook shows every project in full; Home cards will open the project's notebook page.
+  - **Seven projects** from the design are in the data; the intro's counts and the legend come from it.
+  - **Previews of Tav. IV–VII:** the hatched placeholder for now; their drawings later (rejected for now: drawing them in this stage).
+- **Affects:** `PROJECT_OVERVIEW.md` §1, §2, §4, §5; `SITEMAP.md` §2, §5; Milestones M4, M5.
 
 ### 2026-11-23 — Contact form: where it lives, how it validates, email later
 - **Context:** M7. PROJECT_OVERVIEW planned `features/send-message` and `features/copy-email`; the email provider is still an open question.

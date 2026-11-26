@@ -1,0 +1,111 @@
+/*
+ * Fol. 02.1 — the notebook (Projects page design, variant F; DESIGN.md §1.9 for breakpoints and
+ * padding).
+ */
+
+/* A line above; the sheet's 40px drawing grid behind (decor), sepia at 16% */
+.section {
+  position: relative;
+  border-top: 1px solid var(--ink);
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--sepia) 16%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--sepia) 16%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 40px 40px;
+}
+
+/* ---------- Head: folio (1–3), h2 (4–9), marginalia (10–12) ---------- */
+
+.head {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 12px 24px;
+  align-items: end;
+  padding: 40px 32px 28px;
+}
+
+.folio {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / span 3;
+  gap: 8px;
+}
+
+.folioNumber {
+  color: var(--sanguine);
+}
+
+.title {
+  grid-column: 4 / span 6;
+}
+
+.marginalia {
+  grid-column: 10 / span 3;
+  justify-self: end;
+  font-size: 16px;
+}
+
+.body {
+  padding: 0 32px 56px;
+}
+
+/* One layout at a time: the spread on desktops, the slider on tablets and phones */
+.forSlider {
+  display: none;
+}
+
+/* ---------- Tablet: one column ---------- */
+
+@media (width <= 1024px) {
+  .forSpread {
+    display: none;
+  }
+
+  .forSlider {
+    display: revert;
+  }
+
+  /* The head lines up with the slider: at most 720px, centred */
+  .head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    max-width: 720px;
+    margin-inline: auto;
+    padding-inline: 24px;
+  }
+
+  .folio,
+  .title,
+  .marginalia {
+    grid-column: 1 / -1;
+  }
+
+  .marginalia {
+    justify-self: start;
+  }
+
+  .title {
+    font-size: clamp(26px, 6vw, 32px);
+  }
+
+  .body {
+    padding-inline: 24px;
+    padding-bottom: 48px;
+  }
+}
+
+/* ---------- Phone ---------- */
+
+@media (width <= 600px) {
+  .head,
+  .body {
+    padding-inline: 16px;
+  }
+}

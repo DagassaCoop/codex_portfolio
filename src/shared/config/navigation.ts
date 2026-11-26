@@ -4,6 +4,6 @@
  */
 export const navigation = [
   { key: 'home', href: '/', folio: '01' },
-  { key: 'work', href: '/work', folio: '02' },
+  { key: 'projects', href: '/projects', folio: '02' },
   { key: 'about', href: '/about', folio: '03' },
 ] as const;

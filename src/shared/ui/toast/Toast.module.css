@@ -3,8 +3,10 @@
  * (DESIGN.md §1.8). The kit draws the position only as a rule (sheet 05 §06), so it lives here.
  */
 
+/* Layer 45, above dialogs and the menu (the page designs' value) */
 .viewport {
   position: fixed;
+  z-index: 45;
   right: 32px;
   bottom: 32px;
   display: flex;

@@ -1,0 +1,20 @@
+/* A project's links row */
+
+.arrow {
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+/* No public link: a dashed box with the reason, as tall as the buttons beside it (44 / 36px) */
+.note {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r);
+}
+
+.noteSm {
+  height: 36px;
+}

@@ -1,0 +1,21 @@
+/* A project's right page in the notebook (Projects page design, Fol. 02.1) */
+
+/* Title and task: the design's notebook sizes (30 and 16px), a step under the kit's h2 and body */
+.title {
+  font-size: 30px;
+}
+
+.title:focus {
+  outline: none;
+}
+
+.task {
+  font-size: 16px;
+}
+
+/* Links at the bottom of the page */
+.foot {
+  gap: 10px;
+  margin-top: auto;
+  padding-bottom: 8px;
+}

@@ -1,12 +1,17 @@
 /* Placement and parts the kit draws only inline (kit sheet 05 §04) */
 
-/* The scrim and the panel are pinned to the viewport; the panel scrolls when it is taller */
+/*
+ * The scrim and the panel are pinned to the viewport; the panel scrolls when it is taller.
+ * Overlays sit on layer 40 (the page designs' value), above anything the page raises.
+ */
 .backdrop {
   position: fixed;
+  z-index: 40;
 }
 
 .panel {
   position: fixed;
+  z-index: 40;
   overflow-y: auto;
 }
 

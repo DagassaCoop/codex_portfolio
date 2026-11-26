@@ -1,0 +1,84 @@
+/*
+ * A notebook page (Projects page design, Fol. 02.1): surface paper ruled every 32px (sepia at 13%),
+ * a 22px hatched gutter by the spine (ink-2 at 22%), the folio 16px from the bottom.
+ * The paper, the gutter and the folio stay put; the content scrolls if it does not fit.
+ */
+
+.page {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--surface);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--sepia) 13%, transparent) 1px,
+    transparent 1px
+  );
+  background-position: 0 20px;
+  background-size: 100% 32px;
+}
+
+.content {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-color: var(--line-strong) transparent;
+  scrollbar-width: thin;
+}
+
+/* The shared focus line, drawn inside: the page clips what is outside */
+.content:focus-visible {
+  outline: 2px dashed var(--sanguine);
+  outline-offset: -3px;
+}
+
+.left .content {
+  padding: 36px 48px 44px 40px;
+}
+
+.right .content {
+  padding: 36px 44px 44px 48px;
+}
+
+.gutter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 22px;
+  pointer-events: none;
+}
+
+.left .gutter {
+  right: 0;
+  background-image: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--ink-2) 22%, transparent) 0 1px,
+    transparent 1px 6px
+  );
+}
+
+.right .gutter {
+  left: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    color-mix(in srgb, var(--ink-2) 22%, transparent) 0 1px,
+    transparent 1px 6px
+  );
+}
+
+.folio {
+  position: absolute;
+  bottom: 16px;
+}
+
+.left .folio {
+  left: 40px;
+}
+
+.right .folio {
+  right: 44px;
+}

@@ -1,0 +1,68 @@
+/* The notebook's title page (Projects page design, Fol. 02.1) */
+
+.center {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.label {
+  color: var(--sanguine);
+}
+
+.compass {
+  fill: none;
+}
+
+.circle {
+  stroke: var(--sanguine);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.legs {
+  stroke: var(--ink);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.bar {
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+.hinge {
+  fill: var(--surface);
+  stroke: var(--ink);
+  stroke-width: 1.2;
+}
+
+/* Drawn larger and tighter than the kit's display size (Projects page design) */
+.title {
+  font-size: 64px;
+  line-height: 0.95;
+}
+
+.title:focus {
+  outline: none;
+}
+
+.line {
+  display: block;
+}
+
+.subtitle {
+  font-size: 20px;
+}
+
+.text {
+  max-width: 340px;
+}
+
+.signature {
+  text-align: center;
+}

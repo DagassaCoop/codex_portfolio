@@ -17,7 +17,7 @@
 
 ## 1. Goals
 
-- Show real commercial work (multi-brand iGaming monorepo, AngularJS → Vue migration, pet projects) as readable case studies.
+- Show real commercial work (multi-brand iGaming monorepo, AngularJS → Vue migration, pet projects) in a readable form: one notebook page per project on the Projects page (no separate case-study pages, PROGRESS.md Decisions 2026-11-26).
 - Make it easy to contact me: a contact form on every page, plus a copyable email address, CV, LinkedIn and GitHub.
 - The site is itself a portfolio piece: an accessible, fast, tested codebase with a strict design system and FSD architecture.
 
@@ -34,8 +34,7 @@ Pages (details in `sitemap.md`):
 | Route                   | Page                     | Notes                                                                                   |
 | ----------------------- | ------------------------ | --------------------------------------------------------------------------------------- |
 | `/[locale]`             | Home                     | Hero (Fol. 01), Selected work (Fol. 02, 3 × Tav.), What I do, Experience (spec table + timeline) |
-| `/[locale]/work`        | Work                     | All tavole, filter chips, grid/list toggle                                              |
-| `/[locale]/work/[slug]` | Work detail (case study) | Spec table, Task / Solution / Result, gallery, code, prev/next                          |
+| `/[locale]/projects`    | Projects                 | Fol. 02 index of tavole (h1, numbers, legend of directions), then the notebook (Fol. 02.1): a spread per project with a page turn on desktops; a page slider with swipe and a Details dialog on tablets and phones |
 | `/[locale]/about`       | About                    | Skills / Experience / Education                                                         |
 | `*`                     | 404                      | Empty state                                                                             |
 
@@ -88,21 +87,21 @@ The Next.js `app/` router lives in the **repo root** and only re-exports FSD pag
 │  ├─ [locale]/
 │  │  ├─ layout.tsx            → src/app/layouts
 │  │  ├─ page.tsx              → export { HomePage as default } from '@/pages/home'
-│  │  ├─ work/page.tsx         → @/pages/work
-│  │  ├─ work/[slug]/page.tsx  → @/pages/work-detail
+│  │  ├─ projects/page.tsx     → @/pages/projects
 │  │  └─ about/page.tsx        → @/pages/about
 │  └─ not-found.tsx
 ├─ pages/README.md              # empty on purpose (see above)
 ├─ proxy.ts                     # next-intl locale routing
 ├─ messages/                    # all copy: en.json, fr.json (next-intl)
 ├─ public/                      # cv.pdf, static images, favicons
+├─ CLAUDE.md                    # where the context lives and what each file holds
 ├─ context/                     # DESIGN.md, PROJECT_OVERVIEW.md, PROGRESS.md, SITEMAP.md
 ├─ .storybook/                  # Storybook config (main.ts, preview.tsx)
 ├─ test/                        # Vitest setup, MSW handlers and server (currently empty, see PROGRESS.md)
 ├─ e2e/                         # Playwright specs (currently empty, see PROGRESS.md)
 └─ src/
    ├─ app/        # providers (i18n, toast), global styles, layouts
-   ├─ pages/      # home, work, work-detail, about, not-found
+   ├─ pages/      # home, projects, about, not-found
    ├─ widgets/    # composed page blocks
    ├─ features/   # user actions
    ├─ entities/   # business entities
@@ -114,8 +113,8 @@ The Next.js `app/` router lives in the **repo root** and only re-exports FSD pag
 | Layer      | Slices                                                                                                                                                                                                                                                            |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `widgets`  | `header`, `mobile-menu`, `social-rail`, `footer-stamp` (built in M2); planned: `contact-section`, `command-palette`, `drawing-layer` (grid, "+", marginalia — decorative), and any page block used by more than one page (e.g. `experience` on Home and About) |
-| `pages`    | Blocks used by one page only live in that page's slice, as Steiger's `insignificant-slice` rule asks: `pages/home/ui/hero` (Fol. 01), `selected-work` (Fol. 02), `services` (Fol. 03r), `experience` (Fol. 03v); parts shared by the Home sections in `pages/home/ui/components` (`section-head`); `work-grid` in `pages/work`, `case-study` in `pages/work-detail`. A block moves to `widgets` once a second page uses it |
-| `features` | `switch-locale`, `filter-work`, `toggle-work-view` (the contact form and copy-email live in `widgets/contact-section`: they have no other consumer, Steiger `insignificant-slice`)                                                                                                                                                   |
+| `pages`    | Blocks used by one page only live in that page's slice, as Steiger's `insignificant-slice` rule asks: `pages/home/ui/hero` (Fol. 01), `selected-work` (Fol. 02), `services` (Fol. 03r), `experience` (Fol. 03v); parts shared by the Home sections in `pages/home/ui/components` (`section-head`); `intro` (Fol. 02) and the notebook (Fol. 02.1) in `pages/projects`. A block moves to `widgets` once a second page uses it |
+| `features` | `switch-locale` (the Projects page has no filters or view toggle: the notebook replaced them, 2026-11-26; the contact form and copy-email live in `widgets/contact-section`: they have no other consumer, Steiger `insignificant-slice`)                                                                                                                                                   |
 | `entities` | `project` (Tav.: data, `ProjectCard` with its preview drawings; built in M3), `experience` (data, `duration` / `formatPeriod`; built in M3; its timeline UI is in `pages/home` until About needs it) (job / education entry), `tech` (stack item + tooltip text)                                                                                                                                                                        |
 | `shared`   | `ui` (kit components on Base UI, one folder each, plus `icons`), `styles` (kit stylesheet, fonts), `config` (site config: availability status, links, email), `lib` (`storybook` helpers for stories, `roman`, `years`), `api` (email client), `i18n`                                                                                          |
 
@@ -136,7 +135,7 @@ All content lives in git (map of what lives where: `context/SITEMAP.md`). There 
 
 | What                                                                                                     | Format                       | Where                                 |
 | -------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------- |
-| Project data: slug, Tav. number, type, year, stack, `featured`, links, images, metrics                   | Typed TS objects             | `entities/project/model`              |
+| Project data: slug, Tav. number, direction, status, years, company and country, stack, `featured`, links | Typed TS objects             | `entities/project/model`              |
 | Experience and education data: company, dates, city, format, stack                                       | Typed TS objects             | `entities/experience/model`           |
 | Site config: availability, email, social links, CV path, the author's stack                              | TS                           | `shared/config`                       |
 | All copy: UI strings, section headings, project titles, Task / Solution / Result texts, job descriptions | JSON messages, keyed by slug | `messages/{en,fr}.json` (`next-intl`) |
@@ -147,7 +146,9 @@ export const projects = [
   {
     slug: 'innopharma-migration',
     tav: 3, // written as "Tav. III"
-    type: 'fullstack',
+    direction: 'fullstack', // architecture | product | fullstack | designSystem (Projects legend)
+    status: 'live', // live | wip ("In progress") | draft
+    country: 'IE', // commercial projects: the Projects page counts the countries
     years: [2022, 2024], // "2022—24"
     company: 'Innopharma', // none: a personal project
     stack: ['Vue', 'TypeScript', 'AngularJS', 'Docker'],
@@ -156,11 +157,11 @@ export const projects = [
 ] as const satisfies readonly ProjectData[];
 
 // copy: messages/en.json → projects.innopharma-migration.{label, title, summary} (card);
-// task, solution, result come with the case study (M5)
+// the notebook's texts (task, role, impact, challenge…) come with M4 stage 2
 ```
 
-- A single page template (`pages/work-detail`) renders every case study from its data and its messages.
-- `featured: true` puts a project on the Home page (currently Tav. I Soft2Bet multi-brand platform, Tav. II Life Focus Tree, Tav. III AngularJS → Vue migration at Innopharma). The same list drives the Work grid, the command palette and prev/next pagination.
+- The notebook on the Projects page renders every project from its data and its messages; there are no case-study pages.
+- `featured: true` puts a project on the Home page (currently Tav. I Soft2Bet multi-brand platform, Tav. II Life Focus Tree, Tav. III AngularJS → Vue migration at Innopharma). The same list drives the Projects page (intro counts, legend, notebook) and the command palette.
 - Rich text inside messages (bold, links) uses `t.rich` with tags mapped to kit elements.
 - Concept rule: brands (how many, multi-branding, the "brand template") are **not** mentioned in the hero or in the illustration callouts. They may appear in a case study.
 

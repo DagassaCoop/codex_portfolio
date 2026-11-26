@@ -1,0 +1,66 @@
+/* The notebook's contents page (Projects page design, Fol. 02.1) */
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.label {
+  color: var(--sanguine);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A kit menu item, 48px tall; outside a menu it keeps the shared focus line, drawn inside */
+.entry {
+  width: 100%;
+  min-height: 48px;
+  gap: 12px;
+  padding: 0 8px;
+}
+
+.entry:focus-visible {
+  outline: 2px dashed var(--sanguine);
+  outline-offset: -3px;
+}
+
+.tag {
+  flex: none;
+  width: 92px;
+  color: var(--sanguine);
+  font-size: 11px;
+}
+
+.title {
+  overflow: hidden;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 17px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leader {
+  flex: 1;
+  min-width: 16px;
+  border-bottom: 1px dotted var(--line-strong);
+  transform: translateY(5px);
+}
+
+.folio {
+  flex: none;
+}
+
+.note {
+  margin-top: auto;
+}

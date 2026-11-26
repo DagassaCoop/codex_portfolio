@@ -22,3 +22,9 @@
     );
   background-size: 24px 24px;
 }
+
+/* No drawing yet: the kit's hatching over the surface, like the card media's placeholder */
+.placeholder {
+  background-image: var(--hatch);
+  background-size: auto;
+}

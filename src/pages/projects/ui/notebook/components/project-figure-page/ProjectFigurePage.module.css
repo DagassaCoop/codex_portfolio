@@ -1,0 +1,45 @@
+/* A project's left page in the notebook (Projects page design, Fol. 02.1) */
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tag {
+  color: var(--sanguine);
+}
+
+/* ---------- The figure: the drawing in a 268px frame, the caption under it ---------- */
+
+.figure {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  margin: 0;
+}
+
+/* 268px as drawn; it gives way first when the page is short (down to 150px) */
+.frame {
+  position: relative;
+  flex: 0 1 268px;
+  min-height: 150px;
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--surface);
+}
+
+.status {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+}
+
+.caption {
+  font-size: 16px;
+}

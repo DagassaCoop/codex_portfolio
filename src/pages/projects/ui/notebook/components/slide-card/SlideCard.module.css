@@ -1,0 +1,74 @@
+/* A project's page in the notebook on tablets and phones (Projects page design, "pad") */
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.tag {
+  color: var(--sanguine);
+}
+
+/* The project's number in outline (decor) */
+.numeral {
+  flex: none;
+  color: transparent;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 0.8;
+  letter-spacing: -0.03em;
+  -webkit-text-stroke: 1.2px var(--ink);
+}
+
+/* Two lines, always as tall as two lines: every card is the same height */
+.title {
+  display: -webkit-box;
+  height: 2.3em;
+  overflow: hidden;
+  font-size: clamp(22px, 5vw, 28px);
+  line-height: 1.15;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.title:focus {
+  outline: none;
+}
+
+/*
+ * 16:10 as drawn; on a short window (a phone on its side) it gives way so that the page and the
+ * controls stay within ~90% of the window's height, never under 140px.
+ */
+.frame {
+  position: relative;
+  flex: none;
+  aspect-ratio: 16 / 10;
+  max-height: max(140px, calc(90svh - 420px));
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--surface);
+}
+
+.status {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+}
+
+/* Three lines, always as tall as three lines */
+.task {
+  display: -webkit-box;
+  height: 4.5em;
+  overflow: hidden;
+  font-size: 15.5px;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}

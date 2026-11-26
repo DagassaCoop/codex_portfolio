@@ -143,7 +143,7 @@ The kit maps shadcn **Typography** onto these classes.
 - **Borders:** 1px `--line` inside cards · 1px `--line-strong` inputs · 1px `--ink` component outlines · **2px `--ink`** header, stamp, tables (`th`), accordion top, sheet/drawer edges · 1px dashed `--sanguine` construction lines.
 - **Grid:** 12 columns **without gutter** (grid lines = column borders). Max width 1440. Page margins 32 (desktop) / 20 (mobile). Social rail 72. "+" marks on key intersections in `--sepia`, mono font, decorative.
 - **Icons:** Lucide, stroke 1.6, 24 grid. In the kit, chevrons (Select, Nav, Dropdown) and check marks use `stroke-width="2"`.
-- **In the app:** the page frame, breakpoints and section padding follow the Home page design, see §1.9. Its frame is 1680px wide (not 1440) and its outer and section margins differ from the 32 / 20 above.
+- **In the app:** the page frame, breakpoints and section padding follow the Home page design, see §1.9. Its frame is 1680px wide on the design; the app narrows it to 1440px (PROGRESS.md Decisions, 2026-11-26) and its outer and section margins differ from the 32 / 20 above.
 
 ### 1.9 Page layout and breakpoints (Home page design)
 
@@ -163,7 +163,7 @@ The design also has a rule at 1180px for an element that is not drawn (`.h-tlabe
 
 - Paper around the sheet: padding `28 20 20 20` (phone: 12).
 - Ruler above the frame: letters A–L over the 12 content columns, mono 10px, +0.12em, `--muted`, 8px from the top of the paper. Decor (`aria-hidden`). Hidden on phones.
-- Frame: max-width **1680**, centered, 1px `--ink` border, bg `--paper`.
+- Frame: max-width **1680** on the design, **1440** in the app (2026-11-26), centered, 1px `--ink` border, bg `--paper`.
 - Grid: columns `72px | 1fr` (social rail 72). Rows: header **72**, main, footer. **In the app** the main row is `1fr`, so on a page shorter than the rail the footer stays at the bottom instead of stretching.
   - Desktop / tablet: monogram (top left, 72×72) · header (top) · rail (left, under the monogram) · main · footer.
   - Phone: monogram + rail share a 72px strip (the rail turns horizontal), then the header (**64**), main, footer.
@@ -174,7 +174,7 @@ The design also has a rule at 1180px for an element that is not drawn (`.h-tlabe
 
 **Section padding** inside `main` (`.h-pad` in the design): **32** desktop · **24** tablet · **16** phone. Section rhythm: head `40 / 24`, body bottom 56.
 
-**In the app:** `src/app/layouts/PageFrame.tsx` + `PageFrame.module.css` draws the frame, the cells and the lines; widgets fill the cells. Media queries cannot read custom properties, so the breakpoints are literals in the CSS Modules (`width <= 1024px`, `width <= 600px`). The ruler is anchored to the frame rather than to the paper (as on the canvas), so it stays over the columns once the frame stops at 1680px.
+**In the app:** `src/app/layouts/PageFrame.tsx` + `PageFrame.module.css` draws the frame, the cells and the lines; widgets fill the cells. Media queries cannot read custom properties, so the breakpoints are literals in the CSS Modules (`width <= 1024px`, `width <= 600px`). The ruler is anchored to the frame rather than to the paper (as on the canvas), so it stays over the columns once the frame stops at 1440px.
 
 ---
 
@@ -546,7 +546,7 @@ Default w480 (kit shows 620 for tavola preview, 400 for alert), max-w 100%, surf
 - `.cx-dialog-foot`: pad 14 24, top border line, **bg sunk**, buttons right, gap 10 (Ghost + Primary; Alert: Ghost "Stay" + Ink "Open site ↗").
   A11y: `role="dialog"`/`"alertdialog"`, `aria-modal="true"`, `aria-labelledby`, `aria-describedby`.
 
-**In the app** (`src/shared/ui/dialog`, Base UI Dialog; added in M2 for the mobile menu): `Dialog`, `DialogTrigger` (kit button look, Secondary by default), `DialogPopup` (`width` 480 / 620 / 400), `DialogHeader` (`label`, `title` → the dialog's name, `closeLabel` → Ghost icon close), `DialogBody`, `DialogDescription`, `DialogFooter`, `DialogClose` (Ghost by default). The kit draws the scrim and the dialog inside a demo stage (`position: absolute`); the app pins the scrim to the viewport and centres the dialog in a scrolling viewport with 20px padding (`Dialog.module.css`). Focus moves into the dialog and returns to the trigger; Esc and a click on the scrim close it. Alert Dialog is not built yet.
+**In the app** (`src/shared/ui/dialog`, Base UI Dialog; added in M2 for the mobile menu): `Dialog`, `DialogTrigger` (kit button look, Secondary by default), `DialogPopup` (`width` 480 / 620 / 400), `DialogHeader` (`label`, `title` → the dialog's name, `closeLabel` → Ghost icon close), `DialogBody`, `DialogDescription`, `DialogFooter`, `DialogClose` (Ghost by default). The kit draws the scrim and the dialog inside a demo stage (`position: absolute`); the app pins the scrim to the viewport and centres the dialog in a scrolling viewport with 20px padding (`Dialog.module.css`). Focus moves into the dialog and returns to the trigger; Esc and a click on the scrim close it. The viewport is one column no wider than the screen, so a 620px dialog shrinks to a phone's width (fixed 2026-11-26: it overflowed). Overlays sit on **layer 40** (scrim, viewport, Sheet), the toast stack on **45**, the page designs' values, above anything a page raises with its own `z-index` (fixed 2026-11-26: the notebook's pages and the Home cards' `z-index` 1–2 painted over them). Alert Dialog is not built yet.
 
 ### Sheet — `.cx-sheet-panel` (mobile menu)
 
@@ -578,6 +578,7 @@ w380, flex gap 14, pad `12 12 12 16`, surface, border ink, `--r`, `--float`. Pos
 - `ToastProvider` + `useToast().show({ type, title, description, action })`.
 - Types: `success` (verdigris check), `loading` (spinner, no timeout), `accent` (sanguine label).
 - `max-width: calc(100vw - 40px)` is added so the 380px toast fits phones.
+- The stack sits on layer 45, above dialogs and the menu (layer 40).
 - The stack is 32px from the edges (20px below 768px).
 - `--dark` is not exposed by the component (its only example is the dropped Notte theme, and a dismiss button on ink is not designed).
 

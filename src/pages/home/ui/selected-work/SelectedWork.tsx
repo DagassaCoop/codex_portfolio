@@ -11,7 +11,7 @@ import { SectionHead } from '../components/section-head';
 
 /**
  * Fol. 02, Selected work (Home page design, section 1.2): the featured projects as tavola cards,
- * three in a row; one per row on tablets (lying sideways) and phones; "All work" opens the Work page.
+ * three in a row; one per row on tablets (lying sideways) and phones; "All work" opens the Projects page.
  */
 export function SelectedWork() {
   const t = useTranslations('home.work');
@@ -32,8 +32,7 @@ export function SelectedWork() {
         title={t('title')}
         titleId="work-title"
         action={
-          // The Work page is built in M4; until then the link opens the 404 page
-          <Link href="/work" className={buttonClassName({ variant: 'primary' })}>
+          <Link href="/projects" className={buttonClassName({ variant: 'primary' })}>
             {t('allWork')}
             <ArrowRightIcon />
           </Link>

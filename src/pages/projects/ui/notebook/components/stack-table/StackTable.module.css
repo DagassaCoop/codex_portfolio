@@ -1,0 +1,63 @@
+/* A project's stack table (Projects page design, Fol. 02.1) */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--paper);
+}
+
+/* On a notebook page it fills the rest of the page; never cut: the page scrolls instead */
+.fill {
+  flex: 1 0 auto;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--ink);
+  background: var(--sunk);
+}
+
+.label {
+  font-size: 11px;
+}
+
+.groups {
+  margin: 0;
+}
+
+/* Caption in 112px, badges beside it; on a narrow table the badges wrap under the caption */
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: flex-start;
+  padding: 10px 14px;
+}
+
+.group + .group {
+  border-top: 1px solid var(--line);
+}
+
+.groupLabel {
+  flex: 0 0 112px;
+  padding-top: 5px;
+}
+
+.groupItems {
+  flex: 1 1 200px;
+  margin: 0;
+}
+
+.groupItems ul {
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

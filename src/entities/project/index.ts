@@ -1,3 +1,4 @@
 export { projects, featuredProjects, type Project, type ProjectSlug } from './model/projects';
-export type { ProjectData, ProjectType } from './model/types';
+export type { ProjectCountry, ProjectData, ProjectDirection, ProjectStatus } from './model/types';
 export { ProjectCard } from './ui/project-card';
+export { ProjectPreview } from './ui/project-preview';

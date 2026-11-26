@@ -1,0 +1,119 @@
+/*
+ * Fol. 02 — the index of tavole (Projects page design, section 2.0; DESIGN.md §1.9 for breakpoints
+ * and padding).
+ */
+
+/* The sheet's 40px drawing grid behind the section (decor), sepia at 16%, as in the hero */
+.intro {
+  position: relative;
+  overflow: hidden;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--sepia) 16%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--sepia) 16%, transparent) 1px,
+      transparent 1px
+    );
+  background-position: 0 17px;
+  background-size: 40px 40px;
+}
+
+/* ---------- Folio row: the folio on the left, the breadcrumb on the right ---------- */
+
+.top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  height: 44px;
+  padding: 20px 32px 0;
+}
+
+.folio {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.folioNumber {
+  color: var(--sanguine);
+}
+
+/* ---------- Text column (1–7) and legend (9–12) ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 40px 24px;
+  align-items: start;
+  padding: 48px 32px 64px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / span 7;
+  gap: 24px;
+  min-width: 0;
+}
+
+/* The page title is drawn larger than the kit's display size (Projects page design) */
+.title {
+  font-size: 128px;
+  line-height: 0.88;
+  letter-spacing: -0.05em;
+}
+
+.measure {
+  max-width: 620px;
+}
+
+.legend {
+  grid-column: 9 / span 4;
+}
+
+/* ---------- Tablet: one column ---------- */
+
+@media (width <= 1024px) {
+  .top,
+  .grid {
+    padding-inline: 24px;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .text,
+  .legend {
+    grid-column: 1 / -1;
+  }
+
+  .title {
+    font-size: 96px;
+  }
+}
+
+/* ---------- Phone: the folio row stacks ---------- */
+
+@media (width <= 600px) {
+  .top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    height: auto;
+  }
+
+  .top,
+  .grid {
+    padding-inline: 16px;
+  }
+
+  .title {
+    font-size: 64px;
+  }
+}

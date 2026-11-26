@@ -18,7 +18,7 @@
 | --- | --- | --- |
 | **Copy** (translated) | Every visible string: UI labels, headings, project texts, job descriptions, accessible names | `messages/en.json` and `messages/fr.json`, the same keys in both. Read with `useTranslations` / `getTranslations` (`next-intl`); rich text with `t.rich` |
 | **Site data** (one language) | Author name and initials, revision and its year, availability, email, social links, CV path, source repo, site URL, the author's stack | `src/shared/config/site.ts` (`siteConfig`) |
-| **Project data** | Slug, Tav. number, type, year, stack, `featured`, links, images, metrics | `src/entities/project/model` |
+| **Project data** | Slug, Tav. number, direction, status, years, company and country, stack, `featured`, links | `src/entities/project/model` |
 | **Experience data** | Company, dates, city, format, stack | `src/entities/experience/model` |
 | **Decor** (not content) | Ruler letters, construction labels, dimension values | Constants next to the component that draws them; `aria-hidden`, not translated |
 | **Files** | CV (PDF), images, favicons | `public/` |
@@ -36,9 +36,10 @@ Rules:
 | `meta` | `<title>` and description (`src/app/layouts/LocaleLayout.tsx`) | [done] |
 | `layout` | the page frame and the global widgets (§3) | [done] frame, header, nav, mobile menu, rail, footer |
 | `home` | Home page (`src/pages/home`): `home.hero`, `home.work`, `home.services`, `home.experience` | [done] (the contact section is G3, M7) |
+| `projectsPage` | Projects page (`src/pages/projects`): `projectsPage.meta`, `projectsPage.intro`, `projectsPage.notebook` (`.slider`: tablets and phones) | [done] |
 | `contact` | The contact section and form (`src/widgets/contact-section`) | [done] |
 | `experience` | Job and study copy by id: `experience.<id>.{role,points}` (`src/entities/experience`) | [done] |
-| `projects` | Project copy by slug: `projects.<slug>.{domain,label,title,summary}` (`src/entities/project`) | [in progress] three featured projects |
+| `projects` | Project copy by slug: the card's `projects.<slug>.{domain,label,title,summary}` (`src/entities/project`), the notebook's `{fig,task,role,contribution,impact,challenge,stack}` (`src/pages/projects`) | [done] all seven projects |
 | `projectCard` | The project card's own strings (`personal`, `showStack`) | [done] |
 
 ---
@@ -48,8 +49,7 @@ Rules:
 | Route | Page | Sections | Status |
 | --- | --- | --- | --- |
 | `/[locale]` | Home | Hero (Fol. 01), Selected work (Fol. 02, 3 × Tav.), What I do (Fol. 03r), Experience (Fol. 03v) | [done] (M3), see §4 |
-| `/[locale]/work` | Work | All tavole, filter chips, grid / list | [todo] (M4) |
-| `/[locale]/work/[slug]` | Case study | Spec table, Task / Solution / Result, gallery, code, prev / next | [todo] (M5) |
+| `/[locale]/projects` | Projects | Fol. 02 index of tavole; the notebook (Fol. 02.1) | [in progress] (M4), see §5. No case-study pages (M5 dropped 2026-11-26) |
 | `/[locale]/about` | About | Skills / Experience / Education | [todo] (M6) |
 | `*` | 404 | Empty state | [todo] (M9) |
 
@@ -76,7 +76,7 @@ Drawn on the Home page design; the frame and the cells are described in `DESIGN.
 | Monogram initials "DB" | data | `siteConfig.author.initials` | [done] |
 | Monogram accessible name "DB — Dmytro Bondar, home" | copy + data | `layout.monogram.label` (`{initials}`, `{name}` ← `siteConfig.author`) | [done] |
 | Sheet label "Codex · Rev. B" | copy + data | `layout.header.sheetLabel` (`{revision}` ← `siteConfig.revision`) | [done] |
-| Navigation name "Primary" and items Home / Work / About | data + copy | sections, routes and folios in `src/shared/config/navigation.ts`; titles `layout.nav.{label,home,work,about}` (shared with the mobile menu) | [done]. No counters, no Contact item |
+| Navigation name "Primary" and items Home / Projects / About | data + copy | sections, routes and folios in `src/shared/config/navigation.ts`; titles `layout.nav.{label,home,projects,about}` (shared with the mobile menu) | [done]. No counters, no Contact item |
 | Language switch name "Language", items EN / FR | copy + data | `layout.locale.label`; items from `routing.locales` (`src/shared/i18n`) | [done] (`src/features/switch-locale`) |
 | "Let's talk" | copy | `layout.header.letsTalk`; links to `#contact` | [done]. The target section is not built yet |
 | ⌘K trigger | copy | — | [todo] with the command palette (M8) |
@@ -87,7 +87,7 @@ Drawn on the Home page design; the frame and the cells are described in `DESIGN.
 | Content | Kind | Where | Status |
 | --- | --- | --- | --- |
 | Dialog name "Menu", label "Codex · Index", close button "Close menu" | copy | `layout.menu.{label,heading,close}` | [done] |
-| Sections Home / Work / About | data + copy | `src/shared/config/navigation.ts`; `layout.nav.*` | [done] |
+| Sections Home / Projects / About | data + copy | `src/shared/config/navigation.ts`; `layout.nav.*` | [done] |
 | Folio numbers "FOL. 01–03" | decor (`aria-hidden`) | `navigation[].folio`, formatted in `MobileMenu.tsx` | [done] |
 | Language switch | — | `src/features/switch-locale` (as in the header) | [done] |
 | "Let's talk" | copy | `layout.header.letsTalk`; links to `#contact` | [done]. The target section is not built yet |
@@ -163,17 +163,17 @@ Copy is taken from the Home design for now, like the hero's.
 
 | Content | Kind | Where | Status |
 | --- | --- | --- | --- |
-| Folio "Fol. 02", sheet label "Work · Tav. I — III of III" | copy + data | `home.work.{folio,sheet}`; first and last featured tavola and the total from `projects` (`src/entities/project`), in Roman numerals | [done]. The design's "of VI" comes once all projects are in the data |
+| Folio "Fol. 02", sheet label "Work · Tav. I — III of III" | copy + data | `home.work.{folio,sheet}`; first and last featured tavola and the total from `projects` (`src/entities/project`), in Roman numerals | [done]. "of VII": all seven projects are in the data |
 | Heading "Selected work" | copy | `home.work.title` | [done] |
-| "All work" → `/work`, Primary button | copy | `home.work.allWork` | [done]. The Work page is M4 (404 until then) |
+| "All work" → `/projects`, Primary button | copy | `home.work.allWork` | [done] |
 | Featured projects, in tavola order | data | `projects` with `featured: true` (`src/entities/project/model/projects.ts`) | [done] Tav. I–III |
 | Card: tag "TAV. I", years "2025—26", company, stack | data | `tav`, `years`, `company`, `stack` | [done]. Tag and foot upper-case |
 | Card caption: the project's domain ("IGAMING") over the preview | copy | `projects.<slug>.domain` (upper-cased by the card) | [done]. ⚠ Drafted by the AI, check: "iGaming", "Personal productivity", "Pharma · Lab software" |
 | Card: label, title, summary | copy | `projects.<slug>.{label,title,summary}` | [done]. ⚠ Tav. I mentions the brand count (PROJECT_OVERVIEW.md §5 concept rule) |
 | Card foot for a project without a company: "Personal" | copy | `projectCard.personal` | [done] |
 | Stack "…" button name "Show all 5 technologies" (tablets, when the stack would wrap) | copy | `projectCard.showStack` (`{count}`) | [done] |
-| Card link → the case study | data | `/work/<slug>`, on the title, stretched over the card | [done]. Case studies are M5 (404 until then). The link's name is the title |
-| Card previews (stacked plates, radial tree, AngularJS → Vue) | decor (`aria-hidden`), labels not translated | `src/entities/project/ui/project-card/components/project-preview` | [done]. Stand in for images until the case studies have them. ⚠ Tav. I draws "×5" (concept rule) |
+| Card link → the case study | data | `/work/<slug>`, on the title, stretched over the card | [done]. ⚠ Still points to `/work/<slug>` (404); moves to the project's notebook page in M4 stage 4 (case studies dropped). The link's name is the title |
+| Card previews (stacked plates, radial tree, AngularJS → Vue) | decor (`aria-hidden`), labels not translated | `src/entities/project/ui/project-card/components/project-preview` | [done]. ⚠ Tav. I draws "×5" (concept rule). Tav. IV–VII have no drawing yet: hatched placeholder (`TODO(design)`) |
 
 ### Fol. 03r · What I do — `src/pages/home/ui/services` [done]
 
@@ -204,3 +204,55 @@ Copy is taken from the Home design for now, like the sections above.
 | Years "2025—26", period "Oct 2025 — Nov 2026", duration "1 yr 2 mos" | data, formatted | `formatYears` (`shared/lib/years`), `formatPeriod` (month names from `Intl` in the page's locale), `duration` (both ends included); units `home.experience.{years,months}` | [done] |
 | Format "On-site" / "Hybrid" / "Remote", employment, "Education" | copy | `home.experience.{format,employment,education}` | [done] |
 
+---
+
+## 5. Projects (`src/pages/projects`)
+
+Projects page design on the canvas (`project/Projects.dc.html`, variant F · Notebook; `ProjectsNotebook*.dc.html`). Copy is taken from the design for now.
+
+| Content | Kind | Where | Status |
+| --- | --- | --- | --- |
+| `<title>` "Projects — Dmytro Bondar" | copy | `projectsPage.meta.title` | [done] |
+
+### Fol. 02 · Index of tavole — `src/pages/projects/ui/intro` [done]
+
+| Content | Kind | Where | Status |
+| --- | --- | --- | --- |
+| Folio "Fol. 02", sheet label "Opera · Index of tavole" | copy | `projectsPage.intro.{folio,sheet}` | [done] |
+| Breadcrumb "Codex / Fol. 02 · Projects" (name "Breadcrumb") | copy | `projectsPage.intro.breadcrumb.{label,root,current}` | [done] |
+| h1 "Projects" | copy | `projectsPage.intro.title` | [done] |
+| Dimension "07 TAVOLE · 2020 — 2026" | copy + data (decor, `aria-hidden`) | `projectsPage.intro.dimension` (`{count}`, `{first}`, `{last}` ← `projects`) | [done] |
+| Lead and body | copy | `projectsPage.intro.{lead,body}` | [done]. ⚠ Both say "Seven" / "six years" in words, and the body mentions five brands; update them when projects change |
+| Numbers: tavole, commercial, personal, countries (list name "In numbers") | data + copy | counted from `projects` (`company`, `country`); captions `projectsPage.intro.stats.*` | [done] |
+| Marginalia "— ogni tavola, un problema risolto." | decor (Italian, `aria-hidden`), not translated | `MARGINALIA` in `Intro.tsx` | [done] |
+| Legend head "Legend · 4 directions", "Tav. count" (decor) | copy | `projectsPage.intro.legend.{title,count}` | [done] |
+| Directions: letter (decor), title, text, count ("01"; screen readers hear "1 project") | data + copy | order and letters in `Legend.tsx` (`DIRECTIONS`); `projectsPage.intro.legend.directions.<direction>.{title,text}`; count from `projects[].direction`, `legend.countLabel` | [done] |
+| Status key "In progress — still being drawn", "Draft — on the drawing board" | copy | `projectsPage.intro.legend.status.{label,wip,draft}` | [done] |
+
+### Fol. 02.1 · Notebook — `src/pages/projects/ui/notebook` [done]
+
+Desktop: a spread per project with a 3D page turn (`components/notebook-spread`, client), contents and title page on the first spread. Tablets and phones (≤ 1024px): one page at a time (`components/notebook-slider`, client), swipe and Prev / Next, project details in a dialog. CSS switches the two at 1024px.
+
+| Content | Kind | Where | Status |
+| --- | --- | --- | --- |
+| Folio "Fol. 02.1", sheet label, h2 "Turn the pages", marginalia (decor) | copy | `projectsPage.notebook.{folio,sheet,title,marginalia}` | [done] |
+| Section role "notebook" (screen readers) | copy | `projectsPage.notebook.roledescription` | [done] |
+| Folios "fol. 3v", "fol. 4r" on the pages and in the contents | decor (`aria-hidden`), not translated | `leftFolio` / `rightFolio` in `Notebook.tsx` | [done] |
+| Contents: "Contents", "Projects I — VII", rows "Project II · title · fol. 3v" (buttons), the note (decor) | copy + data | `projectsPage.notebook.contents.*`, `project.tag`; titles `projects.<slug>.title` | [done] |
+| Title page: label, compass drawing (decor), "Projects / I — VII", subtitle, text, signature | copy + data | `projectsPage.notebook.titlePage.*`; range from `projects`, name `siteConfig.author.name` | [done]. ⚠ "Seven projects" is written in words |
+| Left page: "Project II", "Commercial" / "Personal" | copy + data | `projectsPage.notebook.project.{tag,commercial,personal}`; commercial = has a `company` | [done] |
+| Figure: the drawing, the status badge ("In progress" / "Draft"), caption "Fig. II — a tree from one root" | data + copy | `ProjectPreview` (`src/entities/project`); `status`; `projectsPage.intro.legend.status.*.badge`; `project.fig` + `projects.<slug>.fig` | [done]. Tav. IV–VII hatched (no drawing yet) |
+| Stack: "Stack", "11 technologies", groups and items | copy | `project.{stack,stackCount}`; `projects.<slug>.stack` (array of `{label, items}`, read with `t.raw`; items are mostly tech names, the same in EN and FR) | [done] |
+| Right page: "Direction" / "Domain" and their values, outlined numeral (decor) | copy | `project.{direction,domain}`; `projects.<slug>.{label,domain}` | [done] |
+| Title (h3), task | copy | `projects.<slug>.{title,task}` | [done] |
+| "01 · Role" (role + contribution), "02 · Impact", "03 · Challenge" | copy | `project.{role,impact,challenge}`; `projects.<slug>.{role,contribution,impact,challenge}` | [done] |
+| Links "Live product" / "Live demo" / "GitHub" (new tab) | data + copy | `projects[].links` (`kind`, `href`); `projectsPage.notebook.links.<kind>`, name `layout.newTab` | [done] Tav. VI only. ⚠ TODO(content): URLs of Tav. I, II, IV, V |
+| No link: "Internal product · no public link", "Not built yet" | data + copy | `projects[].linkNote`; `projectsPage.notebook.linkNotes.<note>` | [done] Tav. III, VII |
+| Draft: "Have a club? Let’s talk →" → `#contact` | copy | `projectsPage.notebook.draftCta`; shown when `status` is `draft` | [done] |
+| Controls: group "Turn pages", Prev / Next, counter "Project II of VII · fol. 3v — fol. 4r", Contents | copy | `projectsPage.notebook.controls.{label,prev,next,contents,counterContents,counterProject}` | [done] |
+| Announcement after a turn "Spread 3 of 8: Project II, Life Focus Tree" (live region) | copy | `projectsPage.notebook.controls.{announceContents,announceProject}` | [done] |
+| Tablets / phones: sheet label "one page per project", marginalia "— swipe left or right, or use the buttons" | copy | `projectsPage.notebook.slider.{sheet,marginalia}` | [done] |
+| Slider: group "Projects notebook" (role "swipeable notebook"), contents h3 "All projects" with rows "II · title →" | copy + data | `projectsPage.notebook.slider.{label,roledescription,contentsTitle}`; numerals and titles from `projects` | [done] |
+| Slide card: "Project II", numeral (decor), title, drawing + status badge, task | copy + data | as on the spread (`project.tag`, `projects.<slug>.{title,task}`, `status`) | [done] |
+| "Details" (name "Open details: Life Focus Tree"), counter "Project II of VII" / "Contents", announcement "Project II of VII: Life Focus Tree" | copy | `projectsPage.notebook.slider.{details,detailsLabel,counterContents,counterProject,announceProject}`; Prev / Next / Contents from `controls` | [done] |
+| Details dialog: label "Project II · Personal", title, close "Close details"; body and links as on the spread | copy | `project.{tag,commercial,personal}`, `projects.<slug>.title`, `projectsPage.notebook.slider.close` | [done] |

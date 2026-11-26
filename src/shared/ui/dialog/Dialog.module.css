@@ -1,15 +1,23 @@
 /* Placement on the page: the kit only draws dialogs inside a demo stage */
 
-/* The scrim covers the viewport */
+/*
+ * The scrim covers the viewport. Overlays sit on layer 40 (the page designs' value), above
+ * anything the page raises with its own z-index (cards, the notebook's pages).
+ */
 .backdrop {
   position: fixed;
+  z-index: 40;
 }
 
 /* Centres the dialog and scrolls it when it is taller than the screen; 20px = the phone page margin (DESIGN.md §1.8) */
 .viewport {
   position: fixed;
   inset: 0;
+  z-index: 40;
   display: grid;
+
+  /* One column no wider than the screen, so a 620px dialog shrinks to fit a phone (max-width: 100%) */
+  grid-template-columns: minmax(0, 1fr);
   place-items: center;
   padding: 20px;
   overflow-y: auto;

@@ -15,7 +15,7 @@ import {
   type CardLayout,
 } from '@/shared/ui/card';
 
-import { ProjectPreview } from './components/project-preview';
+import { ProjectPreview } from '../project-preview';
 import styles from './ProjectCard.module.css';
 import type { Project } from '../../model/projects';
 

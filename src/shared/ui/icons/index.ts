@@ -8,6 +8,7 @@
  */
 export { Icon, type IconProps } from './Icon';
 
+export { ArrowLeftIcon } from './ArrowLeftIcon';
 export { ArrowRightIcon } from './ArrowRightIcon';
 export { ArrowUpRightIcon } from './ArrowUpRightIcon';
 export { CheckIcon } from './CheckIcon';
@@ -17,6 +18,7 @@ export { DownloadIcon } from './DownloadIcon';
 export { FileDownIcon } from './FileDownIcon';
 export { FileTextIcon } from './FileTextIcon';
 export { GithubIcon } from './GithubIcon';
+export { GlobeIcon } from './GlobeIcon';
 export { LayoutGridIcon } from './LayoutGridIcon';
 export { LinkedinIcon } from './LinkedinIcon';
 export { ListIcon } from './ListIcon';
