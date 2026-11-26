@@ -128,8 +128,7 @@ On every page, after the page's own sections (`LocaleLayout`). Copy from the Hom
 | Revision "B · 2026" | data | `siteConfig.revision`; `siteConfig.revisionYear` = the year of the build | [done] |
 | Location "Toronto, ON" | copy | `layout.footer.locationValue` | [done] |
 | Source link "GitHub ↗" (new tab) | data + copy | `siteConfig.links.source`; `layout.footer.sourceLink` (the ↗ is decor in the component), name `layout.newTab` | [done] |
-| Status "Open for work" / "Say hello" | data + copy | `siteConfig.available`; `layout.footer.status.{available,unavailable}` | [done] |
-| "Let's talk" cell | copy | `layout.footer.letsTalk`; links to `#contact` | [done]. The target section is not built yet |
+| Blank last cell, hatched like a disabled button | decor (`aria-hidden`) | `FooterStamp.tsx` | [done]. Replaced the "Let’s talk" cell and its status on 2026-11-26 (copy `layout.footer.{status,letsTalk}` removed) |
 
 ### G5 · Command palette [todo]
 

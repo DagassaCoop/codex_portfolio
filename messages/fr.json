@@ -176,12 +176,7 @@
       "location": "Lieu",
       "locationValue": "Toronto (ON)",
       "source": "Source",
-      "sourceLink": "GitHub",
-      "status": {
-        "available": "Disponible",
-        "unavailable": "Dites bonjour"
-      },
-      "letsTalk": "Discutons"
+      "sourceLink": "GitHub"
     },
     "menu": {
       "label": "Menu",

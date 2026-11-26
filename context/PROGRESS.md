@@ -61,6 +61,13 @@ _One entry per meaningful step. Template:_
 
 <!-- entries below, newest first -->
 
+### 2026-11-26 — Footer stamp: hatched blank cell instead of "Let's talk"
+- **Status:** [done]
+- **What:** the author removed the footer's "Let's talk" button; its cell (1.6fr) is now blank and hatched like a disabled button (`--sunk` + `--hatch`, `aria-hidden`). The commented-out button, its CSS and the copy `layout.footer.{status,letsTalk}` are removed. Phone: Source and the hatched cell share the last row (Source no longer takes a full row).
+- **Where:** `src/widgets/footer-stamp/ui/FooterStamp.{tsx,module.css}`, `messages/{en,fr}.json`; docs `DESIGN.md` §1.9, `SITEMAP.md` G4
+- **Verified:** `typecheck`, `lint`, `lint:css`, `format:check`, `build` pass; in the production build screenshots at 1440, 768 and 375, axe has no violations in the footer.
+- **Note:** `siteConfig.available` is still used by the hero badge.
+
 ### 2026-11-23 — Contact form: no request type
 - **Status:** [done]
 - **What:** the "Request type" select (Job offer / Freelance / Question / Other) is removed, on the author's request: from the zod schema, the form, the server action's fields, the tests, `contact.form.{type,types}` in EN and FR, and the kit's contact form composition story. The form is now Name, Email, Message, optional consent.
