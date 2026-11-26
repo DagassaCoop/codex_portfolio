@@ -188,6 +188,9 @@
       "heading": "Codex · Index",
       "open": "Ouvrir le menu",
       "close": "Fermer le menu"
+    },
+    "toast": {
+      "dismiss": "Fermer"
     }
   },
   "projectCard": {
@@ -256,6 +259,55 @@
     "khpi": {
       "role": "Licence (BSc), informatique",
       "points": []
+    }
+  },
+  "contact": {
+    "folio": "Fol. 04",
+    "sheet": "Contact",
+    "title": "Construisons le prochain.",
+    "lead": "Parlez-moi de l’équipe et du produit — je répondrai à l’adresse que vous laisserez.",
+    "email": {
+      "label": "E-mail",
+      "copy": "Copier",
+      "copyLabel": "Copier l’adresse e-mail",
+      "copied": "Copié",
+      "copyFailed": "Copie impossible : sélectionnez l’adresse"
+    },
+    "links": {
+      "label": "Fichiers et profils",
+      "cv": "CV · PDF",
+      "linkedin": "LinkedIn",
+      "github": "GitHub"
+    },
+    "form": {
+      "name": "Nom",
+      "namePlaceholder": "Jeanne Dupont",
+      "email": "E-mail",
+      "emailPlaceholder": "vous@entreprise.com",
+      "message": "Message",
+      "messagePlaceholder": "Parlez-moi de l’équipe, du produit et du calendrier…",
+      "consent": "Utiliser mes données uniquement pour répondre à ce message",
+      "honeypot": "Laissez ce champ vide",
+      "submit": "Envoyer le message",
+      "sending": "Envoi…",
+      "errors": {
+        "nameRequired": "Dites-moi comment vous appeler.",
+        "nameTooLong": "Pas plus de {max} caractères.",
+        "emailInvalid": "Saisissez une adresse complète, p. ex. jeanne@acme.com",
+        "emailTooLong": "Cette adresse est trop longue.",
+        "messageRequired": "Quelques mots suffisent.",
+        "messageTooLong": "Pas plus de {max} caractères.",
+        "messageLinks": "{max} liens au maximum, s’il vous plaît."
+      },
+      "failed": {
+        "title": "Message non envoyé",
+        "text": "Le serveur n’a pas répondu. Réessayez ou écrivez-moi directement : <email></email>"
+      },
+      "sent": {
+        "title": "Message envoyé",
+        "text": "Merci — je répondrai à l’adresse que vous avez laissée.",
+        "another": "Envoyer un autre message"
+      }
     }
   }
 }

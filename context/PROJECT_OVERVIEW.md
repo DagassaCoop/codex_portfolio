@@ -115,7 +115,7 @@ The Next.js `app/` router lives in the **repo root** and only re-exports FSD pag
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `widgets`  | `header`, `mobile-menu`, `social-rail`, `footer-stamp` (built in M2); planned: `contact-section`, `command-palette`, `drawing-layer` (grid, "+", marginalia — decorative), and any page block used by more than one page (e.g. `experience` on Home and About) |
 | `pages`    | Blocks used by one page only live in that page's slice, as Steiger's `insignificant-slice` rule asks: `pages/home/ui/hero` (Fol. 01), `selected-work` (Fol. 02), `services` (Fol. 03r), `experience` (Fol. 03v); parts shared by the Home sections in `pages/home/ui/components` (`section-head`); `work-grid` in `pages/work`, `case-study` in `pages/work-detail`. A block moves to `widgets` once a second page uses it |
-| `features` | `send-message` (contact form + server action), `copy-email`, `switch-locale`, `filter-work`, `toggle-work-view`                                                                                                                                                   |
+| `features` | `switch-locale`, `filter-work`, `toggle-work-view` (the contact form and copy-email live in `widgets/contact-section`: they have no other consumer, Steiger `insignificant-slice`)                                                                                                                                                   |
 | `entities` | `project` (Tav.: data, `ProjectCard` with its preview drawings; built in M3), `experience` (data, `duration` / `formatPeriod`; built in M3; its timeline UI is in `pages/home` until About needs it) (job / education entry), `tech` (stack item + tooltip text)                                                                                                                                                                        |
 | `shared`   | `ui` (kit components on Base UI, one folder each, plus `icons`), `styles` (kit stylesheet, fonts), `config` (site config: availability status, links, email), `lib` (`storybook` helpers for stories, `roman`, `years`), `api` (email client), `i18n`                                                                                          |
 
@@ -179,11 +179,13 @@ export const projects = [
 
 ## 7. Contact form flow
 
-1. The client renders `features/send-message`: RHF + `contactSchema` (zod). Fields: name, email, request type (Job offer / Freelance / Question / Other), message with a counter, optional consent, a hidden honeypot field and a hidden render timestamp.
-2. Submit calls a server action. Spam checks run first: if the honeypot is filled, or the form was submitted less than 3 s after render, the server returns a fake success and sends nothing. Then `contactSchema.safeParse`, which also caps field lengths and the number of links in the message.
-3. Resend sends a notification to me (with reply-to set to the sender) and an auto-reply to the sender in their locale.
-4. The UI shows each state: submitting (Spinner in the button, form disabled) → success Alert, or error Alert with the email as a fallback link. Field errors appear under the field with the `ERR —` prefix.
-5. Copying the email triggers a Toast: "Email copied".
+0. **Where:** `widgets/contact-section` (rendered on every page by `LocaleLayout`): `model/contactSchema.ts` (zod, shared by client and server; errors are `contact.form.errors` keys), `api/sendMessage.ts` (the server action), `api/deliver.server.ts` (delivery), `ui/components/{contact-form,copy-email}`.
+1. The client renders the contact form: RHF + `contactSchema` (zod) through `zodResolver`, validated when a field is left, then as it changes (`mode: 'onTouched'`). Fields: name, email, message with a counter, optional consent, a hidden honeypot field and a hidden render timestamp.
+2. Submit calls a server action. Spam checks run first: if the honeypot is filled, or the form was submitted less than 3 s after render, the server returns a fake success and sends nothing. Then `contactSchema.safeParse`, which also caps field lengths (name 100, email 254, message 1000) and the number of links in the message (3). Schema errors come back by field and are shown on the fields.
+3. **(M7 stage 2)** Resend sends a notification to me (with reply-to set to the sender) and an auto-reply to the sender in their locale.
+   Until then `deliverContactMessage` logs the message in development and fails in production (the form shows its error with the email).
+4. The UI shows each state: submitting (Spinner in the button, fields disabled) → success Alert, or error Alert with the email as a fallback link. Field errors appear under the field with the `ERR —` prefix.
+5. Copying the email triggers a Toast: "Copied" + the address (`ToastProvider` in `LocaleLayout`).
 
 ---
 

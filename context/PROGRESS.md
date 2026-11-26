@@ -22,8 +22,8 @@
 _A snapshot. Overwrite it, don't append to it._
 
 - **Phase:** M3 Home (branch `ui/home-page`). M2 is done (2026-11-21, merged into `main`).
-- **Now:** Experience (Fol. 03v) is done and waiting for review: every Home section of M3 is built (the contact section is G3, M7).
-- **Next:** after review, close M3; then M4 Work. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
+- **Now:** M7 stage 1 (the contact section and form: RHF + zod, server action, spam checks) is done and waiting for review. M3 (Home) is waiting for review too.
+- **Next:** M7 stage 2, email delivery with Resend + React Email (needs the API key and a verified domain); then M4 Work. Stages are done one at a time, each reviewed before the next (Decisions, 2026-11-21).
 - **Blocked by:** nothing.
 
 ---
@@ -39,7 +39,7 @@ _A snapshot. Overwrite it, don't append to it._
 | M4 | Work (`/[locale]/work`) | | |
 | M5 | Work detail / case study (`/[locale]/work/[slug]`) | | |
 | M6 | About (`/[locale]/about`) | | |
-| M7 | Contact form: server action, email, spam protection | | |
+| M7 | Contact form: server action, email, spam protection | [in progress] | 1 Section + form + validation + server action + spam checks [done] · 2 Email delivery (Resend) [todo] |
 | M8 | Command palette (⌘K) | | |
 | M9 | 404 | | |
 | M10 | Quality pass: E2E, axe, screenshot tests, performance targets | | |
@@ -60,6 +60,30 @@ _One entry per meaningful step. Template:_
 ```
 
 <!-- entries below, newest first -->
+
+### 2026-11-23 — Contact form: no request type
+- **Status:** [done]
+- **What:** the "Request type" select (Job offer / Freelance / Question / Other) is removed, on the author's request: from the zod schema, the form, the server action's fields, the tests, `contact.form.{type,types}` in EN and FR, and the kit's contact form composition story. The form is now Name, Email, Message, optional consent.
+- **Where:** `src/widgets/contact-section/`, `src/shared/ui/field/ContactForm.stories.tsx`, `messages/{en,fr}.json`; docs `PROJECT_OVERVIEW.md` §7, `SITEMAP.md` G3, `DESIGN.md` §4
+- **Verified:** `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` pass; `test` 17/17; `test:stories` 152/152; in the production build the form has no select, axe has no violations at 1440 and 375.
+
+### 2026-11-23 — M7 stage 1: contact section, form validation, server action
+- **Status:** [done]
+- **What:**
+  - **Dependencies:** `react-hook-form` 7.92, `zod` 4.6, `@hookform/resolvers` 7.0 (deferred at init until the form). Resend and React Email wait for stage 2.
+  - **Widget `contact-section`** (Fol. 04, G3), rendered on every page by `LocaleLayout`:
+    - `model/contactSchema.ts`: one zod schema for client and server (trimmed name ≤ 100, email ≤ 254 and valid, message ≤ 1000 with ≤ 3 links, optional consent); errors are `contact.form.errors` keys; `submissionSchema` adds the honeypot and the start time.
+    - `api/sendMessage.ts` (server action): spam checks first (honeypot filled or sent within 3 s → quiet success, nothing sent), then the schema (errors returned by field), then delivery. `api/deliver.server.ts`: logs in development, fails in production until stage 2.
+    - `ui/components/contact-form` (client): RHF with `zodResolver`, `mode: 'onTouched'`; kit `Field` / `Input` / `Textarea` / `Checkbox` (via `Controller`); errors with "ERR —" linked to their fields; the first invalid field is focused; server errors land on their fields; fields disabled and a spinner while sending; success panel (focused) with "Send another message" (resets, focuses Name); failure alert with the email as a `mailto:` link; hidden honeypot.
+    - `ui/components/copy-email`: the email in a read-only Input Group, COPY → clipboard + success toast (selects the address if the clipboard is blocked). `ToastProvider` added to `LocaleLayout` (deferred since M2).
+    - Left column: folio, display title, lead, copy-email, CV / LinkedIn / GitHub Mono buttons. One column on tablets, title 48 / 40px.
+  - **Tests:** `test/setup.ts` restored (jest-dom, cleanup). Unit: `contactSchema.test.ts` (11) and `sendMessage.test.ts` (7: delivery with the locale, field errors, non-object input, honeypot, too fast, bot with invalid data, delivery failure). Stories: Widgets / Contact form (empty submit, validate on leave, counter and links, send with disabled fields and focus, failure, server errors on fields, honeypot).
+- **Where:** `src/widgets/contact-section/`, `src/app/layouts/LocaleLayout.tsx`, `test/setup.ts`, `messages/{en,fr}.json`, `package.json`; docs `PROJECT_OVERVIEW.md` §4.2, §7; `SITEMAP.md` §1, G3
+- **Verified:** `typecheck`, `lint`, `lint:css`, `lint:fsd`, `format:check`, `build` pass; `test` 18/18; `test:stories` 152/152 (axe in every story). In the production build with the real server action: an empty submit shows the three errors (axe clean with errors shown); a person's send (after 3 s) reaches delivery, which fails as planned → "ERR — Message not sent" with the email; a bot's send (under 3 s) gets "Message sent" with focus on the confirmation and nothing delivered; COPY puts the address on the clipboard and shows the toast; screenshots at 1440, 768 and 375 (EN) and 1440 (FR) compared with the Home design; no horizontal scroll.
+- **Follow-ups:**
+  - Stage 2: Resend + React Email (notification with reply-to, auto-reply in the sender's locale); env `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`.
+  - Two fields are labelled "Email" (the address to copy and the form's), as on the design; the copy field is read-only. Rename one if screen-reader testing finds it confusing.
+  - No rate limiting beyond the honeypot and the 3 s check.
 
 ### 2026-11-23 — M3 Experience (Fol. 03v); Table and Trace in the kit
 - **Status:** [done]
@@ -521,6 +545,16 @@ _Decisions made during development that are not, or not yet, in the spec docs. T
 
 <!-- entries below, newest first -->
 
+### 2026-11-23 — Contact form: where it lives, how it validates, email later
+- **Context:** M7. PROJECT_OVERVIEW planned `features/send-message` and `features/copy-email`; the email provider is still an open question.
+- **Decision:**
+  - **Everything contact lives in `widgets/contact-section`** (model / api / ui segments): each feature would have one consumer, the section, which Steiger's `insignificant-slice` rejects. The section is rendered on every page by `LocaleLayout`.
+  - **One zod schema** for React Hook Form and the server action; its error messages are translation keys, so the schema has no language.
+  - **Validation timing:** when a field is left, then as it changes (`onTouched`); everything on submit.
+  - **Spam checks before the schema**, so a bot always gets the quiet success.
+  - **Email delivery is stage 2** (author's choice): until Resend is set up, development logs the message and production fails visibly (error alert with the email), never a fake "sent".
+- **Affects:** `PROJECT_OVERVIEW.md` §4.2, §7; `SITEMAP.md` G3.
+
 ### 2026-11-23 — Badge list and the card's title link
 - **Context:** On tablets the stack should keep to one row with a "…" that shows the rest. A button cannot sit inside the card's `<a>` (invalid HTML, axe `nested-interactive`, a click would navigate).
 - **Decision:**
@@ -791,7 +825,7 @@ _Shortcuts, `TODO(design)` markers, workarounds and warnings to revisit. Templat
 - [ ] **No localized 404 yet:** `app/not-found.tsx` is a bare English fallback (`TODO` in the file). The real page is M9 · since 2026-11-19
 - [ ] **No kit styles in Storybook yet:** `TODO(foundation)` in `.storybook/preview.tsx` · since 2026-11-19
 - [ ] **E2E has only run on `desktop`:** the `tablet` and `mobile` Playwright projects exist but have not been run · since 2026-11-19
-- [ ] **`test/` and `e2e/` are empty.** `test/setup.ts`, `test/vitest.d.ts` and `test/mocks/{handlers,server}.ts` from M0 are gone, and so is `e2e/smoke.spec.ts`. The folders were emptied around 21:38, before the first commit (`f73532a`), so these files were never in git. `vitest.config.ts` (project `unit`) still points to `./test/setup.ts`, so the first unit test will fail until the files are restored or the config changes. Restore them, or was this intentional? · since 2026-11-19
+- [ ] **`e2e/` is empty; `test/` has only `setup.ts`** (restored in M7: jest-dom + cleanup; `vitest.d.ts` and the MSW mocks are not back yet). Previously: **`test/` and `e2e/` were empty.** `test/setup.ts`, `test/vitest.d.ts` and `test/mocks/{handlers,server}.ts` from M0 are gone, and so is `e2e/smoke.spec.ts`. The folders were emptied around 21:38, before the first commit (`f73532a`), so these files were never in git. `vitest.config.ts` (project `unit`) still points to `./test/setup.ts`, so the first unit test will fail until the files are restored or the config changes. Restore them, or was this intentional? · since 2026-11-19
 - [ ] **pseudo-states needs manual registration:** `storybook-addon-pseudo-states` is not loaded into the preview from `main.ts` `addons`, so `.storybook/preview.tsx` registers its decorator and initial globals itself. The toolbar toggle still comes from `main.ts`. Re-check after Storybook upgrades (the decorator could end up registered twice) · since 2026-11-19
 - [ ] **Pseudo-state stories carry no style assertions:** the addon rewrites stylesheets after the story renders, after `play` has run. Real interactions (keyboard Tab) are what get asserted · since 2026-11-19
 - [x] ~~**First `test:stories` run after adding a dependency can fail**~~ while Vite re-optimizes deps. Fixed in stage 2: the `storybook` Vitest project pre-bundles `@base-ui/react/*`, `lucide-react`, `clsx` and `next-intl` (`optimizeDeps.include`). A brand-new runtime dependency used in stories may need adding there · since 2026-11-19

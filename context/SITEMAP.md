@@ -36,6 +36,7 @@ Rules:
 | `meta` | `<title>` and description (`src/app/layouts/LocaleLayout.tsx`) | [done] |
 | `layout` | the page frame and the global widgets (§3) | [done] frame, header, nav, mobile menu, rail, footer |
 | `home` | Home page (`src/pages/home`): `home.hero`, `home.work`, `home.services`, `home.experience` | [done] (the contact section is G3, M7) |
+| `contact` | The contact section and form (`src/widgets/contact-section`) | [done] |
 | `experience` | Job and study copy by id: `experience.<id>.{role,points}` (`src/entities/experience`) | [done] |
 | `projects` | Project copy by slug: `projects.<slug>.{domain,label,title,summary}` (`src/entities/project`) | [in progress] three featured projects |
 | `projectCard` | The project card's own strings (`personal`, `showStack`) | [done] |
@@ -102,9 +103,19 @@ Drawn on the Home page design; the frame and the cells are described in `DESIGN.
 | CV (PDF), downloads | data + file + copy | `siteConfig.links.cv` → `public/cv.pdf`; name `layout.rail.cv`, tooltip `layout.rail.cvTip` | [done] |
 | "Scroll · Fol. 01 — 04" | copy (decor, `aria-hidden`) | `layout.rail.scroll` | [done] |
 
-### G3 · Contact section (Fol. 04) [todo]
+### G3 · Contact section (Fol. 04) — `src/widgets/contact-section` [done] (form; email delivery is M7 stage 2)
 
-Not part of the layout for now (decided 2026-11-21). The form is M7.
+On every page, after the page's own sections (`LocaleLayout`). Copy from the Home design.
+
+| Content | Kind | Where | Status |
+| --- | --- | --- | --- |
+| Folio "Fol. 04", sheet label "Contact · Colophon", heading "Let’s build the next one.", lead | copy | `contact.{folio,sheet,title,lead}` | [done] |
+| Email to copy, "COPY" (name "Copy email address"), toast "Copied" | data + copy | `siteConfig.links.email`; `contact.email.{label,copy,copyLabel,copied,copyFailed}`; toast dismiss `layout.toast.dismiss` | [done] |
+| "CV · PDF ↓", "LinkedIn ↗", "GitHub ↗" (Mono buttons; profiles open in a new tab) | data + copy | `siteConfig.links.{cv,linkedin,github}`; `contact.links.*`, names `layout.newTab` | [done] |
+| Form fields: Name, Email, Message with a counter, optional consent (no request type: removed 2026-11-23) | copy + schema | `contact.form.*`; rules in `model/contactSchema.ts` | [done] |
+| Field errors ("Tell me how to address you." …), with limits | copy | `contact.form.errors.<key>` (`{max}`), keys from the schema | [done] |
+| Honeypot label (hidden) | copy | `contact.form.honeypot` | [done] |
+| "Send message" / "Sending…", failure alert with the email, success "Message sent" + "Send another message" | copy + data | `contact.form.{submit,sending,failed,sent}`; the email from `siteConfig.links.email` | [done] |
 
 ### G4 · Footer stamp — `src/widgets/footer-stamp` [done]
 

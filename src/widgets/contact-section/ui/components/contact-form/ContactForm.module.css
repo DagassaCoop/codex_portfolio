@@ -1,0 +1,56 @@
+/*
+ * The contact form's layout (Home page design, Fol. 04): a panel, name and email side by side,
+ * the rest full width, the consent and the button on a ruled footer. One column on phones.
+ */
+
+.form {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 24px;
+  margin: 0;
+  padding: 28px;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1 / -1;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+/* The honeypot: out of sight and out of the tab order, but in the form for bots */
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Sent: the confirmation replaces the form, in the same panel */
+.sent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px;
+}
+
+.sent:focus {
+  outline: none;
+}
+
+@media (width <= 600px) {
+  .form {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 20px;
+  }
+}

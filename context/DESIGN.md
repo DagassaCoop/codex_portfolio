@@ -352,7 +352,7 @@ Thumb hover: sanguine fill. Active/drag: `rotate(45deg) scale(1.15)`, sanguine-p
 ### Composition — Contact form (kit sheet 02 §07)
 
 `<form class="cx-panel">`, grid 2 columns, gap `20px 24px`, padding 28. Message spans both columns with counter. Footer row: `grid-column: 1/-1`, border-top 1px line, padding-top 20, space-between: checkbox on the left; `Clear` (Ghost, `type=reset`) + `Send message →` (Primary, `type=submit`) on the right.
-⚠ The kit's fields (Budget radios, "Reply by email") are a layout demo. The **fields and options come from `sitemap.md` G3** (Name, Email, Request type: Job offer / Freelance / Question / Other, Message, optional consent checkbox, honeypot). Storybook: Forms → Composition → Contact form.
+⚠ The kit's fields (Budget radios, "Reply by email") are a layout demo. The **fields and options come from `sitemap.md` G3** (Name, Email, Message, optional consent checkbox, honeypot; the request type was dropped on 2026-11-23). Storybook: Forms → Composition → Contact form.
 
 ---
 

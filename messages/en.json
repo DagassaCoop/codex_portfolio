@@ -188,6 +188,9 @@
       "heading": "Codex · Index",
       "open": "Open menu",
       "close": "Close menu"
+    },
+    "toast": {
+      "dismiss": "Dismiss"
     }
   },
   "projectCard": {
@@ -256,6 +259,55 @@
     "khpi": {
       "role": "BSc, Computer Science",
       "points": []
+    }
+  },
+  "contact": {
+    "folio": "Fol. 04",
+    "sheet": "Contact",
+    "title": "Let’s build the next one.",
+    "lead": "Tell me about the team and the product — I’ll reply to the email you leave.",
+    "email": {
+      "label": "Email",
+      "copy": "Copy",
+      "copyLabel": "Copy email address",
+      "copied": "Copied",
+      "copyFailed": "Couldn’t copy: select the address instead"
+    },
+    "links": {
+      "label": "Files and profiles",
+      "cv": "CV · PDF",
+      "linkedin": "LinkedIn",
+      "github": "GitHub"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Jane Cooper",
+      "email": "Email",
+      "emailPlaceholder": "you@company.com",
+      "message": "Message",
+      "messagePlaceholder": "Tell me about the team, the product and the timeline…",
+      "consent": "Use my data only to reply to this message",
+      "honeypot": "Leave this field empty",
+      "submit": "Send message",
+      "sending": "Sending…",
+      "errors": {
+        "nameRequired": "Tell me how to address you.",
+        "nameTooLong": "Keep it under {max} characters.",
+        "emailInvalid": "Add a full address, e.g. jane@acme.com",
+        "emailTooLong": "This address is too long.",
+        "messageRequired": "A few words are enough.",
+        "messageTooLong": "Keep it under {max} characters.",
+        "messageLinks": "Up to {max} links, please."
+      },
+      "failed": {
+        "title": "Message not sent",
+        "text": "The server didn’t answer. Try again, or write to me directly: <email></email>"
+      },
+      "sent": {
+        "title": "Message sent",
+        "text": "Thank you — I’ll reply to the email you left.",
+        "another": "Send another message"
+      }
     }
   }
 }

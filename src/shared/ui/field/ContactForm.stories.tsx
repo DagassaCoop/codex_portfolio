@@ -5,7 +5,6 @@ import { expect } from 'storybook/test';
 import { Button } from '@/shared/ui/button';
 import { Checkbox } from '@/shared/ui/checkbox';
 import { Input } from '@/shared/ui/input';
-import { NativeSelect } from '@/shared/ui/native-select';
 import { Textarea } from '@/shared/ui/textarea';
 
 import styles from './ContactForm.stories.module.css';
@@ -13,7 +12,7 @@ import { Field } from './Field';
 
 /*
  * Composition from kit sheet 02 Forms, §07 (Fol. 04 · Contact), built only from foundation parts.
- * Fields follow sitemap.md G3 (DESIGN.md §4): name, email, request type, message with a counter,
+ * Fields follow sitemap.md G3 (DESIGN.md §4): name, email, message with a counter,
  * optional consent. This is a layout demo; the real form is features/send-message (M7).
  */
 
@@ -35,14 +34,6 @@ function ContactFormDemo({ showErrors = false }: { showErrors?: boolean }) {
           autoComplete="email"
           required
         />
-      </Field>
-      <Field label="Request type">
-        <NativeSelect name="type" defaultValue="job">
-          <option value="job">Job offer</option>
-          <option value="freelance">Freelance</option>
-          <option value="question">Question</option>
-          <option value="other">Other</option>
-        </NativeSelect>
       </Field>
       <Field
         className={styles.wide}
